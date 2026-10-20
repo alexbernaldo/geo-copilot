@@ -10,6 +10,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from app.ui_shared import get_active_run, render_header_banner
+from geo.engines import estimate_mini_study_cost, run_mini_study
 from geo.judge_llm import FEW_SHOT_EJECUCION_IDS
 from geo.loader import load_muestra
 from geo.validation import CAMPOS_VALIDACION, compare
@@ -156,3 +157,23 @@ with col_ap:
         st.dataframe(pd.DataFrame(approvals), use_container_width=True, hide_index=True)
     else:
         st.caption("Aún no se han registrado aprobaciones manuales en este run.")
+
+st.divider()
+
+# 4. Conectores de motores con búsqueda web (F15 · Nivel 3)
+with st.expander("🌐 Conectores en vivo y Mini-Estudio Demostrativo (F15 · 6 prompts × 2 motores × 2 repeticiones = 24 llamadas)"):
+    est_live = estimate_mini_study_cost(n_prompts=6, n_motors=2, repeticiones=2)
+    st.caption(
+        f"**Aislamiento garantizado:** Este conector consulta marcas públicas reales para demostrar la integración con `web_search` / `grounding` / `Sonar` y **nunca se mezcla con los datos sintéticos del kit**. "
+        f"Coste estimado para 24 llamadas: **`{est_live['estimated_cost_eur']:.4f} €`** (tope `MAX_BUDGET_EUR = {est_live['max_budget_eur']:.2f} €`)."
+    )
+    if st.button("🚀 Ejecutar prueba de conectores (24 llamadas con caché / fallback seguro)"):
+        df_live, meta_live = run_mini_study()
+        st.info(
+            f"Mini-estudio completado: `{len(df_live)}` ejecuciones generadas · `degradado={meta_live['degradado']}` · `coste_estimado={meta_live['estimated_cost_eur']:.4f} €`."
+        )
+        st.dataframe(
+            df_live[["ejecucion_id", "prompt_id", "motor", "repeticion", "ciudad", "fuentes", "respuesta"]],
+            use_container_width=True,
+            hide_index=True,
+        )
