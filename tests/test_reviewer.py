@@ -1,7 +1,10 @@
 """Tests del verificador de cifras y guardia normativa (F10)."""
 
-from geo.config import BRIEF_MD
+import docx
+
+from geo.config import BRIEF_MD, RUNS_DIR
 from geo.detection import detect
+from geo.export import export_docx, export_md
 from geo.findings import generate_findings
 from geo.intake import load_brief
 from geo.judge_rules import judge_rules
@@ -9,6 +12,7 @@ from geo.loader import load_ejecuciones, load_fuentes, load_marcas
 from geo.metrics import build_brand_summary_metrics, bundle
 from geo.reviewer import compliance, verify_numbers
 from geo.strategy import build_plan
+from geo.writer import write_client, write_prospect
 
 
 def _sample_context() -> tuple[dict, object, object]:
@@ -98,3 +102,64 @@ def test_compliance_promise_and_denigratory_comparison() -> None:
     )
     assert rev_clean.aprobado is True
     assert rev_clean.cifras_no_trazables == 0
+
+
+def test_writer_and_export_client_and_prospect_f11() -> None:
+    """Comprueba F11: write_client, write_prospect, export_md y export_docx verificando con python-docx."""
+    marcas = load_marcas()
+    df_ej = load_ejecuciones()
+    catalogo = load_fuentes()
+    df_det = detect(df_ej, marcas)
+    evals = judge_rules(df_det, df_ej, marcas, catalogo)
+    tablas = bundle(evals, df_ej, marcas)
+    ficha, _ = load_brief(BRIEF_MD, provider="mock")
+    hallazgos = generate_findings(tablas, ficha=ficha)
+    plan = build_plan(ficha, hallazgos, tablas, provider="mock")
+
+    run_id = "test_f11"
+    run_dir = RUNS_DIR / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1. Modo cliente -> propuesta_cliente.docx y .md
+    prop_cliente = write_client(
+        ficha,
+        tablas,
+        hallazgos,
+        plan,
+        run_id=run_id,
+        provider="mock",
+    )
+    assert prop_cliente.modo == "cliente"
+    assert len(prop_cliente.secciones) == 10
+    assert prop_cliente.revision.aprobado is True
+    assert prop_cliente.revision.cifras_no_trazables == 0
+
+    docx_path = run_dir / "propuesta_cliente.docx"
+    md_cliente_path = run_dir / "propuesta_cliente.md"
+    export_md(prop_cliente, md_cliente_path)
+    export_docx(prop_cliente, docx_path)
+
+    assert docx_path.exists()
+    doc = docx.Document(str(docx_path))
+    assert len(doc.paragraphs) > 20
+    assert len(doc.tables) >= 8
+    footer_text = doc.sections[0].footer.paragraphs[0].text
+    assert "Datos sintéticos" in footer_text and run_id in footer_text
+
+    # 2. Modo prospecto (Vistalia Oftalmología) -> propuesta_prospecto_vistalia.md
+    prop_vistalia = write_prospect(
+        "Vistalia Oftalmología",
+        tablas,
+        marcas_catalogo=marcas,
+        run_id=run_id,
+        provider="mock",
+    )
+    assert prop_vistalia.modo == "prospecto"
+    assert prop_vistalia.revision.aprobado is True
+    assert prop_vistalia.revision.cifras_no_trazables == 0
+
+    md_prosp_path = run_dir / "propuesta_prospecto_vistalia.md"
+    md_prosp_text = export_md(prop_vistalia, md_prosp_path)
+    assert md_prosp_path.exists()
+    assert "Vistalia Oftalmología" in md_prosp_text
+    assert "Asunto:" in md_prosp_text
