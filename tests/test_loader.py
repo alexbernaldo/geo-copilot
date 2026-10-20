@@ -4,12 +4,15 @@ import pandas as pd
 
 from geo.config import (
     BANCO_PROMPTS_CSV,
+    BRIEF_DOCX,
+    BRIEF_MD,
     EJECUCIONES_CSV,
     FUENTES_CATALOGO_CSV,
     MARCAS_CSV,
     MOTORES,
     MUESTRA_EVALUADA_CSV,
 )
+from geo.intake import ficha_resumen, load_brief
 from geo.loader import (
     as_ejecuciones,
     dominios_desconocidos,
@@ -114,3 +117,23 @@ def test_load_muestra() -> None:
         "tipo_fuente",
     }
     assert expected_cols.issubset(set(df.columns))
+
+
+def test_load_brief_example_md_and_docx_mock() -> None:
+    """Comprueba F7: extracción del brief de ejemplo (.md y .docx) en modo mock."""
+    for path in (BRIEF_MD, BRIEF_DOCX):
+        ficha, faltantes = load_brief(path, provider="mock")
+        assert faltantes == []
+        assert ficha.marca == "Clínica Alborada Visión"
+        assert "Madrid" in ficha.ciudades and "Barcelona" in ficha.ciudades
+        assert ficha.ciudad_crecimiento == "Barcelona"
+        assert ficha.competidores_declarados == [
+            "Instituto Oftálmico Tramuntana",
+            "Láser Nítida",
+            "Grupo Hospitalario Valdecruz",
+        ]
+        assert ficha.presupuesto_min_eur == 18000.0
+        assert ficha.presupuesto_max_eur == 27000.0
+        assert len(ficha.restricciones_normativas) > 0
+        assert "Comité" in ficha.audiencia
+        assert "Clínica Alborada Visión" in ficha_resumen(ficha)
