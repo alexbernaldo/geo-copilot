@@ -1,0 +1,15 @@
+.env
+cache/
+runs/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.DS_Store
+/Kit Participantes Hackaton.zip
+/Kit Participantes Hackaton/
+/PLAN_GEO_COPILOT.md
+.opencode/
