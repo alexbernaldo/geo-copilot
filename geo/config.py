@@ -364,9 +364,9 @@ ACTION_LIBRARY: list[dict[str, object]] = [
     {
         "template_id": "TPL-11",
         "titulo": "Plan de PR digital en prensa de salud citada (diariosalud, saludactual, bienestar-hoy)",
-        "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos) en los medios sanitarios más citados por los LLMs.",
+        "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en los medios sanitarios más citados por los LLMs.",
         "palanca": "autoridad_terceros",
-        "tipos_hallazgo": ["fuentes", "competencia", "brief_vs_datos"],
+        "tipos_hallazgo": ["fuentes", "competencia", "brief_vs_datos", "reputacion"],
         "fase_embudo": ["Descubrimiento", "Validación"],
         "esfuerzo": "L",
         "impacto": "L",

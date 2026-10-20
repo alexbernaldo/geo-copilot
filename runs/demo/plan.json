@@ -67,7 +67,8 @@
         "A2",
         "A3",
         "A4",
-        "A5"
+        "A5",
+        "A7"
       ]
     },
     {
@@ -80,7 +81,6 @@
       "objetivo": "Cerrar la brecha de visibilidad en Barcelona y en la fase de Decisión con páginas locales, FAQ citables, precios transparentes y protocolo postoperatorio.",
       "acciones": [
         "A6",
-        "A7",
         "A8",
         "A9",
         "A10"
@@ -336,41 +336,40 @@
     },
     {
       "id": "A7",
-      "titulo": "Programa de activación y respuesta de reseñas verificadas en la sede de Barcelona",
-      "descripcion": "Sistematizar la solicitud de reseñas post-revisión en el centro de Barcelona en Google, opinaclinicas.example y trustpilot.com, respondiendo con detalle informativo.",
+      "titulo": "Fichas individuales de los 14 oftalmólogos con colegiación, publicaciones y subespecialidad",
+      "descripcion": "Reforzar criterios E-E-A-T sanitarios mediante perfiles detallados de cada especialista en Madrid y Barcelona, enlazados como revisores de las guías médicas.",
       "hallazgos_relacionados": [
-        "H1",
-        "H7"
+        "H6",
+        "H2"
       ],
-      "palanca": "reputacion_resenas",
+      "palanca": "entidad_datos_estructurados",
       "fase_embudo": [
         "Validación",
         "Decisión"
       ],
       "motores_objetivo": [
         "ChatGPT",
+        "Claude",
         "Gemini",
-        "Perplexity",
-        "Claude"
+        "Perplexity"
       ],
       "ciudades": [
+        "Madrid",
         "Barcelona"
       ],
       "esfuerzo": "S",
-      "impacto": "L",
-      "responsable": "cliente_comunicacion",
-      "dependencias": [
-        "A3"
-      ],
+      "impacto": "M",
+      "responsable": "cliente_marketing",
+      "dependencias": [],
       "entregables": [
-        "Protocolo de captación de reseñas en clínica de Barcelona",
-        "Guía de respuesta sanitaria conforme a normativa"
+        "14 páginas de perfil médico con número de colegiado y experiencia",
+        "Sello de revisión médica con fecha en las 60 URLs informativas"
       ],
-      "semana_inicio": 6,
-      "plazo_semanas": 5,
+      "semana_inicio": 3,
+      "plazo_semanas": 3,
       "coste_estimado_eur": 900.0,
-      "kpi": ">= 100 nuevas reseñas verificadas en la sede de Barcelona con tasa de respuesta del 100 %",
-      "fase_plan": 1
+      "kpi": "14 perfiles médicos completos con marcado Physician y autoría clínica visible",
+      "fase_plan": 0
     },
     {
       "id": "A8",
@@ -528,11 +527,12 @@
     {
       "id": "A12",
       "titulo": "Plan de PR digital en prensa de salud citada (diariosalud, saludactual, bienestar-hoy)",
-      "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos) en los medios sanitarios más citados por los LLMs.",
+      "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en los medios sanitarios más citados por los LLMs.",
       "hallazgos_relacionados": [
         "H6",
         "H3",
-        "H4"
+        "H4",
+        "H7"
       ],
       "palanca": "autoridad_terceros",
       "fase_embudo": [

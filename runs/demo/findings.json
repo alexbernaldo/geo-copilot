@@ -317,8 +317,8 @@
   },
   {
     "id": "H7",
-    "titulo": "Reputación asistida sólida y oportunidad en seguimiento postoperatorio",
-    "descripcion": "En menciones asistidas, Clínica Alborada Visión presenta solo un 9.3% de menciones negativas y fuerza media de 1.21 (n=108), mientras que Láser Nítida acumula un 34.3% de menciones negativas por seguimiento postoperatorio (n=108).",
+    "titulo": "Fortaleza en reputación asistida: reputación sólida cuando la nombran; el problema es la visibilidad espontánea",
+    "descripcion": "FORTALEZA: cuando se consulta por la marca en asistido, Clínica Alborada Visión presenta una reputación sólida con solo un 9.3% de menciones negativas y fuerza media de 1.21 (n=108), frente al 25.9% de Vistalia Oftalmología (n=108) y el 34.3% de Láser Nítida por seguimiento postoperatorio (n=108). Esto contrasta la hipótesis del cliente «con tan buenas reseñas deberíamos salir recomendados»: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (38.8%, n=240).",
     "tipo": "reputacion",
     "fase_embudo": "Validación",
     "motores": [],
@@ -346,6 +346,17 @@
         ]
       },
       {
+        "metrica": "pct_negativo_asistida[marca=Vistalia Oftalmología]",
+        "valor": 25.9,
+        "n": 108,
+        "tabla": "T9",
+        "ejecucion_ids": [
+          "EJ-0049",
+          "EJ-0074",
+          "EJ-0085"
+        ]
+      },
+      {
         "metrica": "pct_negativo_asistida[marca=Láser Nítida]",
         "valor": 34.3,
         "n": 108,
@@ -354,6 +365,17 @@
           "EJ-0048",
           "EJ-0058",
           "EJ-0060"
+        ]
+      },
+      {
+        "metrica": "tasa_aparicion_espontanea[marca=Clínica Alborada Visión]",
+        "valor": 38.8,
+        "n": 240,
+        "tabla": "T1_espontanea",
+        "ejecucion_ids": [
+          "EJ-0002",
+          "EJ-0003",
+          "EJ-0006"
         ]
       }
     ],

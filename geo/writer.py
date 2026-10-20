@@ -479,6 +479,8 @@ def write_client(
     }
 
     # Bucle de verificación y reescritura (máximo 2 reintentos si hay incidencias en el texto narrativo)
+    initial_rev_narr: InformeRevision | None = None
+    rewrite_iterations = 0
     for attempt in range(2):
         full_narr_text = "\n\n".join(narrative.model_dump().values())
         rev_narr = compliance(
@@ -489,11 +491,14 @@ def write_client(
             provider=active_provider,
             use_cache=use_cache,
         )
+        if initial_rev_narr is None:
+            initial_rev_narr = rev_narr
         if rev_narr.aprobado:
             break
         if active_provider == "mock":
             narrative = mock_narr
             break
+        rewrite_iterations += 1
         inc_txt = "\n".join(f"- [{i.tipo}] {i.texto} -> {i.sugerencia}" for i in rev_narr.incidencias)
         retry_prompt = (
             f"{user_prompt}\n\n"
@@ -594,6 +599,11 @@ def write_client(
         "modelo": active_model,
         "prompt_version": "writer_client_v1",
         "coste_estimado_llm_eur": stats["estimated_cost_eur"],
+        "llm_calls": stats["calls"],
+        "iteraciones_reescritura": rewrite_iterations,
+        "revision_antes_reescritura": (
+            initial_rev_narr.model_dump() if initial_rev_narr is not None else None
+        ),
         "datos_sinteticos": True,
     }
 

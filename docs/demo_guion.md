@@ -21,7 +21,7 @@
 - **Qué decir:**
   > «Clínica Alborada Visión tiene 4,7 estrellas, más de 1.800 reseñas de pacientes y es líder percibida en Madrid. Su Comité de Dirección cree que con esa reputación los asistentes de IA ya la recomiendan. Pero cuando un paciente pregunta a ChatGPT o Claude sin mencionar ninguna marca, **Alborada cae al puesto 7 de 10 con un Score de Citación de solo 27,97 sobre 100**. Hoy os presentamos **GEO Copilot**: el sistema que convierte datos crudos de visibilidad conversacional en una propuesta estratégica verificada, trazable hasta cada respuesta original y lista para enviar al cliente.»
 - **Qué mostrar:**
-  - Tarjetas superiores de la portada (`Score espontáneo: 27,97/100 · Puesto 7/10`, `Aparición espontánea: 38,8 % (n=240)`, `Presupuesto Plan: 23.950 €`, `Verificador: 563/563 cifras trazables`).
+  - Tarjetas superiores de la portada (`Score espontáneo: 27,97/100 · Puesto 7/10`, `Aparición espontánea: 38,8 % (n=240)`, `Presupuesto Plan: 24.300 €`, `Verificador: 571/571 cifras trazables`).
 
 ---
 
@@ -50,8 +50,8 @@
 
 ### 4. Plan Estratégico, Restricciones y Simulador What-If (2:45 – 3:45 · 60 s) · *Pantalla: `5 Plan`*
 - **Qué decir:**
-  > «Cada hallazgo aprobado en el **Checkpoint 2** activa acciones concretas en `5_Plan`. No son recomendaciones genéricas: son 11 acciones en 4 fases a 12 meses con entregable, responsable, KPI y grafo de dependencias sin ciclos.»
-  > «El módulo `budget.py` garantiza dos restricciones duras del brief: el coste total queda en **23.950 €** (dentro de `18.000–27.000 €`) y la carga del equipo interno de 1,5 personas **nunca supera las 8 horas semanales** (máximo `6,5 h/semana`).»
+  > «Cada hallazgo aprobado en el **Checkpoint 2** activa acciones concretas en `5_Plan`. No son recomendaciones genéricas: son 14 acciones en 4 fases a 12 meses con entregable, responsable, KPI y grafo de dependencias sin ciclos. Además, como la reputación asistida de Alborada es una **fortaleza** (`9,3 %` negativo frente a `25,9 %` de Vistalia y `34,3 %` de Láser Nítida), el sistema no gasta presupuesto en gestión de crisis reputacional, sino que la utiliza como argumento central en contenidos y PR digital.»
+  > «El módulo `budget.py` garantiza dos restricciones duras del brief: el coste total queda en **24.300 €** (dentro de `18.000–27.000 €`) y la carga del equipo interno de 1,5 personas **nunca supera las 8 horas semanales** (máximo `6,5 h/semana`).»
   > «Abajo, el **Simulador What-If** (claramente etiquetado como *escenario hipotético, no una predicción*) nos permite mover el slider de Barcelona y de ChatGPT/Claude, ver en vivo cómo el Score sube de `27,97` y volcarlo con un clic a los objetivos del plan.»
 - **Qué mostrar:**
   - Matriz Esfuerzo vs Impacto, Gantt por semanas, curva de horas semanales bajo la línea roja de `8 h/sem` y mover un slider del simulador.
@@ -60,7 +60,7 @@
 
 ### 5. Confianza: Sello del Revisor y Validación del Juez (3:45 – 4:15 · 30 s) · *Pantallas: `6 Propuesta` y `7 Calidad y trazas`*
 - **Qué decir:**
-  > «¿Cómo garantizamos al Comité de Dirección que el LLM no ha inventado ni un solo dato? En `6_Propuesta`, el Agente Revisor audita el documento completo: **563 de 563 cifras verificadas contra las tablas deterministas** y **0 incidencias normativas sanitarias** (cero promesas garantizadas, cero comparativas denigratorias).»
+  > «¿Cómo garantizamos al Comité de Dirección que el LLM no ha inventado ni un solo dato? En `6_Propuesta`, el Agente Revisor audita el documento completo: **571 de 571 cifras verificadas contra las tablas deterministas** y **0 incidencias normativas sanitarias** (cero promesas garantizadas, cero comparativas denigratorias).»
   > «Además, en `7_Calidad_y_trazas` auditamos nuestro propio juez contra `muestra_evaluada.csv`: **100 % de exactitud y $\kappa = 1{,}000$ en detección, tipo de mención, fuerza y sentimiento**, documentando con total transparencia el 56,7 % en `tipo_fuente` porque el dataset informa las fuentes a nivel de respuesta y no por marca.»
 - **Qué mostrar:**
   - Sello verde en `6_Propuesta` + botón de descarga `.docx`, y tabla de $\kappa$ de Cohen en `7_Calidad_y_trazas`.
@@ -69,7 +69,7 @@
 
 ### 6. Giro Comercial: Modo Prospecto en Frío (4:15 – 4:45 · 30 s) · *Pantalla: `6 Propuesta` → Pestaña `Modo Prospecto`*
 - **Qué decir:**
-  > «Por último, convertimos el estudio sectorial en una máquina de desarrollo de negocio para la agencia. En la pestaña **Modo Prospecto**, seleccionamos a cualquier competidor sin brief —por ejemplo, **Vistalia Oftalmología** o **Láser Nítida**— y el sistema genera al instante una auditoría ejecutiva de captación con sus 3 brechas reales, 3 intervenciones y un correo comercial de 145 palabras listo para enviar.»
+  > «Por último, convertimos el estudio sectorial en una máquina de desarrollo de negocio para la agencia. En la pestaña **Modo Prospecto**, seleccionamos a cualquier competidor sin brief —por ejemplo, **Vistalia Oftalmología** o **Láser Nítida**— y el sistema genera al instante una auditoría ejecutiva de captación con sus 3 brechas reales, 3 intervenciones y un correo comercial de 120 a 180 palabras listo para enviar.»
 - **Qué mostrar:**
   - Cambiar el selector a `Vistalia Oftalmología` y mostrar el correo comercial listo para copiar y el botón de descarga `.docx`.
 

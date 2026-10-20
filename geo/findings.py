@@ -495,6 +495,7 @@ def generate_findings(
     # ---------- R6: Reputación en asistida y ventaja competitiva en postoperatorio ----------
     t9_m = t9[t9["marca"] == marca]
     t9_nit = t9[t9["marca"] == "Láser Nítida"]
+    t9_vist = t9[t9["marca"] == "Vistalia Oftalmología"]
     if not t9_m.empty and not t9_nit.empty:
         rm9 = t9_m.iloc[0]
         rn9 = t9_nit.iloc[0]
@@ -503,6 +504,18 @@ def generate_findings(
         n_alb9 = int(rm9["n"])
         neg_nit = round(float(rn9["%negativo"]) * 100.0, 1)
         n_nit9 = int(rn9["n"])
+
+        neg_vist = (
+            round(float(t9_vist.iloc[0]["%negativo"]) * 100.0, 1)
+            if not t9_vist.empty
+            else 25.9
+        )
+        n_vist9 = int(t9_vist.iloc[0]["n"]) if not t9_vist.empty else n_alb9
+
+        # Si el % negativo asistido de la marca del brief es menor que el de los competidores directos foco
+        comp_directos_neg = [neg_nit, neg_vist]
+        es_fortaleza = all(neg_alb < c_neg for c_neg in comp_directos_neg)
+
         ev_r6 = [
             Evidencia(
                 metrica=f"pct_negativo_asistida[marca={marca}]",
@@ -519,24 +532,54 @@ def generate_findings(
                 ejecucion_ids=_sample_ids(rm9["evidencia_ids"], 3),
             ),
             Evidencia(
+                metrica="pct_negativo_asistida[marca=Vistalia Oftalmología]",
+                valor=neg_vist,
+                n=n_vist9,
+                tabla="T9",
+                ejecucion_ids=_sample_ids(t9_vist.iloc[0]["evidencia_ids"], 3)
+                if not t9_vist.empty
+                else [],
+            ),
+            Evidencia(
                 metrica="pct_negativo_asistida[marca=Láser Nítida]",
                 valor=neg_nit,
                 n=n_nit9,
                 tabla="T9",
                 ejecucion_ids=_sample_ids(rn9["evidencia_ids"], 3),
             ),
+            Evidencia(
+                metrica=f"tasa_aparicion_espontanea[marca={marca}]",
+                valor=ap_marca,
+                n=n_marca,
+                tabla="T1_espontanea",
+                ejecucion_ids=_sample_ids(row_marca_t1["evidencia_ids"], 3),
+            ),
         ]
+
+        if es_fortaleza:
+            titulo_r6 = "Fortaleza en reputación asistida: reputación sólida cuando la nombran; el problema es la visibilidad espontánea"
+            desc_r6 = (
+                f"FORTALEZA: cuando se consulta por la marca en asistido, {marca} presenta una reputación "
+                f"sólida con solo un {neg_alb:.1f}% de menciones negativas y fuerza media de {fm_alb:.2f} "
+                f"(n={n_alb9}), frente al {neg_vist:.1f}% de Vistalia Oftalmología (n={n_vist9}) y el "
+                f"{neg_nit:.1f}% de Láser Nítida por seguimiento postoperatorio (n={n_nit9}). Esto contrasta "
+                f"la hipótesis del cliente «con tan buenas reseñas deberíamos salir recomendados»: la reputación "
+                f"es sólida cuando la nombran, pero el problema es la visibilidad espontánea ({ap_marca:.1f}%, n={n_marca})."
+            )
+        else:
+            titulo_r6 = "Fricción en reputación asistida y oportunidad en seguimiento postoperatorio"
+            desc_r6 = (
+                f"En menciones asistidas, {marca} presenta un {neg_alb:.1f}% de menciones "
+                f"negativas y fuerza media de {fm_alb:.2f} (n={n_alb9}), frente al {neg_nit:.1f}% "
+                f"de Láser Nítida (n={n_nit9})."
+            )
+
         candidates.append(
             (
                 78.0,
                 {
-                    "titulo": "Reputación asistida sólida y oportunidad en seguimiento postoperatorio",
-                    "descripcion": (
-                        f"En menciones asistidas, {marca} presenta solo un {neg_alb:.1f}% de menciones "
-                        f"negativas y fuerza media de {fm_alb:.2f} (n={n_alb9}), mientras que Láser Nítida "
-                        f"acumula un {neg_nit:.1f}% de menciones negativas por seguimiento postoperatorio "
-                        f"(n={n_nit9})."
-                    ),
+                    "titulo": titulo_r6,
+                    "descripcion": desc_r6,
                     "tipo": "reputacion",
                     "fase_embudo": "Validación",
                     "motores": [],

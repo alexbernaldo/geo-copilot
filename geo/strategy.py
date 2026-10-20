@@ -50,14 +50,32 @@ class _EstrategiaLLMOutput(BaseModel):
     acciones: list[_AccionSeleccionLLM]
 
 
+def _is_reputation_strength(hallazgos: Sequence[Hallazgo]) -> bool:
+    """Devuelve True si el hallazgo de reputación es una fortaleza ('reputación sólida cuando la nombran')."""
+    return any(
+        h.tipo == "reputacion"
+        and ("fortaleza" in h.titulo.lower() or "fortaleza" in h.descripcion.lower())
+        for h in hallazgos
+        if h.aprobado
+    )
+
+
 def select_candidate_templates(hallazgos: Sequence[Hallazgo]) -> list[dict[str, Any]]:
-    """Selecciona por código las plantillas candidatas de ACTION_LIBRARY según los tipos de hallazgos aprobados."""
+    """Selecciona por código las plantillas candidatas de ACTION_LIBRARY según los tipos de hallazgos aprobados.
+
+    Si el hallazgo de reputación es una fortaleza, no selecciona acciones de gestión reputacional
+    (`palanca == 'reputacion_resenas'`), sino que lo canaliza como argumento en contenido y PR.
+    """
     active_types = {h.tipo for h in hallazgos if h.aprobado}
     if not active_types:
         active_types = {h.tipo for h in hallazgos}
 
+    rep_is_strength = _is_reputation_strength(hallazgos)
+
     candidates: list[dict[str, Any]] = []
     for tpl in ACTION_LIBRARY:
+        if rep_is_strength and tpl["palanca"] == "reputacion_resenas":
+            continue
         tpl_types = set(tpl["tipos_hallazgo"])  # type: ignore[arg-type]
         if tpl["palanca"] == "medicion" or (tpl_types & active_types):
             candidates.append(tpl)
@@ -199,7 +217,15 @@ def _build_mock_selection(
             h_by_type.setdefault(h.tipo, []).append(h.id)
     all_h_ids = [h.id for h in hallazgos if h.aprobado] or ["H1"]
 
-    # Selección curada de 13 plantillas que cubren todos los hallazgos dentro de 18.000-27.000 € (~23.850 €)
+    # Selección curada de plantillas que cubren todos los hallazgos dentro de 18.000-27.000 €
+    # Cuando reputación es una fortaleza, no se incluye TPL-06 (reputacion_resenas) sino TPL-15 (fichas médicas E-E-A-T)
+    # y la fortaleza de reputación se usa como argumento en TPL-09 (contenido) y TPL-11 (PR digital).
+    rep_strength = _is_reputation_strength(hallazgos)
+    extra_tpl = (
+        ("TPL-15", 3, "bajo", ["ChatGPT", "Claude", "Gemini", "Perplexity"], ciudades_brand[:2])
+        if rep_strength
+        else ("TPL-06", 6, "medio", ["ChatGPT", "Gemini", "Perplexity", "Claude"], [ciudad_crec])
+    )
     chosen_specs: list[tuple[str, int, Literal["bajo", "medio", "alto"], list[Motor], list[str]]] = [
         ("TPL-01", 1, "medio", ["ChatGPT", "Claude", "Gemini", "Perplexity"], ciudades_brand[:2]),
         ("TPL-02", 1, "medio", ["ChatGPT", "Claude"], ciudades_brand[:2]),
@@ -207,7 +233,7 @@ def _build_mock_selection(
         ("TPL-04", 4, "medio", ["ChatGPT", "Claude"], ciudades_brand[:2]),
         ("TPL-17", 2, "medio", ["ChatGPT", "Claude", "Gemini", "Perplexity"], ciudades_brand[:2]),
         ("TPL-05", 5, "medio", ["ChatGPT", "Gemini", "Perplexity", "Claude"], [ciudad_crec]),
-        ("TPL-06", 6, "medio", ["ChatGPT", "Gemini", "Perplexity", "Claude"], [ciudad_crec]),
+        extra_tpl,  # type: ignore[list-item]
         ("TPL-07", 5, "medio", ["ChatGPT", "Claude", "Gemini", "Perplexity"], ciudades_brand[:2]),
         ("TPL-08", 6, "medio", ["ChatGPT", "Claude", "Gemini", "Perplexity"], ciudades_brand[:2]),
         ("TPL-09", 7, "medio", ["ChatGPT", "Claude", "Gemini", "Perplexity"], ciudades_brand[:2]),
@@ -311,9 +337,20 @@ def build_plan(
 
     # Construir objetos Accion calculando el coste en código desde ACTION_LIBRARY
     tpl_lookup = {str(t["template_id"]): t for t in ACTION_LIBRARY}
-    tpl_to_action_id: dict[str, str] = {}
-    raw_items = llm_out.acciones if llm_out.acciones else mock_out.acciones
+    rep_strength = _is_reputation_strength(hallazgos)
+    rep_h_ids = [h.id for h in hallazgos if h.aprobado and h.tipo == "reputacion"]
 
+    raw_items = llm_out.acciones if llm_out.acciones else mock_out.acciones
+    if rep_strength:
+        filtered_items = [
+            it
+            for it in raw_items
+            if tpl_lookup.get(it.template_id, ACTION_LIBRARY[0])["palanca"] != "reputacion_resenas"
+        ]
+        if filtered_items:
+            raw_items = filtered_items
+
+    tpl_to_action_id: dict[str, str] = {}
     for idx, item in enumerate(raw_items, start=1):
         tpl_to_action_id[item.template_id] = f"A{idx}"
 
@@ -323,6 +360,14 @@ def build_plan(
     for idx, item in enumerate(raw_items, start=1):
         aid = f"A{idx}"
         tpl = tpl_lookup.get(item.template_id, ACTION_LIBRARY[0])
+        palanca_val = str(tpl["palanca"])
+        rels = list(item.hallazgos_relacionados)
+        if rep_strength and rep_h_ids and palanca_val in ("contenido", "autoridad_terceros"):
+            if item.template_id in ("TPL-09", "TPL-11") or "reputacion" in tpl["tipos_hallazgo"]:  # type: ignore[operator]
+                for rh in rep_h_ids:
+                    if rh not in rels:
+                        rels.append(rh)
+
         rango: tuple[float, float] = tpl["coste_rango_eur"]  # type: ignore[assignment]
         coste_eur = cost_from_tier(rango, item.nivel_coste)
         deps_aid = [
@@ -337,7 +382,7 @@ def build_plan(
                 id=aid,
                 titulo=item.titulo,
                 descripcion=item.descripcion,
-                hallazgos_relacionados=item.hallazgos_relacionados,
+                hallazgos_relacionados=rels,
                 palanca=tpl["palanca"],  # type: ignore[arg-type]
                 fase_embudo=list(tpl["fase_embudo"]),  # type: ignore[arg-type]
                 motores_objetivo=item.motores_objetivo,

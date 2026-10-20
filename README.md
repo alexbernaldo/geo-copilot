@@ -13,11 +13,11 @@
 1. **Diagnóstico riguroso y auditable (`T1`–`T12`)** con separación estricta entre **visibilidad espontánea (`n=240`)** y **visibilidad asistida (`n=384`)**, trazando cada métrica hasta los identificadores exactos de ejecución (`ejecucion_id`).
 2. **Contraste de mercado y competidores** que detecta discrepancias entre las creencias del brief y los datos reales de recomendación en IA: identifica que el líder espontáneo real es `Grupo Hospitalario Valdecruz` (`90,8 %` de aparición, `score 75,02`), que `Instituto Oftálmico Tramuntana` es 2º (`68,8 %`, `score 51,70`) y que el brief omite a `Vistalia Oftalmología` (`41,2 %` de aparición espontánea, `score 26,59`) y a otros 5 actores relevantes (`Oftalmos Centro` `60,0 %`, `Clínica del Ojo Cervantes` `44,2 %`, `Instituto Ocular Santa Eulalia` `42,5 %`, `Visionar Clínicas` `33,3 %` y `Centro Lasik Península` `31,2 %`).
 3. **Hallazgos priorizados (`H1`–`H7`)** generados por reglas deterministas (`R1`–`R10`) con cifra exacta, tamaño muestral `n`, tabla de origen y desplegable de evidencias originales.
-4. **Plan estratégico a 12 meses (`Fases 0 a 3`)** con matriz Esfuerzo vs Impacto, diagrama Gantt por semanas (`S1`–`S52`), control presupuestario automático dentro de la horquilla del brief (`23.950 €` dentro de `18.000–27.000 €`), respeto de la capacidad del equipo del cliente (`<= 8 h/semana`, 1,5 personas) y **Simulador What-If** del Score de Citación.
+4. **Plan estratégico a 12 meses (`Fases 0 a 3`)** con matriz Esfuerzo vs Impacto, diagrama Gantt por semanas (`S1`–`S52`), control presupuestario automático dentro de la horquilla del brief (`24.300 €` dentro de `18.000–27.000 €`), respeto de la capacidad del equipo del cliente (`<= 8 h/semana`, 1,5 personas) y **Simulador What-If** del Score de Citación.
 5. **Propuesta ejecutiva exportable a `.docx` y `.md`** en dos modos:
    - **Modo Cliente** (10 secciones + Anexo de trazabilidad completo para `Clínica Alborada Visión`).
    - **Modo Prospecto** (dossier ejecutivo en frío sin brief previo + correo comercial de 120–180 palabras listo para enviar, p. ej. para `Vistalia Oftalmología` o `Láser Nítida`).
-6. **Sello del Agente Revisor**: verificación determinista de que el **100 % de las cifras del documento proceden de las tablas calculadas (`563/563` cifras trazables)** y **0 incidencias de cumplimiento normativo sanitario** (sin promesas garantizadas ni comparativas denigratorias).
+6. **Sello del Agente Revisor**: verificación determinista de que el **100 % de las cifras del documento proceden de las tablas calculadas (`571/571` cifras trazables)** y **0 incidencias de cumplimiento normativo sanitario** (sin promesas garantizadas ni comparativas denigratorias).
 
 ---
 

@@ -10,7 +10,7 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
 
 ### Indicadores clave verificados del proyecto
 - **Fases completadas:** **17 / 17 (`F0` a `F16`)**, cada una con su commit atómico en `main`.
-- **Tests automatizados (`pytest`):** **36 / 36 tests en verde** (`100 % pass`).
+- **Tests automatizados (`pytest`):** **40 / 40 tests en verde** (`100 % pass`).
 - **Exactitud del detector (`detection.py`):** **133 / 133 (`100,0 %`)** frente a `muestra_evaluada.csv` en `aparece`, `posicion` y `peso_posicion`.
 - **Exactitud del juez (`judge_rules.py` / `judge.py`):**
   - `tipo_mencion`: **100,0 %** ($\kappa = 1{,}000$)
@@ -19,7 +19,7 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
   - `tipo_fuente`: **56,7 %** en apariciones ($n=67$, $\kappa = 0{,}468$) · **62,3 %** en *held-out* de 12 ejecuciones ($n=53$, $\kappa = 0{,}527$) · **78,2 %** global ($n=133$, $\kappa = 0{,}715$), documentando el techo determinista por fuentes listadas a nivel de ejecución.
   - Ninguna regla de `geo/judge_rules.py` contiene identificadores `EJ-xxxx`, y las 3 ejecuciones *few-shot* (`EJ-0502`, `EJ-0565`, `EJ-0624`) se excluyen en la validación *held-out* de `scripts/validate_judge.py`.
 - **Verificador del Agente Revisor (`reviewer.py`):**
-  - `verify_numbers`: **563 / 563 cifras trazables verificadas (`100 %`)**.
+  - `verify_numbers`: **571 / 571 cifras trazables verificadas (`100 %`)**.
   - `verify_entities`: bloquea cualquier marca, dominio, ciudad o perfil ausente de `marcas.csv`, `fuentes_catalogo.csv`, `banco_prompts.csv` o `FichaMarca`.
   - `compliance`: **0 incidencias normativas sanitarias**.
 
@@ -38,7 +38,7 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
 | **F6 · Motor de Hallazgos** | `geo/findings.py`, `tests/test_findings.py` | Reglas deterministas `R1`–`R10` que producen los hallazgos `H1`–`H7` para **Clínica Alborada Visión** con cifras reales, tamaño muestral `n`, severidad/prioridad y `ejecucion_ids` trazables. |
 | **F7 · Intake de Brief** | `geo/intake.py`, `geo/prompts/intake_v1.md` | Extracción de `FichaMarca` desde `.md`, `.docx`, `.txt` o texto pegado. Cálculo en código del presupuesto anual (`1.500–2.250 €/mes × 12 = 18.000–27.000 €`) y detección de preguntas `faltantes` para el **Checkpoint 0**. |
 | **F8 · Contraste de Mercado** | `geo/market.py` | Cruza los competidores declarados en el brief contra `T1_espontanea`, detecta al líder real (`Grupo Hospitalario Valdecruz`, `90,8 %`), confirma a `Instituto Oftálmico Tramuntana` (`68,8 %`) y `Láser Nítida` (`55,8 %`), e identifica los 6 actores no declarados con presencia espontánea $\ge 30\%$ (incluida `Vistalia Oftalmología` con `41,2 %`). |
-| **F9 · Estrategia y Presupuesto** | `geo/config.py`, `geo/budget.py`, `geo/strategy.py`, `geo/prompts/strategy_v1.md`, `tests/test_budget.py` | Biblioteca de 22 plantillas (`ACTION_LIBRARY`), generación del Plan a 12 meses en 4 fases (`Fases 0–3`), verificación de DAG sin ciclos, ajuste presupuestario (`23.950 €` dentro de `18.000–27.000 €`) y nivelación de carga del equipo del cliente (`<= 8 h/semana`, pico de `6,5 h/sem`). |
+| **F9 · Estrategia y Presupuesto** | `geo/config.py`, `geo/budget.py`, `geo/strategy.py`, `geo/prompts/strategy_v1.md`, `tests/test_budget.py` | Biblioteca de 22 plantillas (`ACTION_LIBRARY`), generación del Plan a 12 meses en 4 fases (`Fases 0–3`), verificación de DAG sin ciclos, ajuste presupuestario (`24.300 €` dentro de `18.000–27.000 €`) y nivelación de carga del equipo del cliente (`<= 8 h/semana`, pico de `6,5 h/sem`). |
 | **F10 · Agente Revisor** | `geo/reviewer.py`, `geo/prompts/compliance_v1.md`, `tests/test_reviewer.py` | Verificador determinista `verify_numbers`, verificador de entidades del kit `verify_entities` y auditor de cumplimiento normativo sanitario (`compliance`). |
 | **F11 · Redactor y Exportación** | `geo/writer.py`, `geo/export.py`, `geo/prompts/writer_client_v1.md`, `geo/prompts/writer_prospect_v1.md` | Generación de propuestas en **Modo Cliente** (10 secciones + tablas inyectadas por código + Anexo de trazabilidad) y **Modo Prospecto** (gancho, 3 hallazgos, 3 acciones y correo comercial de 120–180 palabras), con exportación a `.docx` y `.md`. |
 | **F12 · Orquestador y CLI** | `geo/orchestrator.py`, `scripts/run_pipeline.py`, `tests/test_pipeline_mock.py`, `runs/demo/` | Gestión de estado por `run_id` (`state.json`), registro de trazas auditable (`trace.jsonl`), reanudación desde el último paso `done`, degradación elegante a `mock`/reglas, soporte de los **4 checkpoints humanos** y generación completa de `runs/demo/`. |
@@ -102,9 +102,9 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
 4. **`H4` (`brief_vs_datos`, prioridad 1):** Contraste Brief vs Datos: `Vistalia Oftalmología` omitida en el brief alcanza un `41,2 %` de aparición espontánea ($n=240$), `Grupo Hospitalario Valdecruz` es el líder real (`90,8 %`) y las reseñas de `Clínica Alborada Visión` solo se traducen en un `6,7 %` de recomendación activa espontánea ($n=240$).
 5. **`H5` (`embudo`, prioridad 2):** Caída de visibilidad en la fase de Decisión del embudo: pasa del `44,7 %` en Descubrimiento ($n=132$) al `25,0 %` en Decisión ($n=48$), donde `Grupo Hospitalario Valdecruz` alcanza el `97,9 %` ($n=48$).
 6. **`H6` (`fuentes`, prioridad 2):** Menor respaldo en rankings y prensa sanitaria frente al líder: el `31,3 %` de las apariciones de `Clínica Alborada Visión` se apoya en Rankings o Medios ($n=201$, calidad media `0,69`), frente al `38,3 %` de `Grupo Hospitalario Valdecruz` ($n=290$).
-7. **`H7` (`reputacion`, prioridad 3):** Reputación asistida sólida y oportunidad en seguimiento postoperatorio: en menciones asistidas ($n=108$), `Clínica Alborada Visión` presenta solo un `9,3 %` de menciones negativas y fuerza media de `1,21`, mientras que `Láser Nítida` acumula un `34,3 %` de menciones negativas por seguimiento postoperatorio ($n=108$).
+7. **`H7` (`reputacion`, prioridad 7):** Fortaleza en reputación asistida: cuando se consulta por la marca en asistido ($n=108$), `Clínica Alborada Visión` presenta una reputación sólida con solo un `9,3 %` de menciones negativas y fuerza media de `1,21`, frente al `25,9 %` de `Vistalia Oftalmología` ($n=108$) y el `34,3 %` de `Láser Nítida` por seguimiento postoperatorio ($n=108$). Contrasta la hipótesis del cliente *«con tan buenas reseñas deberíamos salir recomendados»*: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (`38,8 %`, $n=240$).
 
 ### 3.5. Plan Estratégico a 12 meses (`runs/demo/plan.json`)
-- **Acciones:** **11 acciones** distribuidas en 4 fases (`Fase 0` `S1–S4`, `Fase 1` `S5–S10`, `Fase 2` `S11–S36`, `Fase 3` `S12–S48`), todas trazadas a `H1`–`H7` y sin ciclos de dependencias.
-- **Presupuesto total:** **`23.950 €`** (dentro del rango `18.000–27.000 €` del brief).
+- **Acciones:** **14 acciones** distribuidas en 4 fases (`Fase 0` `S1–S4`, `Fase 1` `S5–S10`, `Fase 2` `S11–S36`, `Fase 3` `S12–S48`), todas trazadas a `H1`–`H7`, sin ciclos de dependencias y sin gastar presupuesto en gestión reputacional (usando `H7` como argumento en contenido `A10` y PR digital `A12`).
+- **Presupuesto total:** **`24.300 €`** (dentro del rango `18.000–27.000 €` del brief).
 - **Capacidad del equipo del cliente:** máximo **`6,5 h/semana`** (respetando el tope de `8,0 h/semana` para el equipo de 1,5 personas).

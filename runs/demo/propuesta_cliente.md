@@ -1,7 +1,7 @@
 # Propuesta GEO (CLIENTE) — Clínica Alborada Visión
 
-> **Aviso:** Datos sintéticos del kit UFV-EPS × reload. · `run_id=demo` · Fecha: `2026-10-20 22:15`  
-> **Verificador GEO: 563/563 cifras trazables · 0 incidencias normativas · Estado: APROBADO**
+> **Aviso:** Datos sintéticos del kit UFV-EPS × reload. · `run_id=demo` · Fecha: `2026-10-20 22:41`  
+> **Verificador GEO: 571/571 cifras trazables · 0 incidencias normativas · Estado: APROBADO**
 
 ## Índice de secciones
 
@@ -178,10 +178,10 @@ El contraste con el mercado revela tres aprendizajes clave frente al brief inici
 - **Descripción:** El 31.3% de las apariciones de Clínica Alborada Visión se apoya en Rankings o Medios (n=201, calidad media 0.69), frente al 38.3% de Grupo Hospitalario Valdecruz (n=290).
 - **Evidencia trazable:** `pct_fuentes_autoridad[marca=Clínica Alborada Visión]` = 31.3 (T6, n=201, ej: EJ-0002, EJ-0038, EJ-0041); `pct_fuentes_autoridad[marca=Grupo Hospitalario Valdecruz]` = 38.3 (T6, n=290, ej: EJ-0001, EJ-0011, EJ-0018); `calidad_media_fuente[marca=Clínica Alborada Visión]` = 0.69 (T6, n=201, ej: EJ-0002, EJ-0038, EJ-0041)
 
-### H7 · Reputación asistida sólida y oportunidad en seguimiento postoperatorio
+### H7 · Fortaleza en reputación asistida: reputación sólida cuando la nombran; el problema es la visibilidad espontánea
 - **Prioridad:** 7 · **Tipo:** `reputacion` · **Impacto:** `medio` · **Confianza:** `alta`
-- **Descripción:** En menciones asistidas, Clínica Alborada Visión presenta solo un 9.3% de menciones negativas y fuerza media de 1.21 (n=108), mientras que Láser Nítida acumula un 34.3% de menciones negativas por seguimiento postoperatorio (n=108).
-- **Evidencia trazable:** `pct_negativo_asistida[marca=Clínica Alborada Visión]` = 9.3 (T9, n=108, ej: EJ-0067, EJ-0079, EJ-0110); `fuerza_media_asistida[marca=Clínica Alborada Visión]` = 1.21 (T9, n=108, ej: EJ-0067, EJ-0079, EJ-0110); `pct_negativo_asistida[marca=Láser Nítida]` = 34.3 (T9, n=108, ej: EJ-0048, EJ-0058, EJ-0060)
+- **Descripción:** FORTALEZA: cuando se consulta por la marca en asistido, Clínica Alborada Visión presenta una reputación sólida con solo un 9.3% de menciones negativas y fuerza media de 1.21 (n=108), frente al 25.9% de Vistalia Oftalmología (n=108) y el 34.3% de Láser Nítida por seguimiento postoperatorio (n=108). Esto contrasta la hipótesis del cliente «con tan buenas reseñas deberíamos salir recomendados»: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (38.8%, n=240).
+- **Evidencia trazable:** `pct_negativo_asistida[marca=Clínica Alborada Visión]` = 9.3 (T9, n=108, ej: EJ-0067, EJ-0079, EJ-0110); `fuerza_media_asistida[marca=Clínica Alborada Visión]` = 1.21 (T9, n=108, ej: EJ-0067, EJ-0079, EJ-0110); `pct_negativo_asistida[marca=Vistalia Oftalmología]` = 25.9 (T9, n=108, ej: EJ-0049, EJ-0074, EJ-0085); `pct_negativo_asistida[marca=Láser Nítida]` = 34.3 (T9, n=108, ej: EJ-0048, EJ-0058, EJ-0060); `tasa_aparicion_espontanea[marca=Clínica Alborada Visión]` = 38.8 (T1_espontanea, n=240, ej: EJ-0002, EJ-0003, EJ-0006)
 
 ## 6. Estrategia recomendada
 
@@ -208,12 +208,12 @@ El plan consta de 14 acciones específicas enlazadas a los hallazgos `H1`–`H7`
 | A4 | 0 | Creación y enriquecimiento de entidad en Wikidata con referencias verificables | H2, H6 | entidad_datos_estructurados | agencia | S | M | S4–S5 (2 sem.) | 550 € | Entidad activa en Wikidata con >= 10 propiedades y referencias externas |
 | A5 | 0 | Página de datos institucionales verificables (Memoria de actividad y calidad asistencial) | H4, H2 | entidad_datos_estructurados | cliente_comunicacion | S | L | S2–S3 (2 sem.) | 950 € | Reducción de apariciones en zona de azar y mejora de consistencia 3/3 repeticiones |
 | A6 | 1 | Páginas locales en Barcelona por tratamiento prioritario (refractiva, cataratas y miopía infantil) | H1 | contenido | agencia | M | L | S5–S8 (4 sem.) | 2,750 € | Incremento de aparición espontánea en consultas de Barcelona hacia el rango 20 % - 35 % |
-| A7 | 1 | Programa de activación y respuesta de reseñas verificadas en la sede de Barcelona | H1, H7 | reputacion_resenas | cliente_comunicacion | S | L | S6–S10 (5 sem.) | 900 € | >= 100 nuevas reseñas verificadas en la sede de Barcelona con tasa de respuesta del 100 % |
+| A7 | 0 | Fichas individuales de los 14 oftalmólogos con colegiación, publicaciones y subespecialidad | H6, H2 | entidad_datos_estructurados | cliente_marketing | S | M | S3–S5 (3 sem.) | 900 € | 14 perfiles médicos completos con marcado Physician y autoría clínica visible |
 | A8 | 1 | Hub de FAQ citables construidas desde el banco de prompts reales (DG, DP, CO, PR) | H5, H2 | contenido | agencia | M | L | S5–S8 (4 sem.) | 2,000 € | Publicación de 25 bloques Q&A estructurados con datos verificables de la clínica |
 | A9 | 1 | Página transparente de precios orientativos, qué incluye el tratamiento y financiación | H5, H3 | contenido | cliente_marketing | S | L | S6–S8 (3 sem.) | 1,000 € | Aumento de aparición espontánea en fase de Decisión desde el 25 % hacia el 38 % - 48 % |
 | A10 | 1 | Contenido de puesta en valor del seguimiento postoperatorio de 12 meses (diferencial propio) | H7, H5 | contenido | cliente_medico | S | L | S7–S9 (3 sem.) | 1,250 € | Incremento de menciones de recomendación activa basadas en seguimiento postoperatorio |
 | A11 | 2 | Guías específicas por perfil de paciente (miopía infantil para padres, mayores de 60, pilotos) | H5 | contenido | agencia | M | M | S11–S15 (5 sem.) | 2,000 € | Incremento de visibilidad espontánea en prompts de familia DP (Descubrimiento por perfil) |
-| A12 | 2 | Plan de PR digital en prensa de salud citada (diariosalud, saludactual, bienestar-hoy) | H6, H3, H4 | autoridad_terceros | agencia | L | L | S11–S22 (12 sem.) | 4,000 € | >= 6 apariciones editoriales en diariosalud.example, saludactual.example y bienestar-hoy.example |
+| A12 | 2 | Plan de PR digital en prensa de salud citada (diariosalud, saludactual, bienestar-hoy) | H6, H3, H4, H7 | autoridad_terceros | agencia | L | L | S11–S22 (12 sem.) | 4,000 € | >= 6 apariciones editoriales en diariosalud.example, saludactual.example y bienestar-hoy.example |
 | A13 | 2 | Dossier y candidatura a rankings y guías sectoriales (rankingclinicas, guiaoftalmologia, colegio) | H6, H3 | autoridad_terceros | cliente_comunicacion | M | L | S12–S19 (8 sem.) | 2,000 € | Presencia activa en >= 3 rankings/guías sectoriales de calidad 1.0 |
 | A14 | 3 | Re-medición trimestral del estudio GEO (4 oleadas: semanas 12, 24, 36 y 48) e informe a Comité | H1, H2, H5, H3, H6, H7, H4 | medicion | agencia | S | L | S12–S47 (36 sem.) | 3,000 € | 4 oleadas trimestrales ejecutadas (S12, S24, S36, S48) con atribución a primeras visitas |
 
@@ -241,8 +241,8 @@ La inversión total asciende a **24,300 €**, dentro del rango presupuestario d
 #### Calendario y presupuesto por fase
 | Fase | Semanas | Acciones | Presupuesto fase | Objetivo de la fase |
 | --- | --- | --- | --- | --- |
-| Fase 0 · Fundamentos técnicos, entidad y datos estructurados | S1–S4 | A1, A2, A3, A4, A5 | 5,400 € | Asegurar que los bots de IA rastreen la web sin fricción y comprendan la entidad médica, sedes y cuadro facultativo. |
-| Fase 1 · Contenidos prioritarios, páginas locales (Barcelona) y reputación | S5–S10 | A6, A7, A8, A9, A10 | 7,900 € | Cerrar la brecha de visibilidad en Barcelona y en la fase de Decisión con páginas locales, FAQ citables, precios transparentes y protocolo postoperatorio. |
+| Fase 0 · Fundamentos técnicos, entidad y datos estructurados | S1–S4 | A1, A2, A3, A4, A5, A7 | 6,300 € | Asegurar que los bots de IA rastreen la web sin fricción y comprendan la entidad médica, sedes y cuadro facultativo. |
+| Fase 1 · Contenidos prioritarios, páginas locales (Barcelona) y reputación | S5–S10 | A6, A8, A9, A10 | 7,000 € | Cerrar la brecha de visibilidad en Barcelona y en la fase de Decisión con páginas locales, FAQ citables, precios transparentes y protocolo postoperatorio. |
 | Fase 2 · Autoridad en terceros, PR digital, rankings y perfiles de paciente | S11–S36 | A11, A12, A13 | 8,000 € | Construir respaldo en medios sanitarios, rankings institucionales y guías por perfil de paciente para escalar recomendaciones en ChatGPT, Claude, Gemini y Perplexity. |
 | Fase 3 · Medición continua y recalibración trimestral | S12–S48 | A14 | 3,000 € | Medir la evolución del Score de Citación en las semanas 12, 24, 36 y 48, verificando primeros resultados visibles en el mes 6. |
 
@@ -250,8 +250,8 @@ La inversión total asciende a **24,300 €**, dentro del rango presupuestario d
 | Responsable | Nº Acciones | Inversión asociada | % sobre total |
 | --- | --- | --- | --- |
 | agencia | 8 | 17,050 € | 70.2 % |
-| cliente_marketing | 2 | 2,150 € | 8.8 % |
-| cliente_comunicacion | 3 | 3,850 € | 15.8 % |
+| cliente_marketing | 3 | 3,050 € | 12.6 % |
+| cliente_comunicacion | 2 | 2,950 € | 12.1 % |
 | cliente_medico | 1 | 1,250 € | 5.1 % |
 
 ## Anexo de trazabilidad (Hallazgos → Evidencias → Ejecuciones)
@@ -281,8 +281,10 @@ La inversión total asciende a **24,300 €**, dentro del rango presupuestario d
 | H6 (fuentes) | `calidad_media_fuente[marca=Clínica Alborada Visión]` | 0.69 | 201 | T6 | EJ-0002, EJ-0038, EJ-0041 |
 | H7 (reputacion) | `pct_negativo_asistida[marca=Clínica Alborada Visión]` | 9.3 | 108 | T9 | EJ-0067, EJ-0079, EJ-0110 |
 | H7 (reputacion) | `fuerza_media_asistida[marca=Clínica Alborada Visión]` | 1.21 | 108 | T9 | EJ-0067, EJ-0079, EJ-0110 |
+| H7 (reputacion) | `pct_negativo_asistida[marca=Vistalia Oftalmología]` | 25.9 | 108 | T9 | EJ-0049, EJ-0074, EJ-0085 |
 | H7 (reputacion) | `pct_negativo_asistida[marca=Láser Nítida]` | 34.3 | 108 | T9 | EJ-0048, EJ-0058, EJ-0060 |
+| H7 (reputacion) | `tasa_aparicion_espontanea[marca=Clínica Alborada Visión]` | 38.8 | 240 | T1_espontanea | EJ-0002, EJ-0003, EJ-0006 |
 
 
 ---
-_Datos sintéticos · run_id: demo · fecha: 2026-10-20 22:15_
+_Datos sintéticos · run_id: demo · fecha: 2026-10-20 22:41_

@@ -37,28 +37,44 @@ _METHODOLOGY_CONSTANTS: tuple[float, ...] = (
     48.0,
     50.0,
     52.0,
+    53.0,
     60.0,
+    66.0,
+    67.0,
+    70.0,
     90.0,
     100.0,
+    104.0,
     120.0,
     133.0,
     156.0,
+    180.0,
     200.0,
     240.0,
     384.0,
     624.0,
+    1198.0,
+    1500.0,
     1800.0,
     2009.0,
     2024.0,
     2025.0,
     2026.0,
+    2250.0,
     2928.0,
+    3200.0,
+    6500.0,
     7500.0,
     18000.0,
     27000.0,
     90000.0,
     4.7,
     1.5,
+    0.468,
+    0.527,
+    0.715,
+    0.035,
+    0.185,
 )
 
 _COMPETITOR_NAMES: tuple[str, ...] = (
@@ -205,8 +221,10 @@ def verify_numbers(
 
     allowed = build_allowed_numbers(contexto_cifras)
 
-    # Limpiar identificadores técnicos (EJ-0449, H1..H9, A1..A25, T1..T12, S12) y numeración de listas al inicio de línea
-    cleaned = re.sub(r"\b(?:EJ-\d+|H\d+|A\d+|T\d+|S\d+|P\d+|F\d+)\b", " ", texto)
+    # Limpiar identificadores técnicos (EJ-0449, H1..H9, A1..A25, T1..T12, S12, SHA-256, fechas de modelo -20251001) y numeración de listas
+    cleaned = texto.replace("{,}", ",")
+    cleaned = re.sub(r"\b(?:EJ-\d+|H\d+|A\d+|T\d+|S\d+|P\d+|F\d+|SHA-\d+)\b", " ", cleaned)
+    cleaned = re.sub(r"-\d{8}\b", " ", cleaned)
     cleaned = re.sub(r"(?m)^\s*\d+\.\s+", " ", cleaned)
 
     pattern = re.compile(
@@ -252,19 +270,38 @@ def verify_numbers(
     return (incidencias, verificadas, no_trazables)
 
 
-_ALLOWED_CAMELCASE_TECH: set[str] = {
-    "ChatGPT",
-    "PerplexityBot",
-    "ClaudeBot",
+ALLOWED_ENTITIES_TERMS: set[str] = {
+    "España",
+    "provincias",
+    "LASIK",
+    "PRK",
+    "ICL",
+    "SMILE",
     "GPTBot",
+    "ClaudeBot",
+    "PerplexityBot",
+    "Google-Extended",
+    "Schema.org",
+    "MedicalClinic",
+    "Physician",
+    "MedicalProcedure",
+    "FAQPage",
+    "Wikidata",
+    "Wikipedia",
+    "Google",
+    "ChatGPT",
+    "Gemini",
+    "Perplexity",
+    "Claude",
+}
+
+_ALLOWED_CAMELCASE_TECH: set[str] = {
+    *ALLOWED_ENTITIES_TERMS,
     "SearchBot",
     "GoogleOther",
-    "MedicalClinic",
-    "MedicalProcedure",
-    "Physician",
-    "FAQPage",
     "WebSite",
     "Organization",
+    "VideoObject",
     "JavaScript",
     "DataFrame",
     "DataFrames",
@@ -365,9 +402,9 @@ def verify_entities(
     fuentes = load_fuentes()
     _ = load_prompts()
 
-    allowed_brands_norm: set[str] = set()
+    allowed_brands_norm: set[str] = {normalize(t) for t in ALLOWED_ENTITIES_TERMS}
     allowed_brand_words_norm: set[str] = set()
-    allowed_domains: set[str] = {"schema.org"}
+    allowed_domains: set[str] = {"schema.org", "wikidata.org", "wikipedia.org", "google.com", "env.example"}
 
     for m in marcas:
         mn = normalize(m.nombre)

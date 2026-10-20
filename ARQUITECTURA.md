@@ -36,7 +36,7 @@ flowchart TD
 
     subgraph Salida["4. Redacción, Verificación y Exportación"]
         WRT["writer.py\nModo Cliente (10 secciones)\nModo Prospecto (Dossier + Email)"]
-        REV["reviewer.py\nVerificador de cifras (563/563)\n+ Cumplimiento sanitario (0 incidencias)"]
+        REV["reviewer.py\nVerificador de cifras (571/571)\n+ Cumplimiento sanitario (0 incidencias)"]
         EXP["export.py\nPropuesta final .docx y .md\n+ Anexo de Trazabilidad"]
     end
 
@@ -67,7 +67,7 @@ El principio rector de la arquitectura es: **«El código calcula, filtra y veri
 | **5. Intake** | `geo/intake.py` | Parsea `.md`/`.docx`/`.txt`, **calcula el rango presupuestario en euros (`1.500–2.250 €/mes × 12 = 18.000–27.000 €`)** y detecta campos vacíos. | Extrae campos descriptivos del brief hacia el esquema `FichaMarca` y redacta preguntas para `faltantes`. | `ficha.json`, `faltantes.json` |
 | **6. Mercado** | `geo/market.py` | Cruza competidores declarados con el ranking espontáneo (`T1_espontanea`), clasifica en `marca_brief`/`lider`/`referencia`/`competidor_directo`/`contexto`, detecta los 6 actores no declarados con presencia relevante (como `Vistalia Oftalmología` con `41,2 %` o `Oftalmos Centro` con `60,0 %`) y verifica si existen candidatos fuera de `marcas.csv` (`0` en el kit sintético). | Nada. | `market.json` |
 | **7. Hallazgos** | `geo/findings.py` | Ejecuta las reglas deterministas `R1`–`R10`, construye objetos `Evidencia` con `ejecucion_ids` reales y ordena por prioridad. | Nada (títulos y descripciones con plantillas exactas alimentadas por cifras reales). | `findings.json` (`H1`–`H7`) |
-| **8. Plan y Presupuesto** | `geo/strategy.py`, `geo/budget.py` | Selecciona plantillas de `ACTION_LIBRARY`, calcula costes en código, elimina ciclos en el DAG de dependencias, recorta por ratio `impacto/esfuerzo` si supera `27.000 €` y desplaza semanas si supera `8 h/semana` del equipo cliente. | Personaliza la descripción y el KPI de cada acción seleccionada para el contexto de la clínica. | `plan.json` (`23.950 €`, 11 acciones) |
+| **8. Plan y Presupuesto** | `geo/strategy.py`, `geo/budget.py` | Selecciona plantillas de `ACTION_LIBRARY`, calcula costes en código, elimina ciclos en el DAG de dependencias, recorta por ratio `impacto/esfuerzo` si supera `27.000 €` y desplaza semanas si supera `8 h/semana` del equipo cliente. | Personaliza la descripción y el KPI de cada acción seleccionada para el contexto de la clínica. | `plan.json` (`24.300 €`, 14 acciones) |
 | **9. Redacción y Revisión** | `geo/writer.py`, `geo/reviewer.py`, `geo/export.py` | Genera todas las tablas Markdown de la propuesta, extrae cada cifra con regex (`verify_numbers`), comprueba que exista en el conjunto permitido ($\pm 0{,}12$), bloquea cualquier entidad fuera del kit (`verify_entities`) y valida restricciones sanitarias y presupuestarias. | Redacta los párrafos ejecutivos e interpretativos y el correo comercial de prospecto (120–180 palabras). | `propuesta.json`, `revision.json`, `.docx`, `.md` |
 
 ---
@@ -92,9 +92,9 @@ El sistema aplica **tres barreras defensivas independientes** contra la alucinac
 2. **Inyección de tablas por código**: En `geo/writer.py`, las tablas de ranking espontáneo/asistido, motores, embudo, geografía, fuentes, competidores, cronograma y presupuesto se construyen directamente desde los DataFrames de `geo/metrics.py` y `geo/budget.py`.
 3. **Verificador determinista `verify_numbers` (`geo/reviewer.py`)**:
    - Construye el conjunto cerrado de todos los números autorizados a partir de `metrics.json`, `tablas/*.parquet`, `findings.json`, `plan.json`, `ficha.json` y constantes estructurales del estudio (`624`, `240`, `384`, `25`, `10`, `4`, etc.).
-   - Extrae mediante expresiones regulares todas las cifras del documento redactado (soportando formato español `27,97`, porcentajes `38,8 %` y miles `23.950 €`) tras ignorar identificadores (`EJ-0001`, `H1`, `A01`, `T12`).
-   - Comprueba que cada cifra coincida dentro de una tolerancia de redondeo de $\pm 0{,}15$. Si alguna cifra no es trazable (`cifras_no_trazables > 0`), devuelve las frases infractoras al redactor hasta un máximo de 2 reintentos y, si persiste, sustituye por la narrativa determinista verificada.
-   - **Resultado en el run de referencia (`runs/demo/`):** **`563/563` cifras trazables verificadas (`0` no trazables)**.
+   - Extrae mediante expresiones regulares todas las cifras del documento redactado (soportando formato español `27,97`, porcentajes `38,8 %` y miles `24.300 €`) tras ignorar identificadores (`EJ-0001`, `H1`, `A01`, `T12`).
+   - Comprueba que cada cifra coincida dentro de una tolerancia de redondeo de $\pm 0{,}12$. Si alguna cifra no es trazable (`cifras_no_trazables > 0`), devuelve las frases infractoras al redactor hasta un máximo de 2 reintentos y, si persiste, sustituye por la narrativa determinista verificada.
+   - **Resultado en el run de referencia (`runs/demo/`):** **`571/571` cifras trazables verificadas (`0` no trazables)**.
 
 ---
 
@@ -145,7 +145,7 @@ El kit incluye `muestra_evaluada.csv` con **133 filas** correspondientes a **15 
 El sistema adapta automáticamente el plan y el documento final a las restricciones extraídas en `FichaMarca`:
 - **Audiencia (Comité de Dirección y Dirección Médica, perfil no técnico)**: lenguaje ejecutivo en español de España, sin jerga opaca de IA, explicando cada métrica en términos de negocio sanitario (visibilidad espontánea antes de conocer la marca vs validación asistida cuando el paciente ya compara).
 - **Restricciones financieras y operativas**:
-  - Presupuesto ajustado automáticamente en `geo/budget.py` a **`23.950 €`**, dentro del rango **`18.000–27.000 €`** (`1.500–2.250 €/mes` durante 12 meses).
+  - Presupuesto ajustado automáticamente en `geo/budget.py` a **`24.300 €`**, dentro del rango **`18.000–27.000 €`** (`1.500–2.250 €/mes` durante 12 meses).
   - Carga de trabajo para el equipo interno de **1,5 personas** limitada en todas las semanas (`S1` a `S52`) a **`<= 8,0 horas/semana`** (pico máximo del plan: `6,5 h/semana`).
   - **Hito de resultados visibles en el mes 6 (semana 24)** incorporado en el protocolo de medición trimestral (`S12, S24, S36, S48`).
 - **Cumplimiento normativo sanitario (`geo/reviewer.py`)**:
