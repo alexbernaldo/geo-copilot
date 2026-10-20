@@ -1,0 +1,68 @@
+{
+  "marca": "Clínica Alborada Visión",
+  "web": "https://www.alboradavision.example",
+  "sector": "Sanidad privada",
+  "subsector": "oftalmología (cirugía refractiva y cataratas)",
+  "servicios": [
+    "Cirugía refractiva (LASIK, PRK, lentes fáquicas)",
+    "cirugía de cataratas con lentes premium",
+    "control de miopía infantil",
+    "revisiones oftalmológicas",
+    "derivación en retina y glaucoma"
+  ],
+  "servicios_prioritarios": [
+    "Cirugía refractiva",
+    "control de miopía infantil"
+  ],
+  "diferenciales": [
+    "Seguimiento postoperatorio personalizado incluido durante 12 meses",
+    "valoración preoperatoria completa en una sola visita",
+    "equipo médico estable y bien valorado por los pacientes"
+  ],
+  "publicos": [
+    "Adultos de 25 a 50 años con miopía o astigmatismo que quieren dejar las gafas (decide el propio paciente).",
+    "Mayores de 60 años con cataratas (frecuentemente deciden o acompañan sus hijos).",
+    "Padres de niños con miopía progresiva.",
+    "Profesionales con requisitos específicos, por ejemplo pilotos de aviación (nicho)."
+  ],
+  "ciudades": [
+    "Madrid",
+    "Barcelona"
+  ],
+  "ciudad_principal": "Madrid",
+  "ciudad_crecimiento": "Barcelona",
+  "competidores_declarados": [
+    "Instituto Oftálmico Tramuntana",
+    "Láser Nítida",
+    "Grupo Hospitalario Valdecruz"
+  ],
+  "situacion_digital": {
+    "web_y_contenidos": "Web con fichas de tratamiento y blog (unas 60 URLs). SEO local trabajado en Madrid.",
+    "reputacion": "4,7 sobre 5 en Google con unas 1.800 opiniones.",
+    "medios_y_terceros": "Presencia escasa en prensa. Sin página en Wikipedia. Perfiles en directorios sanitarios sin actualizar.",
+    "tecnico": "Sin datos estructurados implementados. No existe estrategia GEO ni medición de visibilidad en asistentes de IA.",
+    "herramientas": "GA4, Search Console, CRM, herramienta de gestión de reseñas",
+    "fundacion_y_tamano": "2009 · 14 oftalmólogos · unos 120 profesionales · alrededor de 7.500 intervenciones al año",
+    "sedes": "3 centros en Madrid y 1 centro en Barcelona (abierto en 2024)"
+  },
+  "hipotesis_cliente": [
+    "Con tan buenas reseñas deberíamos salir recomendados.",
+    "En Barcelona nadie nos encuentra."
+  ],
+  "objetivo_principal": "Que los asistentes de IA recomienden a Clínica Alborada Visión de forma espontánea en Madrid y Barcelona, especialmente en cirugía refractiva",
+  "kpis_negocio": [
+    "+25 % de primeras visitas de cirugía refractiva en 12 meses",
+    "visibilidad y recomendación en asistentes de IA medibles y en crecimiento"
+  ],
+  "horizonte_meses": 12,
+  "presupuesto_min_eur": 18000.0,
+  "presupuesto_max_eur": 27000.0,
+  "equipo": "1 responsable de marketing + 1 persona de comunicación a media jornada; colaboración con la agencia",
+  "restricciones_normativas": [
+    "Sector sanitario: la publicidad sanitaria está regulada.",
+    "No se pueden prometer resultados ni hacer comparativas denigratorias."
+  ],
+  "tono": "Riguroso, cercano y sin sensacionalismo",
+  "audiencia": "Comité de dirección (perfil mixto médico y de negocio)",
+  "formato": "Documento + resumen ejecutivo presentable"
+}

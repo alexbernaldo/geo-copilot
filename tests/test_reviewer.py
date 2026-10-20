@@ -10,7 +10,7 @@ from geo.intake import load_brief
 from geo.judge_rules import judge_rules
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas
 from geo.metrics import build_brand_summary_metrics, bundle
-from geo.reviewer import compliance, verify_numbers
+from geo.reviewer import compliance, verify_entities, verify_numbers
 from geo.strategy import build_plan
 from geo.writer import write_client, write_prospect
 
@@ -163,3 +163,47 @@ def test_writer_and_export_client_and_prospect_f11() -> None:
     assert md_prosp_path.exists()
     assert "Vistalia Oftalmología" in md_prosp_text
     assert "Asunto:" in md_prosp_text
+
+
+def test_verify_entities_blocks_mirasierra_and_uncataloged_entities() -> None:
+    """verify_entities bloquea marcas ('Mirasierra', 'OftalmoPlus', 'EuroLaser', 'Clínica Ocularia'), dominios ('oftalmologia-alborada.example'), ciudades ('Valencia') y perfiles ('miedo quirúrgico') que no están en el kit."""
+    ctx, plan, ficha = _sample_context()
+
+    # 1. Texto válido con entidades del kit -> 0 incidencias
+    valid_text = (
+        "Clínica Alborada Visión (alboradavision.example) compite en Madrid y Barcelona con "
+        "Grupo Hospitalario Valdecruz (valdecruz.example), Instituto Oftálmico Tramuntana "
+        "y Vistalia Oftalmología, según rankings como guiaoftalmologia.example."
+    )
+    assert verify_entities(valid_text, ficha=ficha) == []
+
+    # 2. Falla explícitamente con "Mirasierra" (tanto en 'Instituto Oftalmológico Mirasierra' como sola)
+    inc_mirasierra = verify_entities(
+        "El segundo actor es Instituto Oftalmológico Mirasierra (o Mirasierra).",
+        ficha=ficha,
+    )
+    assert len(inc_mirasierra) >= 1
+    assert all(i.bloqueante for i in inc_mirasierra)
+    assert any("mirasierra" in i.texto.lower() for i in inc_mirasierra)
+
+    rev_mirasierra = compliance(
+        "Clínica Alborada Visión compite con Mirasierra en Madrid.",
+        plan=plan,
+        ficha=ficha,
+        contexto_cifras=ctx,
+        provider="mock",
+    )
+    assert rev_mirasierra.aprobado is False
+
+    # 3. Falla con OftalmoPlus, EuroLaser, Clínica Ocularia, oftalmologia-alborada.example, miedo quirúrgico y Valencia
+    for bad_snippet in (
+        "Se detectaron OftalmoPlus y EuroLaser.",
+        "La Clínica Ocularia aparece en las respuestas.",
+        "El dominio propio es oftalmologia-alborada.example.",
+        "Falta contenido para el perfil de paciente con miedo quirúrgico.",
+        "Crecimiento previsto en la clínica de Valencia.",
+    ):
+        incs = verify_entities(bad_snippet, ficha=ficha)
+        assert len(incs) >= 1, f"Debería bloquear: {bad_snippet}"
+        assert all(i.bloqueante for i in incs)
+

@@ -1,0 +1,48 @@
+{
+  "run_id": "demo",
+  "created_at": "2026-10-20T20:33:31",
+  "modo": "cliente",
+  "provider": "mock",
+  "brief_path": "/Users/alexb/Documents/Hacking Bridge/carpeta sin título/kit/Kit Participantes Hackaton/01_Briefings/Brief_de_ejemplo_Clinica_Alborada.md",
+  "marca_prospecto": null,
+  "steps": {
+    "intake": "done",
+    "market": "done",
+    "detect": "done",
+    "judge": "done",
+    "metrics": "done",
+    "findings": "done",
+    "plan": "done",
+    "review": "done",
+    "write": "done",
+    "export": "done"
+  },
+  "checkpoints": {
+    "checkpoint_0_brief": true,
+    "checkpoint_1_competidores": true,
+    "checkpoint_2_hallazgos": true,
+    "checkpoint_3_plan": true
+  },
+  "human_approvals": [
+    {
+      "checkpoint": "checkpoint_0_brief",
+      "timestamp": "2026-10-20T20:33:31",
+      "note": "Auto-approve CLI"
+    },
+    {
+      "checkpoint": "checkpoint_1_competidores",
+      "timestamp": "2026-10-20T20:33:32",
+      "note": "Auto-approve CLI"
+    },
+    {
+      "checkpoint": "checkpoint_2_hallazgos",
+      "timestamp": "2026-10-20T20:33:32",
+      "note": "Auto-approve CLI"
+    },
+    {
+      "checkpoint": "checkpoint_3_plan",
+      "timestamp": "2026-10-20T20:33:32",
+      "note": "Auto-approve CLI"
+    }
+  ]
+}

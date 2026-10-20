@@ -1,0 +1,78 @@
+{
+  "marca_brief": "Clínica Alborada Visión",
+  "lider_espontaneo": "Grupo Hospitalario Valdecruz",
+  "puesto_espontaneo": 7,
+  "total_marcas": 10,
+  "score_espontaneo": 27.97,
+  "tasa_aparicion_espontanea": 0.3875,
+  "pct_recomendacion_activa_espontanea": 0.0667,
+  "score_lider_espontaneo": 75.02,
+  "tasa_aparicion_lider_espontanea": 0.9083,
+  "score_asistido": 73.97,
+  "tasa_aparicion_asistida": 1.0,
+  "fuerza_media_asistida": 1.213,
+  "pct_negativo_asistida": 0.0926,
+  "pct_desconocimiento_asistida": 0.0648,
+  "pct_azar_espontanea": 0.4125,
+  "pct_consolidada_espontanea": 0.1875,
+  "por_motor_espontanea": {
+    "Perplexity": {
+      "tasa_aparicion": 0.65,
+      "score": 49.08,
+      "n": 60
+    },
+    "Gemini": {
+      "tasa_aparicion": 0.5667,
+      "score": 41.38,
+      "n": 60
+    },
+    "ChatGPT": {
+      "tasa_aparicion": 0.1833,
+      "score": 11.7,
+      "n": 60
+    },
+    "Claude": {
+      "tasa_aparicion": 0.15,
+      "score": 9.73,
+      "n": 60
+    }
+  },
+  "por_ciudad_espontanea": {
+    "Madrid": {
+      "tasa_aparicion": 0.5417,
+      "score": 42.17,
+      "n": 24
+    },
+    "Barcelona": {
+      "tasa_aparicion": 0.0417,
+      "score": 3.39,
+      "n": 24
+    }
+  },
+  "por_embudo_espontanea": {
+    "Descubrimiento": {
+      "tasa_aparicion": 0.447,
+      "score": 33.5,
+      "fuerza_media": 0.788,
+      "n": 132
+    },
+    "Comparación": {
+      "tasa_aparicion": 0.3889,
+      "score": 27.5,
+      "fuerza_media": 0.611,
+      "n": 36
+    },
+    "Validación": {
+      "tasa_aparicion": 0.3333,
+      "score": 21.58,
+      "fuerza_media": 0.333,
+      "n": 24
+    },
+    "Decisión": {
+      "tasa_aparicion": 0.25,
+      "score": 16.32,
+      "fuerza_media": 0.292,
+      "n": 48
+    }
+  }
+}

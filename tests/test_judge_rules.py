@@ -164,3 +164,19 @@ def test_judge_llm_cache_and_ensemble(tmp_path) -> None:
     )
     assert rep["fuerza"]["accuracy"] >= 0.85
     assert rep["tipo_mencion"]["accuracy"] >= 0.75
+
+
+def test_no_ejecucion_id_hardcoded_in_judge_rules_and_fewshot_excluded() -> None:
+    """Garantiza que judge_rules.py no contiene ningún Ejecucion_ID (EJ-xxxx) y que validate_judge.py excluye las few-shot."""
+    from pathlib import Path
+    import re
+    from geo.config import ROOT_DIR
+    from geo.judge_llm import FEW_SHOT_EJECUCION_IDS
+
+    jr_code = (ROOT_DIR / "geo" / "judge_rules.py").read_text(encoding="utf-8")
+    assert re.findall(r"\bEJ-\d+\b", jr_code, flags=re.IGNORECASE) == []
+
+    vj_code = (ROOT_DIR / "scripts" / "validate_judge.py").read_text(encoding="utf-8")
+    assert "FEW_SHOT_EJECUCION_IDS" in vj_code
+    assert len(FEW_SHOT_EJECUCION_IDS) == 3
+

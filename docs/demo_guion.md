@@ -28,9 +28,9 @@
 ### 2. Brief, Faltantes y Mapa Competitivo Real (0:30 – 1:15 · 45 s) · *Pantallas: `1 Brief` y `2 Competidores`*
 - **Qué decir:**
   > «En la página 1 cargamos el briefing del cliente. El código —nunca el LLM— calcula la horquilla presupuestaria anual (`18.000 a 27.000 €`) y detecta qué información falta antes de presupuestar (URL exacta, desglose de tráfico web o acceso al CMS), generando las preguntas para el cliente en el **Checkpoint 0**.»
-  > «Al pasar a la página 2 (**Checkpoint 1**), el sistema contrasta lo que el cliente cree contra las 240 ejecuciones espontáneas reales: descubre que el verdadero líder en IA es **Grupo Hospitalario Valdecruz** (`Score 61,60`, `90,8 %` de aparición), alerta de que **Vistalia Oftalmología** (`Score 44,54`, `69,2 %` de aparición) les supera sin estar declarada en su brief, e identifica 3 marcas emergentes fuera del catálogo (`OftalmoPlus`, `EuroLaser` y `Clínica Ocularia`).»
+  > «Al pasar a la página 2 (**Checkpoint 1**), el sistema contrasta lo que el cliente cree contra las 240 ejecuciones espontáneas reales: descubre que el verdadero líder en IA es **Grupo Hospitalario Valdecruz** (`Score 75,02`, `90,8 %` de aparición) por delante de **Instituto Oftálmico Tramuntana** (`Score 51,70`, `68,8 %`), alerta de que **Vistalia Oftalmología** (`Score 26,59`, `41,2 %` de aparición espontánea) no estaba declarada en su brief pese a superarla en tasa de aparición (`41,2 %` vs `38,8 %`), e identifica otros 5 actores relevantes del catálogo con presencia espontánea $\ge 30\%$ (`Oftalmos Centro` `60,0 %`, `Clínica del Ojo Cervantes` `44,2 %`, `Instituto Ocular Santa Eulalia` `42,5 %`, `Visionar Clínicas` `33,3 %` y `Centro Lasik Península` `31,2 %`).»
 - **Qué mostrar:**
-  - En `2_Competidores`, señalar la tabla de contraste y las 3 marcas emergentes detectadas automáticamente.
+  - En `2_Competidores`, señalar la tabla de contraste y las discrepancias detectadas entre el brief y `T1_espontanea`.
 
 ---
 
@@ -38,9 +38,9 @@
 - **Qué decir:**
   > «Aquí es donde la mayoría de herramientas engañaría al cliente: si mezcláramos consultas con marca y sin marca, inflaríamos artificialmente su visibilidad. En `3_Diagnóstico` separamos estrictamente **Espontáneo (`n=240`)** de **Asistido (`n=384`)**.»
   > «Mirad los tres cuellos de botella de Alborada:
-  > 1. **Brecha geográfica (`T4`)**: en Madrid aparecen en el **54,2 %** de las consultas (`n=24`), pero en **Barcelona caen al 4,2 % (`1 de 24`)**, justo donde quieren crecer un 25 %.
-  > 2. **Asimetría por motor (`T2`)**: funcionan bien en Perplexity (**65,0 %**) y Gemini (**56,7 %**), pero se desploman en **Claude (15,0 %)** y **ChatGPT (18,3 %)**.
-  > 3. **Caída en el embudo y fricción de conversión (`T3`)**: en fase de **Decisión** caen al **23,3 %** espontáneo, y cuando el paciente pregunta directamente por ellos en asistido (`n=91`), el **22,0 % de las respuestas contienen advertencias negativas** por falta de precios orientativos y tiempos de espera.»
+  > 1. **Brecha geográfica (`T4`)**: en Madrid aparecen en el **54,2 %** de las consultas (`n=24`, `Score 42,17`), pero en **Barcelona caen al 4,2 % (`1 de 24`, `Score 3,39`)**, justo donde quieren crecer un 25 %.
+  > 2. **Asimetría por motor (`T2`)**: funcionan bien en Perplexity (**65,0 %**, `Score 49,08`) y Gemini (**56,7 %**, `Score 41,38`), pero se desploman en **Claude (15,0 %, `Score 9,73`)** y **ChatGPT (18,3 %, `Score 11,70`)**.
+  > 3. **Caída en el embudo (`T3`) y contraste asistido (`T9`)**: pasan del **44,7 %** en Descubrimiento (`n=132`) al **25,0 %** en la fase crítica de **Decisión** (`n=48`, `Score 16,32`). En cambio, en consultas asistidas sobre la marca (`n=108`), aparecen en el **100,0 %** (`Score 73,97`) con solo un **9,3 %** de menciones negativas, mientras que su competidor low-cost **Láser Nítida** sufre un **34,3 %** de menciones negativas por seguimiento postoperatorio (`n=108`).»
   > «Y ninguna cifra es una caja negra: si hacemos clic en **Ver evidencia**, leemos la respuesta exacta del motor con la marca resaltada y los dominios citados.»
 - **Qué mostrar:**
   - Alternar pestaña **Espontáneo (`n=240`)** y **Asistido (`n=384`)**.
@@ -86,6 +86,6 @@
 1. **«¿Cómo evitáis que el falso positivo del adjetivo "nítida" infle a la marca Láser Nítida?»**
    - En `geo/text.py` y `geo/detection.py`, el término corto `"nítida"` solo se acepta cuando va precedido de `"láser"` o `"clínica"`. Así evitamos falsos positivos en frases como *«visión más nítida»* y clavamos **133/133 (100 %)** en `muestra_evaluada.csv`.
 2. **«¿Por qué `tipo_fuente` tiene un 56,7 % en apariciones mientras los demás campos tienen un 100 %?»**
-   - Porque en `ejecuciones.csv` la columna `Fuentes citadas` contiene los dominios de toda la respuesta (separados por `;`), sin indicar qué dominio respalda a qué marca cuando aparecen 3 o 4 clínicas en el mismo texto. Cuando aparece el dominio propio de la clínica (`oftalmologia-alborada.example`), se asigna `Web propia` con 100 % de certeza; en el resto, existe ambigüedad intrínseca al dato de entrada.
+   - Porque en `ejecuciones.csv` la columna `Fuentes citadas` contiene los dominios de toda la respuesta (separados por `;`), sin indicar qué dominio respalda a qué marca cuando aparecen 3 o 4 clínicas en el mismo texto. Cuando aparece el dominio propio de la clínica (`alboradavision.example`), se asigna `Web propia` con 100 % de certeza; en el resto, existe ambigüedad intrínseca al dato de entrada.
 3. **«¿Qué ocurre si se cae la API de Anthropic u OpenAI a mitad de la demo?»**
    - El orquestador (`geo/orchestrator.py`) captura cualquier excepción o falta de clave, activa la degradación elegante (`degradado=True` en `trace.jsonl`) hacia el motor determinista/mock, y además contamos con caché SHA-256 en disco y el directorio `runs/demo/` precalculado.

@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from geo.config import PROMPTS_DIR, SCORE_WEIGHTS, SOURCE_QUALITY_BY_TYPE
 from geo.llm import complete_json
+from geo.loader import load_fuentes, load_marcas, load_prompts
 from geo.schemas import FichaMarca, Hallazgo, Incidencia, InformeRevision, Plan
 from geo.text import normalize
 
@@ -251,6 +252,240 @@ def verify_numbers(
     return (incidencias, verificadas, no_trazables)
 
 
+_ALLOWED_CAMELCASE_TECH: set[str] = {
+    "ChatGPT",
+    "PerplexityBot",
+    "ClaudeBot",
+    "GPTBot",
+    "SearchBot",
+    "GoogleOther",
+    "MedicalClinic",
+    "MedicalProcedure",
+    "Physician",
+    "FAQPage",
+    "WebSite",
+    "Organization",
+    "JavaScript",
+    "DataFrame",
+    "DataFrames",
+    "YouTube",
+    "Trustpilot",
+    "OpenAI",
+    "PageSpeed",
+    "LinkedIn",
+    "GitHub",
+    "Pydantic",
+    "AppTest",
+    "FichaMarca",
+    "ContrasteMercado",
+    "MarcaMercado",
+    "InformeRevision",
+    "TipoMencion",
+    "TipoFuente",
+    "FasePlan",
+}
+
+_UNCATALOGED_CITIES_NORM: set[str] = {
+    "valencia",
+    "sevilla",
+    "bilbao",
+    "zaragoza",
+    "malaga",
+    "murcia",
+    "alicante",
+    "vigo",
+    "granada",
+    "cordoba",
+    "valladolid",
+    "palma",
+    "gijon",
+    "pamplona",
+    "santander",
+    "salamanca",
+    "toledo",
+    "burgos",
+    "oviedo",
+    "tarragona",
+    "girona",
+    "lleida",
+}
+
+_UNCATALOGED_PROFILES_NORM: tuple[str, ...] = (
+    "miedo quirurgico",
+    "miedo al quirofano",
+    "fobia quirurgica",
+    "deportista de elite",
+    "opositor",
+    "conductor profesional",
+)
+
+_UNCATALOGED_BRAND_TOKENS_NORM: tuple[str, ...] = (
+    "mirasierra",
+    "ocularia",
+    "oftalmoplus",
+    "eurolaser",
+    "baviera",
+    "barraquer",
+    "miranza",
+    "fernandez-vega",
+    "fernandez vega",
+    "vissum",
+    "novovision",
+    "oftalvist",
+    "quironsalud",
+)
+
+_GENERIC_CLINIC_STOPWORDS_NORM: set[str] = {
+    "clinica",
+    "clinicas",
+    "instituto",
+    "centro",
+    "hospital",
+    "grupo hospitalario",
+    "clinica oftalmologica",
+    "clinicas oftalmologicas",
+    "centro oftalmologico",
+    "centros oftalmologicos",
+    "instituto oftalmologico",
+    "hospital privado",
+    "centro sanitario",
+    "clinica privada",
+}
+
+
+def verify_entities(
+    texto: str,
+    ficha: FichaMarca | None = None,
+) -> list[Incidencia]:
+    """Verifica que el texto no contenga marcas, dominios, ciudades ni perfiles ausentes de marcas.csv, fuentes_catalogo.csv, banco_prompts.csv o FichaMarca."""
+    if not texto:
+        return []
+
+    marcas = load_marcas()
+    fuentes = load_fuentes()
+    _ = load_prompts()
+
+    allowed_brands_norm: set[str] = set()
+    allowed_brand_words_norm: set[str] = set()
+    allowed_domains: set[str] = {"schema.org"}
+
+    for m in marcas:
+        mn = normalize(m.nombre)
+        allowed_brands_norm.add(mn)
+        allowed_brand_words_norm.update(mn.split())
+        for a in m.alias:
+            an = normalize(a)
+            allowed_brands_norm.add(an)
+            allowed_brand_words_norm.update(an.split())
+        if m.dominio:
+            allowed_domains.add(m.dominio.lower().strip())
+
+    for dom in fuentes:
+        allowed_domains.add(dom.lower().strip())
+
+    allowed_cities_norm: set[str] = {"madrid", "barcelona"}
+    if ficha is not None:
+        if ficha.marca:
+            fmn = normalize(ficha.marca)
+            allowed_brands_norm.add(fmn)
+            allowed_brand_words_norm.update(fmn.split())
+        for comp in ficha.competidores_declarados:
+            cn = normalize(comp)
+            allowed_brands_norm.add(cn)
+            allowed_brand_words_norm.update(cn.split())
+        for c in ficha.ciudades:
+            if c:
+                allowed_cities_norm.add(normalize(c))
+
+    incidencias: list[Incidencia] = []
+    seen_texts: set[str] = set()
+
+    def _add_inc(label: str, sug: str) -> None:
+        if label not in seen_texts:
+            seen_texts.add(label)
+            incidencias.append(
+                Incidencia(
+                    tipo="cifra_no_trazable",
+                    texto=label,
+                    sugerencia=sug,
+                    bloqueante=True,
+                )
+            )
+
+    # 1. Dominios web (.example, .com, .es, .org, .net, .io)
+    dom_pat = re.compile(
+        r"\b([a-zA-Z0-9][a-zA-Z0-9\-]*(?:\.[a-zA-Z0-9\-]+)*\.(?:example|es|com|org|net|io))\b"
+    )
+    for m in dom_pat.finditer(texto):
+        dom_cand = m.group(1).lower()
+        if dom_cand.startswith("www."):
+            dom_cand = dom_cand[4:]
+        if dom_cand not in allowed_domains:
+            _add_inc(
+                f"Dominio no catalogado: '{m.group(1)}'",
+                "Usar únicamente dominios presentes en marcas.csv o fuentes_catalogo.csv.",
+            )
+
+    texto_norm = normalize(texto)
+
+    # 2. Marcas / tokens de clínicas no catalogadas explícitas (p. ej. Mirasierra, Ocularia, OftalmoPlus, EuroLaser)
+    for bad_brand in _UNCATALOGED_BRAND_TOKENS_NORM:
+        if bad_brand not in allowed_brands_norm and re.search(rf"\b{re.escape(bad_brand)}\b", texto_norm):
+            _add_inc(
+                f"Marca no catalogada: '{bad_brand}'",
+                "Usar únicamente las 10 marcas y alias definidos en marcas.csv.",
+            )
+
+    # 3. Patrones nominales de clínicas/institutos/centros con mayúscula no presentes en marcas.csv
+    clinic_pat = re.compile(
+        r"\b((?:Cl[ií]nicas?|Instituto|Centro|Grupo\s+Hospitalario|Hospital)\s+"
+        r"(?:Oftalmol[oó]gic[oa]s?\s+|Oft[aá]lmic[oa]s?\s+|Ocular(?:es)?\s+|del\s+Ojo\s+|de\s+Oftalmolog[ií]a\s+)?"
+        r"[A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s+[A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ]+)*)"
+    )
+    for m in clinic_pat.finditer(texto):
+        phrase = m.group(1).strip()
+        p_norm = normalize(phrase)
+        if p_norm in _GENERIC_CLINIC_STOPWORDS_NORM:
+            continue
+        is_known = (
+            p_norm in allowed_brands_norm
+            or any(ab in p_norm or p_norm in ab for ab in allowed_brands_norm if len(ab) >= 5)
+        )
+        if not is_known:
+            _add_inc(
+                f"Entidad clínica no catalogada: '{phrase}'",
+                "Sustituir por una de las 10 marcas oficiales de marcas.csv.",
+            )
+
+    # 4. Tokens CamelCase de marcas inventadas (p. ej. OftalmoPlus, EuroLaser)
+    camel_pat = re.compile(r"\b([A-Z][a-z]+[A-Z][A-Za-z0-9]*)\b")
+    for m in camel_pat.finditer(texto):
+        tok = m.group(1)
+        if tok not in _ALLOWED_CAMELCASE_TECH and normalize(tok) not in allowed_brands_norm:
+            _add_inc(
+                f"Marca CamelCase no catalogada: '{tok}'",
+                "Eliminar marca inventada fuera de marcas.csv.",
+            )
+
+    # 5. Ciudades fuera de banco_prompts.csv / FichaMarca
+    for city_norm in _UNCATALOGED_CITIES_NORM:
+        if city_norm not in allowed_cities_norm and re.search(rf"\b{re.escape(city_norm)}\b", texto_norm):
+            _add_inc(
+                f"Ciudad no catalogada en el estudio: '{city_norm}'",
+                "Ceñirse a las ciudades presentes en banco_prompts.csv y FichaMarca (Madrid y Barcelona).",
+            )
+
+    # 6. Perfiles de paciente fuera de banco_prompts.csv / FichaMarca
+    for prof_norm in _UNCATALOGED_PROFILES_NORM:
+        if re.search(rf"\b{re.escape(prof_norm)}\b", texto_norm):
+            _add_inc(
+                f"Perfil de paciente no catalogado: '{prof_norm}'",
+                "Usar únicamente los perfiles de banco_prompts.csv (45 años miopía, 70 años cataratas, piloto de aviación, 12 años miopía infantil).",
+            )
+
+    return incidencias
+
+
 def _check_regex_compliance(
     texto: str,
     plan: Plan | None = None,
@@ -374,6 +609,9 @@ def compliance(
     if contexto_cifras is not None:
         inc_num, verificadas, no_trazables = verify_numbers(texto, contexto_cifras)
         incidencias.extend(inc_num)
+
+    inc_entities = verify_entities(texto, ficha=ficha)
+    incidencias.extend(inc_entities)
 
     inc_regex = _check_regex_compliance(texto, plan=plan, ficha=ficha)
     incidencias.extend(inc_regex)
