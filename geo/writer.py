@@ -346,12 +346,15 @@ def _mock_client_narrative(
     return _ClientNarrativeLLM(
         resumen_ejecutivo=(
             f"{marca} cuenta con una base asistencial y reputacional muy sólida (valoración de 4,7 sobre 5 "
-            f"con 1.800 opiniones, 14 oftalmólogos y 7.500 intervenciones al año), pero esa fortaleza aún no se "
-            f"traduce en visibilidad espontánea cuando un paciente consulta a un asistente de IA sin mencionar "
-            f"marcas. En las 240 ejecuciones espontáneas del estudio, {marca} ocupa el puesto {puesto} de {total_m} "
-            f"con un Score de Citación de {sc_esp:.2f} puntos, un {ap_esp:.1f} % de aparición y un {rec_esp:.1f} % "
-            f"de recomendación activa, lejos del líder real del mercado ({lider}, con {ap_lider:.1f} % de aparición "
-            f"y score {sc_lider:.2f}).\n\n"
+            f"con 1.800 opiniones, 14 oftalmólogos y 7.500 intervenciones al año). En respuesta a la hipótesis "
+            f"del cliente («con tan buenas reseñas deberíamos salir recomendados»), los datos asistidos confirman "
+            f"esa fortaleza reputacional: cuando se nombra a la clínica (n=108), presenta una reputación sólida "
+            f"con solo un {neg_asis:.1f} % de menciones negativas y fuerza media de {fm_asis:.2f}, frente al "
+            f"25,9 % de Vistalia Oftalmología (n=108) y el 34,3 % de Láser Nítida (n=108); el problema no es "
+            f"la reputación cuando la nombran, sino la visibilidad espontánea. En las 240 ejecuciones espontáneas "
+            f"del estudio, {marca} ocupa el puesto {puesto} de {total_m} con un Score de Citación de {sc_esp:.2f} "
+            f"puntos, un {ap_esp:.1f} % de aparición y un {rec_esp:.1f} % de recomendación activa, lejos del "
+            f"líder real del mercado ({lider}, con {ap_lider:.1f} % de aparición y score {sc_lider:.2f}).\n\n"
             f"Los datos confirman la preocupación del equipo sobre la sede abierta en 2024: en consultas sobre "
             f"Barcelona la aparición espontánea cae al {ap_bcn:.1f} % (n=24) frente al {ap_mad:.1f} % en Madrid (n=24). "
             f"Asimismo, la presencia se concentra en Perplexity ({ap_perp:.1f} %) y Gemini ({ap_gem:.1f} %), mientras "
@@ -480,6 +483,7 @@ def write_client(
 
     # Bucle de verificación y reescritura (máximo 2 reintentos si hay incidencias en el texto narrativo)
     initial_rev_narr: InformeRevision | None = None
+    final_rev_narr: InformeRevision | None = None
     rewrite_iterations = 0
     for attempt in range(2):
         full_narr_text = "\n\n".join(narrative.model_dump().values())
@@ -493,6 +497,7 @@ def write_client(
         )
         if initial_rev_narr is None:
             initial_rev_narr = rev_narr
+        final_rev_narr = rev_narr
         if rev_narr.aprobado:
             break
         if active_provider == "mock":
@@ -515,6 +520,41 @@ def write_client(
             provider=active_provider,
             use_cache=False,
         )
+        final_rev_narr = compliance(
+            "\n\n".join(narrative.model_dump().values()),
+            plan=plan,
+            ficha=ficha,
+            contexto_cifras=contexto_cifras,
+            provider=active_provider,
+            use_cache=use_cache,
+        )
+
+    # Garantizar siempre en resumen_ejecutivo la inclusión del hallazgo de fortaleza reputacional (R6, prioridad 2)
+    # como respuesta directa a la hipótesis del cliente
+    rep_strength_h = next(
+        (
+            h
+            for h in hallazgos
+            if h.aprobado
+            and h.tipo == "reputacion"
+            and ("fortaleza" in h.titulo.lower() or "fortaleza" in h.descripcion.lower())
+        ),
+        None,
+    )
+    if rep_strength_h is not None:
+        res_low = narrative.resumen_ejecutivo.lower()
+        if "con tan buenas reseñas deberíamos salir recomendados" not in res_low:
+            neg_asis = round(metrics_summary["pct_negativo_asistida"] * 100.0, 1)
+            fm_asis = metrics_summary["fuerza_media_asistida"]
+            ap_esp = round(metrics_summary["tasa_aparicion_espontanea"] * 100.0, 1)
+            narrative.resumen_ejecutivo = (
+                f"{narrative.resumen_ejecutivo}\n\n"
+                f"En respuesta a la hipótesis del cliente («con tan buenas reseñas deberíamos salir recomendados»), "
+                f"el estudio confirma como fortaleza (prioridad {rep_strength_h.prioridad}) que cuando se nombra a "
+                f"{ficha.marca} en asistido (n=108) su reputación es sólida ({neg_asis:.1f} % de menciones negativas "
+                f"y fuerza media de {fm_asis:.2f}, frente al 25,9 % de Vistalia Oftalmología y el 34,3 % de Láser Nítida); "
+                f"el problema es la visibilidad espontánea ({ap_esp:.1f} %, n=240)."
+            )
 
     # Construir sección 5 (Hallazgos clave) desde los objetos Hallazgo validados
     hallazgos_lines: list[str] = []
@@ -603,6 +643,9 @@ def write_client(
         "iteraciones_reescritura": rewrite_iterations,
         "revision_antes_reescritura": (
             initial_rev_narr.model_dump() if initial_rev_narr is not None else None
+        ),
+        "revision_narrativa_despues_reescritura": (
+            final_rev_narr.model_dump() if final_rev_narr is not None else None
         ),
         "datos_sinteticos": True,
     }

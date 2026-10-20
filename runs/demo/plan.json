@@ -7,8 +7,8 @@
       "valor_objetivo_max": 48.0,
       "plazo_meses": 12,
       "hallazgos": [
-        "H3",
-        "H6"
+        "H4",
+        "H7"
       ]
     },
     {
@@ -18,8 +18,8 @@
       "valor_objetivo_max": 58.8,
       "plazo_meses": 12,
       "hallazgos": [
-        "H3",
-        "H4"
+        "H4",
+        "H5"
       ]
     },
     {
@@ -39,7 +39,7 @@
       "valor_objetivo_max": 45.0,
       "plazo_meses": 12,
       "hallazgos": [
-        "H2"
+        "H3"
       ]
     },
     {
@@ -49,7 +49,7 @@
       "valor_objetivo_max": 50.0,
       "plazo_meses": 12,
       "hallazgos": [
-        "H5"
+        "H6"
       ]
     }
   ],
@@ -119,9 +119,9 @@
       "titulo": "Datos estructurados schema.org (MedicalClinic, Physician, MedicalProcedure, FAQPage)",
       "descripcion": "Implementar marcado JSON-LD completo en las fichas de cirugía refractiva, cataratas, miopía infantil y sedes de Madrid y Barcelona, vinculando cuadro médico y acreditaciones.",
       "hallazgos_relacionados": [
-        "H6",
-        "H2",
-        "H5"
+        "H7",
+        "H3",
+        "H6"
       ],
       "palanca": "entidad_datos_estructurados",
       "fase_embudo": [
@@ -157,7 +157,7 @@
       "titulo": "Auditoría técnica de rastreabilidad para bots de IA (robots.txt, sitemap, renderizado HTML)",
       "descripcion": "Configurar acceso explícito para GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot y Google-Extended, optimizando tiempos de respuesta y contenido sin dependencia de JS.",
       "hallazgos_relacionados": [
-        "H2"
+        "H3"
       ],
       "palanca": "tecnico",
       "fase_embudo": [
@@ -187,12 +187,12 @@
     },
     {
       "id": "A3",
-      "titulo": "Normalización de entidad y NAP en directorios sanitarios citados",
-      "descripcion": "Unificar nombre oficial, sedes (Madrid y Barcelona), especialidades, cuadro médico y horarios en directoriomedico.example y comparaclinicas.example.",
+      "titulo": "Normalización de entidad y NAP en directorios sanitarios citados (comparaclinicas.example, directoriomedico.example)",
+      "descripcion": "Unificar nombre oficial, sedes (Madrid y Barcelona), especialidades, cuadro médico y horarios en comparaclinicas.example y directoriomedico.example.",
       "hallazgos_relacionados": [
-        "H6",
+        "H7",
         "H1",
-        "H4"
+        "H5"
       ],
       "palanca": "entidad_datos_estructurados",
       "fase_embudo": [
@@ -215,7 +215,7 @@
       "dependencias": [],
       "entregables": [
         "Matriz maestra de atributos NAP y servicios por sede",
-        "Fichas verificadas en directoriomedico.example y comparaclinicas.example"
+        "Fichas verificadas en comparaclinicas.example y directoriomedico.example"
       ],
       "semana_inicio": 2,
       "plazo_semanas": 3,
@@ -228,8 +228,8 @@
       "titulo": "Creación y enriquecimiento de entidad en Wikidata con referencias verificables",
       "descripcion": "Dar de alta y estructurar la entidad de Clínica Alborada Visión en Wikidata con datos verificables (año de fundación 2009, sedes, especialidades, identificadores y referencias de prensa).",
       "hallazgos_relacionados": [
-        "H2",
-        "H6"
+        "H3",
+        "H7"
       ],
       "palanca": "entidad_datos_estructurados",
       "fase_embudo": [
@@ -265,8 +265,8 @@
       "titulo": "Página de datos institucionales verificables (Memoria de actividad y calidad asistencial)",
       "descripcion": "Concentrar en una URL pública de referencia las cifras oficiales de Clínica Alborada Visión (fundada en 2009, 14 oftalmólogos, ~7.500 intervenciones/año, 4,7/5 en 1.800 reseñas) para alimentar grounding web.",
       "hallazgos_relacionados": [
-        "H4",
-        "H2"
+        "H5",
+        "H3"
       ],
       "palanca": "entidad_datos_estructurados",
       "fase_embudo": [
@@ -339,8 +339,8 @@
       "titulo": "Fichas individuales de los 14 oftalmólogos con colegiación, publicaciones y subespecialidad",
       "descripcion": "Reforzar criterios E-E-A-T sanitarios mediante perfiles detallados de cada especialista en Madrid y Barcelona, enlazados como revisores de las guías médicas.",
       "hallazgos_relacionados": [
-        "H6",
-        "H2"
+        "H7",
+        "H3"
       ],
       "palanca": "entidad_datos_estructurados",
       "fase_embudo": [
@@ -376,8 +376,8 @@
       "titulo": "Hub de FAQ citables construidas desde el banco de prompts reales (DG, DP, CO, PR)",
       "descripcion": "Redactar bloques de respuesta directa (40-80 palabras + tabla de criterios) para las dudas recurrentes que lanzan los usuarios a ChatGPT, Claude, Gemini y Perplexity.",
       "hallazgos_relacionados": [
-        "H5",
-        "H2"
+        "H6",
+        "H3"
       ],
       "palanca": "contenido",
       "fase_embudo": [
@@ -416,8 +416,8 @@
       "titulo": "Página transparente de precios orientativos, qué incluye el tratamiento y financiación",
       "descripcion": "Publicar desglose claro de rangos de inversión por técnica (LASIK, PRK, lentes fáquicas, cataratas), detallando que incluye valoración de 1 visita y 12 meses de seguimiento.",
       "hallazgos_relacionados": [
-        "H5",
-        "H3"
+        "H6",
+        "H4"
       ],
       "palanca": "contenido",
       "fase_embudo": [
@@ -453,8 +453,8 @@
       "titulo": "Contenido de puesta en valor del seguimiento postoperatorio de 12 meses (diferencial propio)",
       "descripcion": "Explicar con rigor médico el protocolo de revisiones durante 12 meses con el mismo oftalmólogo, respondiendo a la principal inquietud del paciente sin nombrar ni comparar con terceros.",
       "hallazgos_relacionados": [
-        "H7",
-        "H5"
+        "H2",
+        "H6"
       ],
       "palanca": "contenido",
       "fase_embudo": [
@@ -490,7 +490,7 @@
       "titulo": "Guías específicas por perfil de paciente (miopía infantil para padres, mayores de 60, pilotos)",
       "descripcion": "Crear guías clínicas dedicadas a padres de niños con miopía progresiva, acompañantes de mayores con cataratas y opositores/pilotos con requisitos visuales.",
       "hallazgos_relacionados": [
-        "H5"
+        "H6"
       ],
       "palanca": "contenido",
       "fase_embudo": [
@@ -526,13 +526,13 @@
     },
     {
       "id": "A12",
-      "titulo": "Plan de PR digital en prensa de salud citada (diariosalud, saludactual, bienestar-hoy)",
-      "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en los medios sanitarios más citados por los LLMs.",
+      "titulo": "Plan de PR digital en prensa de salud citada (bienestar-hoy.example, diariosalud.example, saludactual.example)",
+      "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en bienestar-hoy.example, diariosalud.example y saludactual.example.",
       "hallazgos_relacionados": [
-        "H6",
-        "H3",
+        "H7",
         "H4",
-        "H7"
+        "H5",
+        "H2"
       ],
       "palanca": "autoridad_terceros",
       "fase_embudo": [
@@ -558,21 +558,21 @@
       ],
       "entregables": [
         "Informe anual de datos clínicos y tendencias en cirugía refractiva y miopía infantil",
-        "6 artículos/entrevistas con portavoces médicos publicados en prensa sanitaria"
+        "6 artículos/entrevistas con portavoces médicos publicados en bienestar-hoy.example, diariosalud.example y saludactual.example"
       ],
       "semana_inicio": 11,
       "plazo_semanas": 12,
       "coste_estimado_eur": 4000.0,
-      "kpi": ">= 6 apariciones editoriales en diariosalud.example, saludactual.example y bienestar-hoy.example",
+      "kpi": ">= 6 apariciones editoriales en bienestar-hoy.example, diariosalud.example y saludactual.example",
       "fase_plan": 2
     },
     {
       "id": "A13",
-      "titulo": "Dossier y candidatura a rankings y guías sectoriales (rankingclinicas, guiaoftalmologia, colegio)",
-      "descripcion": "Presentar memoria clínica y asistencial ante rankingclinicas.example, guiaoftalmologia.example y colegiooftalmologos.example para mejorar respaldo institucional.",
+      "titulo": "Dossier y candidatura a rankings y guías sectoriales (colegiooftalmologos.example, guiaoftalmologia.example, rankingclinicas.example)",
+      "descripcion": "Presentar memoria clínica y asistencial ante colegiooftalmologos.example, guiaoftalmologia.example y rankingclinicas.example para mejorar respaldo institucional.",
       "hallazgos_relacionados": [
-        "H6",
-        "H3"
+        "H7",
+        "H4"
       ],
       "palanca": "autoridad_terceros",
       "fase_embudo": [
@@ -598,7 +598,7 @@
       ],
       "entregables": [
         "Dossier institucional de indicadores médicos, equipamiento y sedes",
-        "Solicitudes de inclusión/actualización en rankings sectoriales"
+        "Solicitudes de inclusión/actualización en colegiooftalmologos.example, guiaoftalmologia.example y rankingclinicas.example"
       ],
       "semana_inicio": 12,
       "plazo_semanas": 8,
@@ -612,12 +612,12 @@
       "descripcion": "Re-ejecutar el banco de 25 prompts en ChatGPT, Gemini, Perplexity y Claude cada trimestre para medir evolución del Score de Citación, con hito intermedio en el mes 6.",
       "hallazgos_relacionados": [
         "H1",
-        "H2",
-        "H5",
         "H3",
         "H6",
+        "H4",
         "H7",
-        "H4"
+        "H2",
+        "H5"
       ],
       "palanca": "medicion",
       "fase_embudo": [

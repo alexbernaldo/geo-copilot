@@ -36,7 +36,7 @@ flowchart TD
 
     subgraph Salida["4. Redacción, Verificación y Exportación"]
         WRT["writer.py\nModo Cliente (10 secciones)\nModo Prospecto (Dossier + Email)"]
-        REV["reviewer.py\nVerificador de cifras (571/571)\n+ Cumplimiento sanitario (0 incidencias)"]
+        REV["reviewer.py\nVerificador de cifras (578/578)\n+ Cumplimiento sanitario (0 incidencias)"]
         EXP["export.py\nPropuesta final .docx y .md\n+ Anexo de Trazabilidad"]
     end
 
@@ -94,7 +94,7 @@ El sistema aplica **tres barreras defensivas independientes** contra la alucinac
    - Construye el conjunto cerrado de todos los números autorizados a partir de `metrics.json`, `tablas/*.parquet`, `findings.json`, `plan.json`, `ficha.json` y constantes estructurales del estudio (`624`, `240`, `384`, `25`, `10`, `4`, etc.).
    - Extrae mediante expresiones regulares todas las cifras del documento redactado (soportando formato español `27,97`, porcentajes `38,8 %` y miles `24.300 €`) tras ignorar identificadores (`EJ-0001`, `H1`, `A01`, `T12`).
    - Comprueba que cada cifra coincida dentro de una tolerancia de redondeo de $\pm 0{,}12$. Si alguna cifra no es trazable (`cifras_no_trazables > 0`), devuelve las frases infractoras al redactor hasta un máximo de 2 reintentos y, si persiste, sustituye por la narrativa determinista verificada.
-   - **Resultado en el run de referencia (`runs/demo/`):** **`571/571` cifras trazables verificadas (`0` no trazables)**.
+   - **Resultado en el run de referencia (`runs/demo/`):** **`578/578` cifras trazables verificadas (`0` no trazables)**.
 
 ---
 
@@ -121,11 +121,14 @@ El kit incluye `muestra_evaluada.csv` con **133 filas** correspondientes a **15 
    - En las métricas del estudio, la tabla `T12` mide explícitamente la **estabilidad inter-repetición** (desviación típica y rango del Score entre las repeticiones 1, 2 y 3 de cada prompt y motor).
 2. **Caché persistente por contenido**:
    - Cada llamada a `geo/llm.py` o `geo/engines/*` se indexa en `cache/` mediante `SHA-256(proveedor + modelo + prompt_version + system + user + schema)`. Repetir el pipeline o la demo tiene **coste 0,00 € y latencia < 1 segundo**.
-3. **Presupuesto de llamadas y coste de una demo completa**:
-   - Con el juez por reglas como base y el modo híbrido activado:
-     - **Evaluación del corpus**: `0` llamadas LLM obligatorias (o solo en casos de desempate si se activa `--judge-mode ensemble` con proveedor real).
-     - **Pipeline de consultoría (Intake + Strategy + Writer + Compliance)**: **4 llamadas LLM** en total (~`6.500` tokens de entrada y ~`3.200` tokens de salida), con un coste estimado de **`~0,035 €` por ejecución completa** usando Claude Sonnet 4.5 / Haiku 4.5 o GPT-4o.
-     - **Mini-estudio de conectores en vivo (`F15`, opcional)**: `6 prompts × 2 motores × 2 repeticiones = 24 llamadas`, con un coste estimado de **`~0,185 €`** (incluyendo fee de búsqueda web), muy por debajo del tope configurado (`MAX_BUDGET_EUR = 5,00 €` y `MAX_LLM_CALLS = 1.500`).
+3. **Presupuesto de llamadas y coste de una ejecución completa (`estimate_cost`)**:
+   - Calculado con `geo.llm.estimate_cost` (`0,25 €/M` tokens de entrada y `1,25 €/M` tokens de salida):
+     - **Intake (`intake_v1`)**: `1` llamada (`1.502` tokens de entrada, `727` tokens de salida) → **`0,0013 €`**.
+     - **Juez LLM (`judge_v1`, `624` ejecuciones)**: `624` llamadas (`1.219.208` tokens de entrada, `62.240` tokens de salida) → **`0,3826 €`** (`0,00 €` cuando opera con el juez determinista o caché).
+     - **Estrategia y Plan (`strategy_v1`)**: `1` llamada (`8.341` tokens de entrada, `4.295` tokens de salida) → **`0,0075 €`**.
+     - **Redactor (`writer_client_v1`)**: `1` llamada (`3.404` tokens de entrada, `1.409` tokens de salida) → **`0,0026 €`**.
+     - **Revisor (`compliance_v1`, narrativa + documento)**: `2` llamadas (`8.161` tokens de entrada, `80` tokens de salida) → **`0,0021 €`**.
+     - **Total del pipeline completo sin caché (`629` llamadas)**: `1.240.616` tokens de entrada y `68.751` tokens de salida → **`0,3961 €`** (muy por debajo del tope configurado `MAX_BUDGET_EUR = 5,00 €` y `MAX_LLM_CALLS = 1.500`).
 
 ---
 

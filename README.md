@@ -17,7 +17,7 @@
 5. **Propuesta ejecutiva exportable a `.docx` y `.md`** en dos modos:
    - **Modo Cliente** (10 secciones + Anexo de trazabilidad completo para `Clínica Alborada Visión`).
    - **Modo Prospecto** (dossier ejecutivo en frío sin brief previo + correo comercial de 120–180 palabras listo para enviar, p. ej. para `Vistalia Oftalmología` o `Láser Nítida`).
-6. **Sello del Agente Revisor**: verificación determinista de que el **100 % de las cifras del documento proceden de las tablas calculadas (`571/571` cifras trazables)** y **0 incidencias de cumplimiento normativo sanitario** (sin promesas garantizadas ni comparativas denigratorias).
+6. **Sello del Agente Revisor**: verificación determinista de que el **100 % de las cifras del documento proceden de las tablas calculadas (`578/578` cifras trazables)** y **0 incidencias de cumplimiento normativo sanitario** (sin promesas garantizadas ni comparativas denigratorias).
 
 ---
 

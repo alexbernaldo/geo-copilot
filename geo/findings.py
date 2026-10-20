@@ -576,15 +576,15 @@ def generate_findings(
 
         candidates.append(
             (
-                78.0,
+                98.0 if es_fortaleza else 78.0,
                 {
                     "titulo": titulo_r6,
                     "descripcion": desc_r6,
                     "tipo": "reputacion",
-                    "fase_embudo": "Validación",
+                    "fase_embudo": "Comparación" if es_fortaleza else "Validación",
                     "motores": [],
                     "evidencias": ev_r6,
-                    "impacto": "medio",
+                    "impacto": "alto" if es_fortaleza else "medio",
                     "confianza": _calc_confianza(n_alb9),
                 },
             )

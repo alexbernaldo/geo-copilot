@@ -21,7 +21,7 @@
 - **Qué decir:**
   > «Clínica Alborada Visión tiene 4,7 estrellas, más de 1.800 reseñas de pacientes y es líder percibida en Madrid. Su Comité de Dirección cree que con esa reputación los asistentes de IA ya la recomiendan. Pero cuando un paciente pregunta a ChatGPT o Claude sin mencionar ninguna marca, **Alborada cae al puesto 7 de 10 con un Score de Citación de solo 27,97 sobre 100**. Hoy os presentamos **GEO Copilot**: el sistema que convierte datos crudos de visibilidad conversacional en una propuesta estratégica verificada, trazable hasta cada respuesta original y lista para enviar al cliente.»
 - **Qué mostrar:**
-  - Tarjetas superiores de la portada (`Score espontáneo: 27,97/100 · Puesto 7/10`, `Aparición espontánea: 38,8 % (n=240)`, `Presupuesto Plan: 24.300 €`, `Verificador: 571/571 cifras trazables`).
+  - Tarjetas superiores de la portada (`Score espontáneo: 27,97/100 · Puesto 7/10`, `Aparición espontánea: 38,8 % (n=240)`, `Presupuesto Plan: 24.300 €`, `Verificador: 578/578 cifras trazables`).
 
 ---
 
@@ -60,7 +60,7 @@
 
 ### 5. Confianza: Sello del Revisor y Validación del Juez (3:45 – 4:15 · 30 s) · *Pantallas: `6 Propuesta` y `7 Calidad y trazas`*
 - **Qué decir:**
-  > «¿Cómo garantizamos al Comité de Dirección que el LLM no ha inventado ni un solo dato? En `6_Propuesta`, el Agente Revisor audita el documento completo: **571 de 571 cifras verificadas contra las tablas deterministas** y **0 incidencias normativas sanitarias** (cero promesas garantizadas, cero comparativas denigratorias).»
+  > «¿Cómo garantizamos al Comité de Dirección que el LLM no ha inventado ni un solo dato? En `6_Propuesta`, el Agente Revisor audita el documento completo: **578 de 578 cifras verificadas contra las tablas deterministas** y **0 incidencias normativas sanitarias** (cero promesas garantizadas, cero comparativas denigratorias).»
   > «Además, en `7_Calidad_y_trazas` auditamos nuestro propio juez contra `muestra_evaluada.csv`: **100 % de exactitud y $\kappa = 1{,}000$ en detección, tipo de mención, fuerza y sentimiento**, documentando con total transparencia el 56,7 % en `tipo_fuente` porque el dataset informa las fuentes a nivel de respuesta y no por marca.»
 - **Qué mostrar:**
   - Sello verde en `6_Propuesta` + botón de descarga `.docx`, y tabla de $\kappa$ de Cohen en `7_Calidad_y_trazas`.

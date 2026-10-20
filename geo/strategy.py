@@ -11,7 +11,7 @@ from geo.budget import (
     cost_from_tier,
     validate_and_adjust_plan,
 )
-from geo.config import ACTION_LIBRARY, PROMPTS_DIR
+from geo.config import ACTION_LIBRARY, PROMPTS_DIR, get_catalog_domains_by_type
 from geo.llm import complete_json
 from geo.schemas import (
     Accion,
@@ -301,6 +301,7 @@ def build_plan(
     payload = {
         "ficha": ficha.model_dump(),
         "hallazgos_aprobados": [h.model_dump() for h in hallazgos if h.aprobado],
+        "fuentes_catalogo_por_tipo": get_catalog_domains_by_type(),
         "plantillas_candidatas": candidates,
     }
     user_prompt = (

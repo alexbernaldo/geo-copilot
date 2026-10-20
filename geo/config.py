@@ -1,5 +1,6 @@
 """Configuración global, rutas, constantes de la metodología y settings de entorno."""
 
+import csv
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -148,6 +149,42 @@ MAX_FINDINGS: int = 7
 # Capacidad semanal máxima del equipo del cliente dedicada al plan GEO (1 resp. marketing + 0.5 comunicación -> ~18 h/sem dedicables)
 CLIENT_WEEKLY_HOURS_CAPACITY: float = 18.0
 
+
+def get_catalog_domains_by_type(path: Path = FUENTES_CATALOGO_CSV) -> dict[str, list[str]]:
+    """Lee fuentes_catalogo.csv y devuelve los dominios agrupados por Tipo_de_fuente."""
+    by_type: dict[str, list[str]] = {}
+    if path.exists():
+        with path.open(encoding="utf-8-sig", newline="") as f:
+            for row in csv.DictReader(f):
+                dom = str(row["Dominio"]).strip().lower()
+                t_fuente = str(row["Tipo_de_fuente"]).strip()
+                by_type.setdefault(t_fuente, []).append(dom)
+    return by_type
+
+
+def _fmt_domain_list(domains: list[str]) -> str:
+    if not domains:
+        return ""
+    if len(domains) == 1:
+        return domains[0]
+    return ", ".join(domains[:-1]) + " y " + domains[-1]
+
+
+_CATALOG_BY_TYPE: dict[str, list[str]] = get_catalog_domains_by_type()
+_DOM_DIRECTORIOS: str = _fmt_domain_list(_CATALOG_BY_TYPE.get("Directorio / comparador", []))
+_DOM_MEDIOS: str = _fmt_domain_list(_CATALOG_BY_TYPE.get("Medio", []))
+_DOM_MEDIOS_COMMA: str = ", ".join(_CATALOG_BY_TYPE.get("Medio", []))
+_DOM_RESENAS: str = _fmt_domain_list(_CATALOG_BY_TYPE.get("Plataforma de reseñas", []))
+_RANKINGS_EXAMPLE: list[str] = [
+    d for d in _CATALOG_BY_TYPE.get("Ranking / institución", []) if d.endswith(".example")
+]
+_DOM_RANKINGS: str = _fmt_domain_list(_RANKINGS_EXAMPLE or _CATALOG_BY_TYPE.get("Ranking / institución", []))
+_DOM_RANKINGS_COMMA: str = ", ".join(_RANKINGS_EXAMPLE or _CATALOG_BY_TYPE.get("Ranking / institución", []))
+_FOROS_EXAMPLE: list[str] = [
+    d for d in _CATALOG_BY_TYPE.get("Red social / foro", []) if d.endswith(".example")
+]
+_DOM_FOROS: str = _fmt_domain_list(_FOROS_EXAMPLE or _CATALOG_BY_TYPE.get("Red social / foro", []))
+
 # ---------- Catálogo de plantillas de acción (F9, ACTION_LIBRARY: 22 plantillas) ----------
 ACTION_LIBRARY: list[dict[str, object]] = [
     {
@@ -194,8 +231,8 @@ ACTION_LIBRARY: list[dict[str, object]] = [
     },
     {
         "template_id": "TPL-03",
-        "titulo": "Normalización de entidad y NAP en directorios sanitarios citados",
-        "descripcion": "Unificar nombre oficial, sedes ({ciudades}), especialidades, cuadro médico y horarios en directoriomedico.example y comparaclinicas.example.",
+        "titulo": f"Normalización de entidad y NAP en directorios sanitarios citados ({', '.join(_CATALOG_BY_TYPE.get('Directorio / comparador', []))})",
+        "descripcion": f"Unificar nombre oficial, sedes ({{ciudades}}), especialidades, cuadro médico y horarios en {_DOM_DIRECTORIOS}.",
         "palanca": "entidad_datos_estructurados",
         "tipos_hallazgo": ["fuentes", "geografia", "brief_vs_datos"],
         "fase_embudo": ["Descubrimiento", "Comparación"],
@@ -210,7 +247,7 @@ ACTION_LIBRARY: list[dict[str, object]] = [
         "kpi_tipo": "100 % de fichas de directorios sectoriales actualizadas y coherentes en Madrid y Barcelona",
         "entregables_tipo": [
             "Matriz maestra de atributos NAP y servicios por sede",
-            "Fichas verificadas en directoriomedico.example y comparaclinicas.example",
+            f"Fichas verificadas en {_DOM_DIRECTORIOS}",
         ],
     },
     {
@@ -258,7 +295,7 @@ ACTION_LIBRARY: list[dict[str, object]] = [
     {
         "template_id": "TPL-06",
         "titulo": "Programa de activación y respuesta de reseñas verificadas en la sede de Barcelona",
-        "descripcion": "Sistematizar la solicitud de reseñas post-revisión en el centro de Barcelona en Google, opinaclinicas.example y trustpilot.com, respondiendo con detalle informativo.",
+        "descripcion": f"Sistematizar la solicitud de reseñas post-revisión en el centro de Barcelona en {_DOM_RESENAS}, respondiendo con detalle informativo.",
         "palanca": "reputacion_resenas",
         "tipos_hallazgo": ["geografia", "reputacion"],
         "fase_embudo": ["Validación", "Decisión"],
@@ -363,8 +400,8 @@ ACTION_LIBRARY: list[dict[str, object]] = [
     },
     {
         "template_id": "TPL-11",
-        "titulo": "Plan de PR digital en prensa de salud citada (diariosalud, saludactual, bienestar-hoy)",
-        "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en los medios sanitarios más citados por los LLMs.",
+        "titulo": f"Plan de PR digital en prensa de salud citada ({_DOM_MEDIOS_COMMA})",
+        "descripcion": f"Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en {_DOM_MEDIOS}.",
         "palanca": "autoridad_terceros",
         "tipos_hallazgo": ["fuentes", "competencia", "brief_vs_datos", "reputacion"],
         "fase_embudo": ["Descubrimiento", "Validación"],
@@ -376,16 +413,16 @@ ACTION_LIBRARY: list[dict[str, object]] = [
         "plazo_semanas": 12,
         "fase_plan": 2,
         "dependencias_tpl": ["TPL-05", "TPL-09"],
-        "kpi_tipo": ">= 6 apariciones editoriales en diariosalud.example, saludactual.example y bienestar-hoy.example",
+        "kpi_tipo": f">= 6 apariciones editoriales en {_DOM_MEDIOS}",
         "entregables_tipo": [
             "Informe anual de datos clínicos y tendencias en cirugía refractiva y miopía infantil",
-            "6 artículos/entrevistas con portavoces médicos publicados en prensa sanitaria",
+            f"6 artículos/entrevistas con portavoces médicos publicados en {_DOM_MEDIOS}",
         ],
     },
     {
         "template_id": "TPL-12",
-        "titulo": "Dossier y candidatura a rankings y guías sectoriales (rankingclinicas, guiaoftalmologia, colegio)",
-        "descripcion": "Presentar memoria clínica y asistencial ante rankingclinicas.example, guiaoftalmologia.example y colegiooftalmologos.example para mejorar respaldo institucional.",
+        "titulo": f"Dossier y candidatura a rankings y guías sectoriales ({_DOM_RANKINGS_COMMA})",
+        "descripcion": f"Presentar memoria clínica y asistencial ante {_DOM_RANKINGS} para mejorar respaldo institucional.",
         "palanca": "autoridad_terceros",
         "tipos_hallazgo": ["fuentes", "competencia"],
         "fase_embudo": ["Descubrimiento", "Comparación", "Validación"],
@@ -400,7 +437,7 @@ ACTION_LIBRARY: list[dict[str, object]] = [
         "kpi_tipo": "Presencia activa en >= 3 rankings/guías sectoriales de calidad 1.0",
         "entregables_tipo": [
             "Dossier institucional de indicadores médicos, equipamiento y sedes",
-            "Solicitudes de inclusión/actualización en rankings sectoriales",
+            f"Solicitudes de inclusión/actualización en {_DOM_RANKINGS}",
         ],
     },
     {
@@ -511,7 +548,7 @@ ACTION_LIBRARY: list[dict[str, object]] = [
     {
         "template_id": "TPL-18",
         "titulo": "Participación informativa en foros y portales de pacientes oftalmológicos",
-        "descripcion": "Aportar contenido educativo verificado en foroscorazonsalud.example y comunidades de salud ocular sobre preparación preoperatoria y cuidados post-LASIK.",
+        "descripcion": f"Aportar contenido educativo verificado en {_DOM_FOROS} y comunidades de salud ocular sobre preparación preoperatoria y cuidados post-LASIK.",
         "palanca": "comunidades",
         "tipos_hallazgo": ["fuentes", "consistencia"],
         "fase_embudo": ["Descubrimiento", "Validación"],

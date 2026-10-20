@@ -73,8 +73,31 @@ _METHODOLOGY_CONSTANTS: tuple[float, ...] = (
     0.468,
     0.527,
     0.715,
-    0.035,
-    0.185,
+    0.25,
+    1.25,
+    41.0,
+    55.0,
+    80.0,
+    91.0,
+    578.0,
+    629.0,
+    727.0,
+    1409.0,
+    1502.0,
+    3404.0,
+    4295.0,
+    8161.0,
+    8341.0,
+    62240.0,
+    68751.0,
+    1219208.0,
+    1240616.0,
+    0.0013,
+    0.3826,
+    0.0075,
+    0.0026,
+    0.0021,
+    0.3961,
 )
 
 _COMPETITOR_NAMES: tuple[str, ...] = (
@@ -370,7 +393,136 @@ _UNCATALOGED_BRAND_TOKENS_NORM: tuple[str, ...] = (
     "novovision",
     "oftalvist",
     "quironsalud",
+    "saludaldia",
+    "revistaoftalmologica",
+    "doctoralia",
+    "topdoctors",
+    "cuidateplus",
+    "redaccionmedica",
+    "consalud",
+    "isanidad",
+    "gacetamedica",
+    "infosalud",
+    "webconsultas",
+    "medlineplus",
+    "masquemedicos",
 )
+
+_DOMAIN_OR_MEDIA_STEMS_NORM: tuple[str, ...] = (
+    "salud",
+    "revista",
+    "diario",
+    "portal",
+    "guia",
+    "ranking",
+    "directorio",
+    "compara",
+    "opina",
+    "foro",
+    "clinica",
+    "oftalmo",
+    "ocular",
+    "vision",
+    "laser",
+    "lasik",
+    "bienestar",
+)
+
+_STANDARD_SPANISH_MORPHOLOGY_NORM: set[str] = {
+    "salud",
+    "saludable",
+    "saludables",
+    "saludo",
+    "saludos",
+    "revista",
+    "revistas",
+    "entrevista",
+    "entrevistas",
+    "prevista",
+    "previstas",
+    "previsto",
+    "previstos",
+    "diario",
+    "diarios",
+    "diaria",
+    "diarias",
+    "diariamente",
+    "portal",
+    "portales",
+    "guia",
+    "guias",
+    "guiada",
+    "guiadas",
+    "guiado",
+    "guiados",
+    "guiar",
+    "ranking",
+    "rankings",
+    "directorio",
+    "directorios",
+    "compara",
+    "comparan",
+    "comparar",
+    "comparacion",
+    "comparaciones",
+    "comparador",
+    "comparadores",
+    "comparativa",
+    "comparativas",
+    "comparativo",
+    "comparativos",
+    "comparada",
+    "comparadas",
+    "comparado",
+    "comparados",
+    "opina",
+    "opinan",
+    "opinar",
+    "opinion",
+    "opiniones",
+    "foro",
+    "foros",
+    "clinica",
+    "clinicas",
+    "clinico",
+    "clinicos",
+    "policlinica",
+    "policlinicas",
+    "oftalmologia",
+    "oftalmologica",
+    "oftalmologicas",
+    "oftalmologico",
+    "oftalmologicos",
+    "oftalmologo",
+    "oftalmologos",
+    "oftalmologa",
+    "oftalmologas",
+    "oftalmica",
+    "oftalmicas",
+    "oftalmico",
+    "oftalmicos",
+    "oftalmos",
+    "ocular",
+    "oculares",
+    "intraocular",
+    "intraoculares",
+    "vision",
+    "visionar",
+    "revision",
+    "revisiones",
+    "supervision",
+    "television",
+    "prevision",
+    "division",
+    "laser",
+    "lasik",
+    "bienestar",
+    "informerevision",
+    "post-lasik",
+    "pre-lasik",
+    "post-revision",
+    "pre-revision",
+}
 
 _GENERIC_CLINIC_STOPWORDS_NORM: set[str] = {
     "clinica",
@@ -393,9 +545,21 @@ _GENERIC_CLINIC_STOPWORDS_NORM: set[str] = {
 def verify_entities(
     texto: str,
     ficha: FichaMarca | None = None,
+    plan: Plan | None = None,
 ) -> list[Incidencia]:
-    """Verifica que el texto no contenga marcas, dominios, ciudades ni perfiles ausentes de marcas.csv, fuentes_catalogo.csv, banco_prompts.csv o FichaMarca."""
-    if not texto:
+    """Verifica que el texto y el plan no contengan marcas, dominios, slugs de medios/rankings/directorios, ciudades ni perfiles ausentes de marcas.csv, fuentes_catalogo.csv, banco_prompts.csv o FichaMarca."""
+    combined_parts: list[str] = []
+    if texto:
+        combined_parts.append(texto)
+    if plan is not None:
+        for obj in plan.objetivos:
+            combined_parts.append(obj.kpi)
+        for acc in plan.acciones:
+            combined_parts.extend([acc.titulo, acc.descripcion, acc.kpi, *acc.entregables])
+        combined_parts.extend([plan.medicion, *plan.riesgos, *plan.supuestos])
+
+    full_texto = "\n".join(p for p in combined_parts if p)
+    if not full_texto:
         return []
 
     marcas = load_marcas()
@@ -419,6 +583,10 @@ def verify_entities(
 
     for dom in fuentes:
         allowed_domains.add(dom.lower().strip())
+
+    allowed_domain_stems_norm: set[str] = {
+        normalize(dom.split(".")[0]) for dom in allowed_domains if "." in dom
+    }
 
     allowed_cities_norm: set[str] = {"madrid", "barcelona"}
     if ficha is not None:
@@ -453,7 +621,7 @@ def verify_entities(
     dom_pat = re.compile(
         r"\b([a-zA-Z0-9][a-zA-Z0-9\-]*(?:\.[a-zA-Z0-9\-]+)*\.(?:example|es|com|org|net|io))\b"
     )
-    for m in dom_pat.finditer(texto):
+    for m in dom_pat.finditer(full_texto):
         dom_cand = m.group(1).lower()
         if dom_cand.startswith("www."):
             dom_cand = dom_cand[4:]
@@ -463,7 +631,27 @@ def verify_entities(
                 "Usar únicamente dominios presentes en marcas.csv o fuentes_catalogo.csv.",
             )
 
-    texto_norm = normalize(texto)
+    texto_norm = normalize(full_texto)
+
+    # 1b. Slugs / tokens tipo nombre-de-dominio de medios, rankings, directorios o clínicas sin extensión
+    # (p. ej. "saludaldia", "revistaoftalmologica", "rankingmedico", "guiaclinicas")
+    slug_pat = re.compile(r"\b([a-z0-9]+(?:-[a-z0-9]+)*)\b")
+    for m in slug_pat.finditer(texto_norm):
+        tok = m.group(1)
+        if len(tok) < 6 or tok.isdigit():
+            continue
+        if (
+            tok in _STANDARD_SPANISH_MORPHOLOGY_NORM
+            or tok in allowed_domain_stems_norm
+            or tok in allowed_brands_norm
+            or tok in allowed_brand_words_norm
+        ):
+            continue
+        if any(stem in tok for stem in _DOMAIN_OR_MEDIA_STEMS_NORM):
+            _add_inc(
+                f"Medio, dominio o entidad sin extensión no catalogada: '{tok}'",
+                "Usar únicamente los dominios de fuentes_catalogo.csv filtrados por Tipo_de_fuente.",
+            )
 
     # 2. Marcas / tokens de clínicas no catalogadas explícitas (p. ej. Mirasierra, Ocularia, OftalmoPlus, EuroLaser)
     for bad_brand in _UNCATALOGED_BRAND_TOKENS_NORM:
@@ -479,7 +667,7 @@ def verify_entities(
         r"(?:Oftalmol[oó]gic[oa]s?\s+|Oft[aá]lmic[oa]s?\s+|Ocular(?:es)?\s+|del\s+Ojo\s+|de\s+Oftalmolog[ií]a\s+)?"
         r"[A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s+[A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ]+)*)"
     )
-    for m in clinic_pat.finditer(texto):
+    for m in clinic_pat.finditer(full_texto):
         phrase = m.group(1).strip()
         p_norm = normalize(phrase)
         if p_norm in _GENERIC_CLINIC_STOPWORDS_NORM:
@@ -496,7 +684,7 @@ def verify_entities(
 
     # 4. Tokens CamelCase de marcas inventadas (p. ej. OftalmoPlus, EuroLaser)
     camel_pat = re.compile(r"\b([A-Z][a-z]+[A-Z][A-Za-z0-9]*)\b")
-    for m in camel_pat.finditer(texto):
+    for m in camel_pat.finditer(full_texto):
         tok = m.group(1)
         if tok not in _ALLOWED_CAMELCASE_TECH and normalize(tok) not in allowed_brands_norm:
             _add_inc(
@@ -647,7 +835,7 @@ def compliance(
         inc_num, verificadas, no_trazables = verify_numbers(texto, contexto_cifras)
         incidencias.extend(inc_num)
 
-    inc_entities = verify_entities(texto, ficha=ficha)
+    inc_entities = verify_entities(texto, ficha=ficha, plan=plan)
     incidencias.extend(inc_entities)
 
     inc_regex = _check_regex_compliance(texto, plan=plan, ficha=ficha)

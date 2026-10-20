@@ -35,6 +35,75 @@
   },
   {
     "id": "H2",
+    "titulo": "Fortaleza en reputación asistida: reputación sólida cuando la nombran; el problema es la visibilidad espontánea",
+    "descripcion": "FORTALEZA: cuando se consulta por la marca en asistido, Clínica Alborada Visión presenta una reputación sólida con solo un 9.3% de menciones negativas y fuerza media de 1.21 (n=108), frente al 25.9% de Vistalia Oftalmología (n=108) y el 34.3% de Láser Nítida por seguimiento postoperatorio (n=108). Esto contrasta la hipótesis del cliente «con tan buenas reseñas deberíamos salir recomendados»: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (38.8%, n=240).",
+    "tipo": "reputacion",
+    "fase_embudo": "Comparación",
+    "motores": [],
+    "evidencias": [
+      {
+        "metrica": "pct_negativo_asistida[marca=Clínica Alborada Visión]",
+        "valor": 9.3,
+        "n": 108,
+        "tabla": "T9",
+        "ejecucion_ids": [
+          "EJ-0067",
+          "EJ-0079",
+          "EJ-0110"
+        ]
+      },
+      {
+        "metrica": "fuerza_media_asistida[marca=Clínica Alborada Visión]",
+        "valor": 1.21,
+        "n": 108,
+        "tabla": "T9",
+        "ejecucion_ids": [
+          "EJ-0067",
+          "EJ-0079",
+          "EJ-0110"
+        ]
+      },
+      {
+        "metrica": "pct_negativo_asistida[marca=Vistalia Oftalmología]",
+        "valor": 25.9,
+        "n": 108,
+        "tabla": "T9",
+        "ejecucion_ids": [
+          "EJ-0049",
+          "EJ-0074",
+          "EJ-0085"
+        ]
+      },
+      {
+        "metrica": "pct_negativo_asistida[marca=Láser Nítida]",
+        "valor": 34.3,
+        "n": 108,
+        "tabla": "T9",
+        "ejecucion_ids": [
+          "EJ-0048",
+          "EJ-0058",
+          "EJ-0060"
+        ]
+      },
+      {
+        "metrica": "tasa_aparicion_espontanea[marca=Clínica Alborada Visión]",
+        "valor": 38.8,
+        "n": 240,
+        "tabla": "T1_espontanea",
+        "ejecucion_ids": [
+          "EJ-0002",
+          "EJ-0003",
+          "EJ-0006"
+        ]
+      }
+    ],
+    "impacto": "alto",
+    "confianza": "alta",
+    "prioridad": 2,
+    "aprobado": true
+  },
+  {
+    "id": "H3",
     "titulo": "Visibilidad espontánea deficitaria en ChatGPT, Claude",
     "descripcion": "La aparición espontánea de Clínica Alborada Visión cae en ChatGPT (18.3%, n=60), Claude (15.0%, n=60), muy por debajo de su presencia en Perplexity (65.0%, n=60), Gemini (56.7%, n=60).",
     "tipo": "motor",
@@ -91,11 +160,11 @@
     ],
     "impacto": "alto",
     "confianza": "alta",
-    "prioridad": 2,
+    "prioridad": 3,
     "aprobado": true
   },
   {
-    "id": "H3",
+    "id": "H4",
     "titulo": "Brecha de visibilidad espontánea frente a Grupo Hospitalario Valdecruz y competidores directos",
     "descripcion": "Clínica Alborada Visión registra un score espontáneo de 27.97 con un 38.8% de aparición (n=240), frente al líder Grupo Hospitalario Valdecruz con score 75.02 y 90.8% de aparición (n=240) y frente a Instituto Oftálmico Tramuntana con score 51.70 y 68.8% de aparición (n=240).",
     "tipo": "competencia",
@@ -171,11 +240,11 @@
     ],
     "impacto": "alto",
     "confianza": "alta",
-    "prioridad": 3,
+    "prioridad": 4,
     "aprobado": true
   },
   {
-    "id": "H4",
+    "id": "H5",
     "titulo": "Contraste Brief vs Datos: Vistalia omitida, Valdecruz líder real y reseñas insuficientes",
     "descripcion": "El brief no incluye a Vistalia Oftalmología, que alcanza un 41.2% de aparición espontánea (n=240); además, el líder real en IA es Grupo Hospitalario Valdecruz con un 90.8% (n=240) y no Tramuntana, y las buenas reseñas de Clínica Alborada Visión solo se traducen en un 6.7% de recomendación activa (n=240).",
     "tipo": "brief_vs_datos",
@@ -218,11 +287,11 @@
     ],
     "impacto": "alto",
     "confianza": "alta",
-    "prioridad": 4,
+    "prioridad": 5,
     "aprobado": true
   },
   {
-    "id": "H5",
+    "id": "H6",
     "titulo": "Caída de visibilidad en la fase de Decisión del embudo",
     "descripcion": "Clínica Alborada Visión pasa de un 44.7% de aparición espontánea en Descubrimiento (n=132) a un 25.0% en la fase crítica de Decisión (n=48), donde Grupo Hospitalario Valdecruz alcanza el 97.9% (n=48).",
     "tipo": "embudo",
@@ -265,11 +334,11 @@
     ],
     "impacto": "alto",
     "confianza": "alta",
-    "prioridad": 5,
+    "prioridad": 6,
     "aprobado": true
   },
   {
-    "id": "H6",
+    "id": "H7",
     "titulo": "Menor respaldo en rankings y prensa sanitaria frente al líder",
     "descripcion": "El 31.3% de las apariciones de Clínica Alborada Visión se apoya en Rankings o Medios (n=201, calidad media 0.69), frente al 38.3% de Grupo Hospitalario Valdecruz (n=290).",
     "tipo": "fuentes",
@@ -311,75 +380,6 @@
       }
     ],
     "impacto": "alto",
-    "confianza": "alta",
-    "prioridad": 6,
-    "aprobado": true
-  },
-  {
-    "id": "H7",
-    "titulo": "Fortaleza en reputación asistida: reputación sólida cuando la nombran; el problema es la visibilidad espontánea",
-    "descripcion": "FORTALEZA: cuando se consulta por la marca en asistido, Clínica Alborada Visión presenta una reputación sólida con solo un 9.3% de menciones negativas y fuerza media de 1.21 (n=108), frente al 25.9% de Vistalia Oftalmología (n=108) y el 34.3% de Láser Nítida por seguimiento postoperatorio (n=108). Esto contrasta la hipótesis del cliente «con tan buenas reseñas deberíamos salir recomendados»: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (38.8%, n=240).",
-    "tipo": "reputacion",
-    "fase_embudo": "Validación",
-    "motores": [],
-    "evidencias": [
-      {
-        "metrica": "pct_negativo_asistida[marca=Clínica Alborada Visión]",
-        "valor": 9.3,
-        "n": 108,
-        "tabla": "T9",
-        "ejecucion_ids": [
-          "EJ-0067",
-          "EJ-0079",
-          "EJ-0110"
-        ]
-      },
-      {
-        "metrica": "fuerza_media_asistida[marca=Clínica Alborada Visión]",
-        "valor": 1.21,
-        "n": 108,
-        "tabla": "T9",
-        "ejecucion_ids": [
-          "EJ-0067",
-          "EJ-0079",
-          "EJ-0110"
-        ]
-      },
-      {
-        "metrica": "pct_negativo_asistida[marca=Vistalia Oftalmología]",
-        "valor": 25.9,
-        "n": 108,
-        "tabla": "T9",
-        "ejecucion_ids": [
-          "EJ-0049",
-          "EJ-0074",
-          "EJ-0085"
-        ]
-      },
-      {
-        "metrica": "pct_negativo_asistida[marca=Láser Nítida]",
-        "valor": 34.3,
-        "n": 108,
-        "tabla": "T9",
-        "ejecucion_ids": [
-          "EJ-0048",
-          "EJ-0058",
-          "EJ-0060"
-        ]
-      },
-      {
-        "metrica": "tasa_aparicion_espontanea[marca=Clínica Alborada Visión]",
-        "valor": 38.8,
-        "n": 240,
-        "tabla": "T1_espontanea",
-        "ejecucion_ids": [
-          "EJ-0002",
-          "EJ-0003",
-          "EJ-0006"
-        ]
-      }
-    ],
-    "impacto": "medio",
     "confianza": "alta",
     "prioridad": 7,
     "aprobado": true

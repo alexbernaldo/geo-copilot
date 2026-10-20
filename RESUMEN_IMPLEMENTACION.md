@@ -10,7 +10,7 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
 
 ### Indicadores clave verificados del proyecto
 - **Fases completadas:** **17 / 17 (`F0` a `F16`)**, cada una con su commit atómico en `main`.
-- **Tests automatizados (`pytest`):** **40 / 40 tests en verde** (`100 % pass`).
+- **Tests automatizados (`pytest`):** **41 / 41 tests en verde** (`100 % pass`).
 - **Exactitud del detector (`detection.py`):** **133 / 133 (`100,0 %`)** frente a `muestra_evaluada.csv` en `aparece`, `posicion` y `peso_posicion`.
 - **Exactitud del juez (`judge_rules.py` / `judge.py`):**
   - `tipo_mencion`: **100,0 %** ($\kappa = 1{,}000$)
@@ -19,8 +19,8 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
   - `tipo_fuente`: **56,7 %** en apariciones ($n=67$, $\kappa = 0{,}468$) · **62,3 %** en *held-out* de 12 ejecuciones ($n=53$, $\kappa = 0{,}527$) · **78,2 %** global ($n=133$, $\kappa = 0{,}715$), documentando el techo determinista por fuentes listadas a nivel de ejecución.
   - Ninguna regla de `geo/judge_rules.py` contiene identificadores `EJ-xxxx`, y las 3 ejecuciones *few-shot* (`EJ-0502`, `EJ-0565`, `EJ-0624`) se excluyen en la validación *held-out* de `scripts/validate_judge.py`.
 - **Verificador del Agente Revisor (`reviewer.py`):**
-  - `verify_numbers`: **571 / 571 cifras trazables verificadas (`100 %`)**.
-  - `verify_entities`: bloquea cualquier marca, dominio, ciudad o perfil ausente de `marcas.csv`, `fuentes_catalogo.csv`, `banco_prompts.csv` o `FichaMarca`.
+  - `verify_numbers`: **578 / 578 cifras trazables verificadas (`100 %`)**.
+  - `verify_entities`: bloquea cualquier marca, dominio, slug de medio/ranking/directorio sin extensión, ciudad o perfil ausente de `marcas.csv`, `fuentes_catalogo.csv`, `banco_prompts.csv` o `FichaMarca`, aplicándose tanto al texto redactado como a `plan.json` (títulos, descripciones, entregables y KPIs).
   - `compliance`: **0 incidencias normativas sanitarias**.
 
 ---
@@ -97,14 +97,37 @@ Se ha construido de extremo a extremo **GEO Copilot**, una plataforma modular en
 
 ### 3.4. Hallazgos generados (`runs/demo/findings.json`, `H1`–`H7`)
 1. **`H1` (`geografia`, prioridad 1):** Brecha crítica de visibilidad en Barcelona (`4,2 %`, $n=24$) frente a Madrid (`54,2 %`, $n=24$).
-2. **`H2` (`motor`, prioridad 1):** Visibilidad espontánea deficitaria en ChatGPT (`18,3 %`, $n=60$) y Claude (`15,0 %`, $n=60$) frente a Perplexity (`65,0 %`) y Gemini (`56,7 %`).
-3. **`H3` (`competencia`, prioridad 1):** Brecha de visibilidad espontánea (`Score 27,97`, `38,8 %`, $n=240$) frente al líder `Grupo Hospitalario Valdecruz` (`Score 75,02`, `90,8 %`) y frente a `Instituto Oftálmico Tramuntana` (`Score 51,70`, `68,8 %`).
-4. **`H4` (`brief_vs_datos`, prioridad 1):** Contraste Brief vs Datos: `Vistalia Oftalmología` omitida en el brief alcanza un `41,2 %` de aparición espontánea ($n=240$), `Grupo Hospitalario Valdecruz` es el líder real (`90,8 %`) y las reseñas de `Clínica Alborada Visión` solo se traducen en un `6,7 %` de recomendación activa espontánea ($n=240$).
-5. **`H5` (`embudo`, prioridad 2):** Caída de visibilidad en la fase de Decisión del embudo: pasa del `44,7 %` en Descubrimiento ($n=132$) al `25,0 %` en Decisión ($n=48$), donde `Grupo Hospitalario Valdecruz` alcanza el `97,9 %` ($n=48$).
-6. **`H6` (`fuentes`, prioridad 2):** Menor respaldo en rankings y prensa sanitaria frente al líder: el `31,3 %` de las apariciones de `Clínica Alborada Visión` se apoya en Rankings o Medios ($n=201$, calidad media `0,69`), frente al `38,3 %` de `Grupo Hospitalario Valdecruz` ($n=290$).
-7. **`H7` (`reputacion`, prioridad 7):** Fortaleza en reputación asistida: cuando se consulta por la marca en asistido ($n=108$), `Clínica Alborada Visión` presenta una reputación sólida con solo un `9,3 %` de menciones negativas y fuerza media de `1,21`, frente al `25,9 %` de `Vistalia Oftalmología` ($n=108$) y el `34,3 %` de `Láser Nítida` por seguimiento postoperatorio ($n=108$). Contrasta la hipótesis del cliente *«con tan buenas reseñas deberíamos salir recomendados»*: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (`38,8 %`, $n=240$).
+2. **`H2` (`reputacion`, prioridad 2):** Fortaleza en reputación asistida: cuando se consulta por la marca en asistido ($n=108$), `Clínica Alborada Visión` presenta una reputación sólida con solo un `9,3 %` de menciones negativas y fuerza media de `1,21`, frente al `25,9 %` de `Vistalia Oftalmología` ($n=108$) y el `34,3 %` de `Láser Nítida` por seguimiento postoperatorio ($n=108$). Contrasta la hipótesis del cliente *«con tan buenas reseñas deberíamos salir recomendados»*: la reputación es sólida cuando la nombran, pero el problema es la visibilidad espontánea (`38,8 %`, $n=240$).
+3. **`H3` (`motor`, prioridad 3):** Visibilidad espontánea deficitaria en ChatGPT (`18,3 %`, $n=60$) y Claude (`15,0 %`, $n=60$) frente a Perplexity (`65,0 %`) y Gemini (`56,7 %`).
+4. **`H4` (`competencia`, prioridad 4):** Brecha de visibilidad espontánea (`Score 27,97`, `38,8 %`, $n=240$) frente al líder `Grupo Hospitalario Valdecruz` (`Score 75,02`, `90,8 %`) y frente a `Instituto Oftálmico Tramuntana` (`Score 51,70`, `68,8 %`).
+5. **`H5` (`brief_vs_datos`, prioridad 5):** Contraste Brief vs Datos: `Vistalia Oftalmología` omitida en el brief alcanza un `41,2 %` de aparición espontánea ($n=240$), `Grupo Hospitalario Valdecruz` es el líder real (`90,8 %`) y las reseñas de `Clínica Alborada Visión` solo se traducen en un `6,7 %` de recomendación activa espontánea ($n=240$).
+6. **`H6` (`embudo`, prioridad 6):** Caída de visibilidad en la fase de Decisión del embudo: pasa del `44,7 %` en Descubrimiento ($n=132$) al `25,0 %` en Decisión ($n=48$), donde `Grupo Hospitalario Valdecruz` alcanza el `97,9 %` ($n=48$).
+7. **`H7` (`fuentes`, prioridad 7):** Menor respaldo en rankings y prensa sanitaria frente al líder: el `31,3 %` de las apariciones de `Clínica Alborada Visión` se apoya en Rankings o Medios ($n=201$, calidad media `0,69`), frente al `38,3 %` de `Grupo Hospitalario Valdecruz` ($n=290$).
 
 ### 3.5. Plan Estratégico a 12 meses (`runs/demo/plan.json`)
-- **Acciones:** **14 acciones** distribuidas en 4 fases (`Fase 0` `S1–S4`, `Fase 1` `S5–S10`, `Fase 2` `S11–S36`, `Fase 3` `S12–S48`), todas trazadas a `H1`–`H7`, sin ciclos de dependencias y sin gastar presupuesto en gestión reputacional (usando `H7` como argumento en contenido `A10` y PR digital `A12`).
+- **Acciones:** **14 acciones** distribuidas en 4 fases (`Fase 0` `S1–S4`, `Fase 1` `S5–S10`, `Fase 2` `S11–S36`, `Fase 3` `S12–S48`), todas trazadas a `H1`–`H7`, sin ciclos de dependencias, tomando todos los dominios de `fuentes_catalogo.csv` filtrados por `Tipo_de_fuente` y sin gastar presupuesto en gestión reputacional (usando `H2` como argumento en contenido `A10` y PR digital `A12`).
 - **Presupuesto total:** **`24.300 €`** (dentro del rango `18.000–27.000 €` del brief).
 - **Capacidad del equipo del cliente:** máximo **`6,5 h/semana`** (respetando el tope de `8,0 h/semana` para el equipo de 1,5 personas).
+
+---
+
+## 4. Bucle de reescritura y desglose real de llamadas, tokens y coste (`estimate_cost`)
+
+### 4.1. Verificación antes y después del bucle de reescritura (`geo/writer.py` + `geo/reviewer.py`)
+
+| Alcance evaluado | Corrida `runs/demo_real/` (degradación limpia sin clave API en `.env`) | Test del bucle de reescritura (`test_writer_rewrite_loop_fixes_numbers_entities_and_compliance_with_provider`) |
+|---|---|---|
+| **Narrativa antes de reescritura (`revision_antes_reescritura`)** | `91 / 91` cifras verificadas (`0` no trazables) · `0` incidencias de entidades · `0` incidencias normativas (`aprobado=True`) | **`55` cifras verificadas / `1` cifra no trazable** · **`3` incidencias de entidades** (`1` marca, `1` entidad clínica y `1` ciudad fuera del catálogo) · **`2` incidencias normativas (`promesa_resultado`)** (`aprobado=False`) |
+| **Narrativa después de 1 reescritura (`revision_narrativa_despues_reescritura`)** | `91 / 91` cifras verificadas (`0` no trazables) · `0` incidencias (`aprobado=True`, `0` reintentos) | **`91 / 91` cifras verificadas (`0` no trazables)** · **`0` incidencias de entidades** · **`0` incidencias normativas** (`aprobado=True`, `iteraciones_reescritura = 1`) |
+| **Documento final completo con tablas inyectadas por código (`revision.json`)** | **`578 / 578` cifras verificadas (`0` no trazables)** · **`0` incidencias** (`aprobado=True`) | **`578 / 578` cifras verificadas (`0` no trazables)** · **`0` incidencias** (`aprobado=True`) |
+
+### 4.2. Desglose de llamadas, tokens y coste calculado con `geo.llm.estimate_cost` (`0,25 €/M` entrada · `1,25 €/M` salida)
+
+| Etapa del pipeline | Nº de llamadas | Tokens de entrada | Tokens de salida | Coste estimado (`estimate_cost`) |
+|---|---:|---:|---:|---:|
+| **1. Intake (`intake_v1`)** | `1` | `1.502` | `727` | **`0,0013 €`** |
+| **2. Juez LLM (`judge_v1`, `624` ejecuciones)** | `624` | `1.219.208` | `62.240` | **`0,3826 €`** |
+| **3. Estrategia y Plan (`strategy_v1`)** | `1` | `8.341` | `4.295` | **`0,0075 €`** |
+| **4. Redactor (`writer_client_v1`)** | `1` | `3.404` | `1.409` | **`0,0026 €`** |
+| **5. Revisor (`compliance_v1`, narrativa + documento)** | `2` | `8.161` | `80` | **`0,0021 €`** |
+| **Total del pipeline completo sin caché** | **`629`** | **`1.240.616`** | **`68.751`** | **`0,3961 €`** |
