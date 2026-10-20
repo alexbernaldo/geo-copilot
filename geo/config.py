@@ -129,6 +129,22 @@ DESCONOCIMIENTO: list[str] = [
 # Umbral de longitud mínima del fragmento (sin el nombre de la marca) para no ser Pasiva en pos 1-3
 PASIVA_MAX_CHARS: int = 35
 
+# ---------- Umbrales del motor de hallazgos (F6) ----------
+FINDINGS_THRESHOLDS: dict[str, float] = {
+    "r1_geo_diff_pp": 25.0,               # Diferencia >= 25 pp entre ciudades
+    "r1_geo_growth_city_max": 0.15,       # O aparición < 15 % en ciudad de crecimiento
+    "r2_weak_motor_ratio": 0.50,          # Aparición en un motor < 50 % de la media en los demás
+    "r3_funnel_drop_pp": 20.0,            # Caída >= 20 pp respecto a fase anterior
+    "r3_funnel_leader_gap_pp": 30.0,      # Brecha con el líder >= 30 pp en una fase
+    "r5_authority_sources_gap_pp": 20.0,  # Brecha >= 20 pp en Ranking/institución + Medio vs líder
+    "r5_sin_fuente_min": 0.15,            # O % Sin fuente >= 15 %
+    "r7_undeclared_competitor_min": 0.30, # Competidor no declarado con >= 30 % aparición espontánea
+    "r8_azar_min": 0.50,                  # % de series en zona de azar (1-2/3) > 50 %
+    "r9_profile_low_max": 0.40,           # Aparición en familia DP < 40 %
+    "r10_desconocimiento_min": 0.05,      # % de desconocimiento en asistida >= 5 %
+}
+MAX_FINDINGS: int = 7
+
 # ---------- Settings leídos de .env ----------
 LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "mock").strip() or "mock"
 LLM_MODEL: str = os.getenv("LLM_MODEL", "").strip()

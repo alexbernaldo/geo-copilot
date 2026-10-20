@@ -8,6 +8,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from geo.detection import detect
+from geo.findings import generate_findings
 from geo.judge_rules import judge_rules
 from geo.loader import (
     as_ejecuciones,
@@ -108,6 +109,14 @@ def main() -> None:
     t3_alb["fuerza_media"] = t3_alb["fuerza_media"].round(2)
     t3_alb["score"] = t3_alb["score"].round(2)
     print(t3_alb.to_string(index=False))
+
+    print(f"\n=== F6 · Hallazgos Priorizados ({marca_brief}) ===")
+    hallazgos = generate_findings(tablas)
+    for h in hallazgos:
+        evs_str = ", ".join(f"{e.tabla}:{e.valor}(n={e.n})" for e in h.evidencias)
+        print(f"[{h.id} | p={h.prioridad} | {h.tipo} | impacto={h.impacto} | conf={h.confianza}] {h.titulo}")
+        print(f"  {h.descripcion}")
+        print(f"  Evidencias: {evs_str} | Ejemplos: {h.evidencias[0].ejecucion_ids}")
 
 
 if __name__ == "__main__":
