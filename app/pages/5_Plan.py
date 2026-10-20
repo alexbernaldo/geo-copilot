@@ -20,6 +20,12 @@ from geo.budget import (
 )
 from geo.config import CLIENT_WEEKLY_HOURS_CAPACITY
 from geo.schemas import Accion, Plan
+from geo.simulate import (
+    DISCLAIMER_SIMULADOR,
+    apply_simulation_to_plan_objectives,
+    get_brand_baseline_params,
+    simulate,
+)
 
 st.set_page_config(page_title="5 · Plan GEO | GEO Copilot", page_icon="🗺️", layout="wide")
 render_header_banner()
@@ -42,7 +48,11 @@ col_obj, col_bud = st.columns([1.6, 1.0])
 with col_obj:
     st.subheader("🎯 Objetivos estratégicos (horizonte 12 meses)")
     for idx, obj in enumerate(plan.objetivos, start=1):
-        st.markdown(f"**{idx}.** {obj}")
+        h_str = ", ".join(obj.hallazgos) if obj.hallazgos else "-"
+        st.markdown(
+            f"**{idx}. {obj.kpi}** · Actual: `{obj.valor_actual}` → Objetivo ({obj.plazo_meses}m): "
+            f"`{obj.valor_objetivo_min} – {obj.valor_objetivo_max}` *(Hallazgos: {h_str})*"
+        )
 
 with col_bud:
     st.subheader("💶 Control presupuestario")
@@ -300,5 +310,177 @@ if st.button("✅ Aprobar Plan Estratégico (Checkpoint 3) y revalidar restricci
     run.approve_checkpoint("checkpoint_3_plan", note=comentario_cp3)
     st.success(
         f"Checkpoint 3 aprobado. Plan guardado con {len(validated_plan.acciones)} acciones y coste total de {validated_plan.coste_total_eur:,.0f} €."
+    )
+    st.rerun()
+
+st.divider()
+
+# 5. Simulador What-if del Score de Citación (F14)
+st.subheader("🧪 Simulador What-If de Impacto en el Score de Citación (F14)")
+st.warning(f"⚠️ **{DISCLAIMER_SIMULADOR}** Recalcula el Score espontáneo aplicando la fórmula de `geo/metrics.py` sobre los parámetros objetivo seleccionados.")
+
+df_eval_sim = pd.read_parquet(run.run_dir / "evaluaciones.parquet")
+base_params = get_brand_baseline_params(df_eval_sim, ficha.marca)
+
+ap_madrid_base = round(base_params["aparicion_por_ciudad"].get("Madrid", 0.5417) * 100.0, 1)
+ap_bcn_base = round(base_params["aparicion_por_ciudad"].get("Barcelona", 0.0417) * 100.0, 1)
+ap_chatgpt_base = round(base_params["aparicion_por_motor"].get("ChatGPT", 0.1833) * 100.0, 1)
+ap_claude_base = round(base_params["aparicion_por_motor"].get("Claude", 0.15) * 100.0, 1)
+ap_gemini_base = round(base_params["aparicion_por_motor"].get("Gemini", 0.5667) * 100.0, 1)
+ap_perp_base = round(base_params["aparicion_por_motor"].get("Perplexity", 0.65) * 100.0, 1)
+fuerza_base = round(float(base_params["fuerza_presentes"]), 2)
+pct_qual_base = round(float(base_params["pct_fuentes_calidad"]) * 100.0, 1)
+
+col_s1, col_s2, col_s3 = st.columns(3)
+with col_s1:
+    st.markdown("**1. Aparición espontánea por ciudad (%)**")
+    sl_madrid = st.slider(
+        "Madrid (% aparición espontánea)",
+        min_value=0.0,
+        max_value=100.0,
+        value=ap_madrid_base,
+        step=0.5,
+        key="sim_madrid",
+    )
+    sl_bcn = st.slider(
+        "Barcelona (% aparición espontánea)",
+        min_value=0.0,
+        max_value=100.0,
+        value=ap_bcn_base,
+        step=0.5,
+        key="sim_bcn",
+    )
+
+with col_s2:
+    st.markdown("**2. Aparición espontánea por motor (%)**")
+    sl_chatgpt = st.slider(
+        "ChatGPT (% aparición)",
+        min_value=0.0,
+        max_value=100.0,
+        value=ap_chatgpt_base,
+        step=0.5,
+        key="sim_chatgpt",
+    )
+    sl_claude = st.slider(
+        "Claude (% aparición)",
+        min_value=0.0,
+        max_value=100.0,
+        value=ap_claude_base,
+        step=0.5,
+        key="sim_claude",
+    )
+    sl_gemini = st.slider(
+        "Gemini (% aparición)",
+        min_value=0.0,
+        max_value=100.0,
+        value=ap_gemini_base,
+        step=0.5,
+        key="sim_gemini",
+    )
+    sl_perp = st.slider(
+        "Perplexity (% aparición)",
+        min_value=0.0,
+        max_value=100.0,
+        value=ap_perp_base,
+        step=0.5,
+        key="sim_perp",
+    )
+
+with col_s3:
+    st.markdown("**3. Fuerza de recomendación y Calidad de fuente**")
+    sl_fuerza = st.slider(
+        "Fuerza media objetivo en apariciones (0 a 3)",
+        min_value=0.0,
+        max_value=3.0,
+        value=fuerza_base,
+        step=0.05,
+        key="sim_fuerza",
+    )
+    sl_qual = st.slider(
+        "% de fuentes de alta calidad (Institucional / Medio >= 0.9)",
+        min_value=0.0,
+        max_value=100.0,
+        value=pct_qual_base,
+        step=0.5,
+        key="sim_qual",
+    )
+
+cambios_ui = {
+    "aparicion_por_ciudad": {
+        "Madrid": sl_madrid / 100.0,
+        "Barcelona": sl_bcn / 100.0,
+    },
+    "aparicion_por_motor": {
+        "ChatGPT": sl_chatgpt / 100.0,
+        "Claude": sl_claude / 100.0,
+        "Gemini": sl_gemini / 100.0,
+        "Perplexity": sl_perp / 100.0,
+    },
+    "fuerza_media_objetivo": sl_fuerza,
+    "pct_fuentes_calidad": sl_qual / 100.0,
+}
+
+sim_res = simulate(df_eval_sim, ficha.marca, cambios=cambios_ui)
+
+k1, k2, k3, k4 = st.columns(4)
+k1.metric(
+    "Score espontáneo actual",
+    f"{sim_res['score_actual']:.2f} / 100",
+    f"Puesto actual: {sim_res['puesto_actual']}º de 10",
+)
+k2.metric(
+    "Score espontáneo simulado",
+    f"{sim_res['score_simulado']:.2f} / 100",
+    f"{sim_res['delta_score']:+.2f} pts ({DISCLAIMER_SIMULADOR})",
+)
+k3.metric(
+    "Puesto en el ranking simulado",
+    f"{sim_res['puesto_simulado']}º de 10",
+    f"{sim_res['delta_puesto']:+d} posiciones" if sim_res["delta_puesto"] != 0 else "Mismo puesto",
+)
+k4.metric(
+    "Aparición espontánea global",
+    f"{sim_res['tasa_aparicion_simulada'] * 100:.1f} %",
+    f"Actual: {sim_res['tasa_aparicion_actual'] * 100:.1f} %",
+)
+
+col_sim_chart, col_sim_rank = st.columns([1.1, 1.0])
+with col_sim_chart:
+    comp_act = sim_res["componentes"]["actual"]
+    comp_sim = sim_res["componentes"]["simulado"]
+    df_comp_plot = pd.DataFrame(
+        [
+            {"Componente": "Aparición (30)", "Escenario": "Actual", "Puntos": comp_act["aparicion"]},
+            {"Componente": "Aparición (30)", "Escenario": "Simulado", "Puntos": comp_sim["aparicion"]},
+            {"Componente": "Posición (20)", "Escenario": "Actual", "Puntos": comp_act["posicion"]},
+            {"Componente": "Posición (20)", "Escenario": "Simulado", "Puntos": comp_sim["posicion"]},
+            {"Componente": "Fuerza (30)", "Escenario": "Actual", "Puntos": comp_act["fuerza"]},
+            {"Componente": "Fuerza (30)", "Escenario": "Simulado", "Puntos": comp_sim["fuerza"]},
+            {"Componente": "Fuente (20)", "Escenario": "Actual", "Puntos": comp_act["fuente"]},
+            {"Componente": "Fuente (20)", "Escenario": "Simulado", "Puntos": comp_sim["fuente"]},
+        ]
+    )
+    fig_sim = px.bar(
+        df_comp_plot,
+        x="Componente",
+        y="Puntos",
+        color="Escenario",
+        barmode="group",
+        text_auto=".2f",
+        color_discrete_map={"Actual": COLOR_LIDER, "Simulado": COLOR_BRIEF},
+        title=f"Desglose del Score: Actual ({sim_res['score_actual']:.2f}) vs Simulado ({sim_res['score_simulado']:.2f}) — {DISCLAIMER_SIMULADOR}",
+    )
+    fig_sim.update_layout(height=340, margin=dict(l=10, r=10, t=40, b=10))
+    st.plotly_chart(fig_sim, use_container_width=True)
+
+with col_sim_rank:
+    st.markdown("**Ranking espontáneo simulado (`n=240`)**")
+    st.dataframe(sim_res["ranking_simulado"], use_container_width=True, hide_index=True)
+
+if st.button("🎯 Usar como objetivo en el Plan", use_container_width=False):
+    updated_plan_obj = apply_simulation_to_plan_objectives(plan, sim_res)
+    run.save_plan(updated_plan_obj)
+    st.success(
+        f"Objetivo what-if volcado a `plan.objetivos` (Score {sim_res['score_actual']:.2f} → {sim_res['score_simulado']:.2f}, puesto {sim_res['puesto_actual']}º → {sim_res['puesto_simulado']}º)."
     )
     st.rerun()
