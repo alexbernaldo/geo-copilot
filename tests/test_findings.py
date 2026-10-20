@@ -3,10 +3,13 @@
 import math
 import re
 
+from geo.config import BRIEF_MD
 from geo.detection import detect
 from geo.findings import generate_findings
+from geo.intake import load_brief
 from geo.judge_rules import judge_rules
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas
+from geo.market import build_market, discover_uncataloged_brands
 from geo.metrics import bundle
 
 
@@ -64,3 +67,32 @@ def test_generate_findings_alborada_rules_and_traceability() -> None:
     assert "ChatGPT" in all_text and "Claude" in all_text
     assert "Valdecruz" in all_text and "Tramuntana" in all_text
     assert "Vistalia" in all_text
+
+
+def test_build_market_and_discover_uncataloged_f8() -> None:
+    """Comprueba F8: Valdecruz con rol lider, Vistalia en no_declaradas_relevantes, cifras en discrepancias y descubrimiento N3."""
+    marcas = load_marcas()
+    df_ej = load_ejecuciones()
+    catalogo = load_fuentes()
+    df_det = detect(df_ej, marcas)
+    evals = judge_rules(df_det, df_ej, marcas, catalogo)
+    tablas = bundle(evals, df_ej, marcas)
+    ficha, _ = load_brief(BRIEF_MD, provider="mock")
+
+    mercado = build_market(ficha, marcas, tablas, df_ej)
+    assert len(mercado.marcas) == 10
+
+    roles_by_name = {m.nombre: m.rol for m in mercado.marcas}
+    assert roles_by_name["Grupo Hospitalario Valdecruz"] == "lider"
+    assert roles_by_name["Clínica Alborada Visión"] == "marca_brief"
+    assert roles_by_name["Instituto Oftálmico Tramuntana"] == "referencia"
+    assert roles_by_name["Láser Nítida"] == "competidor_directo"
+    assert roles_by_name["Vistalia Oftalmología"] == "competidor_directo"
+
+    assert "Vistalia Oftalmología" in mercado.no_declaradas_relevantes
+    assert len(mercado.discrepancias_brief) >= 2
+    for disc in mercado.discrepancias_brief:
+        assert re.search(r"\d", disc), f"La discrepancia no contiene ninguna cifra: {disc}"
+
+    # En el kit no hay marcas no catalogadas
+    assert discover_uncataloged_brands(df_ej, marcas) == []
