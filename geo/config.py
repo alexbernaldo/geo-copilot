@@ -87,6 +87,48 @@ SOURCE_QUALITY_BY_TYPE: dict[TipoFuente, float] = {
     "Sin fuente": 0.2,
 }
 
+# ---------- Léxico del juez por reglas (F3, texto normalizado sin tildes) ----------
+FUERZA_3: list[str] = [
+    "es la que mas recomendaria",
+    "la opcion mas recomendable",
+    "seria mi recomendacion principal",
+    "si tuviera que inclinarme por una",
+    "es la opcion mas recomendada",
+    "mi recomendacion principal",
+    "tambien la recomendaria con confianza",
+    "me inclinaria por",
+]
+
+FUERZA_2: list[str] = [
+    "alternativa muy bien valorada",
+    "opcion solida y bien valorada",
+    "tambien la recomendaria",
+    "encaja bien",
+]
+
+NEGATIVO: list[str] = [
+    "eso si,",
+    "quejas",
+    "advierten",
+    "listas de espera",
+    "coste notablemente superior",
+    "pocas opiniones verificadas",
+    "desiguales",
+    "mas antiguas",
+    "varia bastante",
+    "echan en falta",
+    "muy cargada",
+]
+
+DESCONOCIMIENTO: list[str] = [
+    "no dispongo de informacion",
+    "no tengo informacion",
+    "no cuento con datos",
+]
+
+# Umbral de longitud mínima del fragmento (sin el nombre de la marca) para no ser Pasiva en pos 1-3
+PASIVA_MAX_CHARS: int = 35
+
 # ---------- Settings leídos de .env ----------
 LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "mock").strip() or "mock"
 LLM_MODEL: str = os.getenv("LLM_MODEL", "").strip()
