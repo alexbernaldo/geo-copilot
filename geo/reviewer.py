@@ -3,13 +3,14 @@
 import json
 import math
 import re
+from pathlib import Path
 from typing import Any, Sequence
 import pandas as pd
 from pydantic import BaseModel
 
 from geo.config import PROMPTS_DIR, SCORE_WEIGHTS, SOURCE_QUALITY_BY_TYPE
 from geo.llm import complete_json
-from geo.loader import load_fuentes, load_marcas, load_prompts
+from geo.loader import load_fuentes, load_marcas
 from geo.schemas import FichaMarca, Hallazgo, Incidencia, InformeRevision, Plan
 from geo.text import normalize
 
@@ -546,6 +547,8 @@ def verify_entities(
     texto: str,
     ficha: FichaMarca | None = None,
     plan: Plan | None = None,
+    *,
+    study_dir: Path | None = None,
 ) -> list[Incidencia]:
     """Verifica que el texto y el plan no contengan marcas, dominios, slugs de medios/rankings/directorios, ciudades ni perfiles ausentes de marcas.csv, fuentes_catalogo.csv, banco_prompts.csv o FichaMarca."""
     combined_parts: list[str] = []
@@ -562,9 +565,9 @@ def verify_entities(
     if not full_texto:
         return []
 
-    marcas = load_marcas()
-    fuentes = load_fuentes()
-    _ = load_prompts()
+    # Catálogo del estudio del proyecto; sin `study_dir` solo cuentan la ficha y los términos permitidos.
+    marcas = load_marcas(study_dir) if study_dir is not None else []
+    fuentes = load_fuentes(study_dir) if study_dir is not None else {}
 
     allowed_brands_norm: set[str] = {normalize(t) for t in ALLOWED_ENTITIES_TERMS}
     allowed_brand_words_norm: set[str] = set()
@@ -825,6 +828,7 @@ def compliance(
     provider: str | None = None,
     model: str | None = None,
     use_cache: bool = True,
+    study_dir: Path | None = None,
 ) -> InformeRevision:
     """Ejecuta el verificador de cifras (si se pasa `contexto_cifras`) y la guardia normativa (Capa 1 regex + Capa 2 LLM)."""
     incidencias: list[Incidencia] = []
@@ -835,7 +839,7 @@ def compliance(
         inc_num, verificadas, no_trazables = verify_numbers(texto, contexto_cifras)
         incidencias.extend(inc_num)
 
-    inc_entities = verify_entities(texto, ficha=ficha, plan=plan)
+    inc_entities = verify_entities(texto, ficha=ficha, plan=plan, study_dir=study_dir)
     incidencias.extend(inc_entities)
 
     inc_regex = _check_regex_compliance(texto, plan=plan, ficha=ficha)

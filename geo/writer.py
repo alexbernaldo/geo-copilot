@@ -3,6 +3,7 @@
 from datetime import datetime
 import json
 import os
+from pathlib import Path
 from typing import Any, Sequence
 import pandas as pd
 from pydantic import BaseModel
@@ -432,6 +433,7 @@ def write_client(
     provider: str | None = None,
     model: str | None = None,
     use_cache: bool = True,
+    study_dir: Path | None = None,
 ) -> Propuesta:
     """Genera la Propuesta completa en modo cliente (10 secciones + anexo), verificada por reviewer."""
     active_provider = (provider or os.getenv("LLM_PROVIDER", LLM_PROVIDER) or "mock").strip().lower()
@@ -490,6 +492,7 @@ def write_client(
             contexto_cifras=contexto_cifras,
             provider=active_provider,
             use_cache=use_cache,
+            study_dir=study_dir,
         )
         if initial_rev_narr is None:
             initial_rev_narr = rev_narr
@@ -523,6 +526,7 @@ def write_client(
             contexto_cifras=contexto_cifras,
             provider=active_provider,
             use_cache=use_cache,
+            study_dir=study_dir,
         )
 
     # Garantizar siempre en resumen_ejecutivo la inclusión del hallazgo de fortaleza reputacional (R6, prioridad 2)
@@ -625,6 +629,7 @@ def write_client(
         contexto_cifras=contexto_cifras,
         provider=active_provider,
         use_cache=use_cache,
+        study_dir=study_dir,
     )
 
     stats = get_llm_stats()
@@ -708,6 +713,7 @@ def write_prospect(
     provider: str | None = None,
     model: str | None = None,
     use_cache: bool = True,
+    study_dir: Path | None = None,
 ) -> Propuesta:
     """Genera una propuesta comercial en modo prospecto (gancho, 3 hallazgos, 3 acciones y correo de 120-180 palabras)."""
     active_provider = (provider or os.getenv("LLM_PROVIDER", LLM_PROVIDER) or "mock").strip().lower()
@@ -816,6 +822,7 @@ def write_prospect(
         contexto_cifras=contexto_cifras,
         provider=active_provider,
         use_cache=use_cache,
+        study_dir=study_dir,
     )
 
     stats = get_llm_stats()

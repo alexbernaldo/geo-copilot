@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from geo.config import ROOT_DIR
+from geo.reference import REFERENCE_DIR
 from geo.metrics import build_brand_summary_metrics
 from geo.orchestrator import Run
 from geo.reviewer import ALLOWED_ENTITIES_TERMS, verify_entities, verify_numbers
@@ -45,7 +46,7 @@ def test_all_project_docs_pass_verify_numbers_and_verify_entities() -> None:
         assert inc_num == [], f"Incidencias numéricas en {rel_path}: {inc_num}"
         assert verificadas > 0
 
-        inc_ent = verify_entities(texto, ficha=ficha, plan=ctx["plan"])
+        inc_ent = verify_entities(texto, ficha=ficha, plan=ctx["plan"], study_dir=REFERENCE_DIR)
         assert inc_ent == [], f"Incidencias de entidades en {rel_path}: {inc_ent}"
 
 
@@ -85,7 +86,7 @@ def test_verify_entities_allows_all_required_technical_and_medical_terms() -> No
         "(MedicalClinic, Physician, MedicalProcedure y FAQPage) y refuerza la entidad en Wikidata, "
         "Wikipedia y Google."
     )
-    incidencias = verify_entities(parrafo_realista, ficha=ctx["ficha"])
+    incidencias = verify_entities(parrafo_realista, ficha=ctx["ficha"], study_dir=REFERENCE_DIR)
     assert incidencias == []
 
 
@@ -131,7 +132,7 @@ def test_verify_entities_blocks_saludaldia_and_revistaoftalmologica_in_text_and_
     # 1. En texto libre sin extensión .example
     inc_txt = verify_entities(
         "Plan de PR digital en prensa de salud citada (diariosalud, saludaldia, revistaoftalmologica).",
-        ficha=ficha,
+        ficha=ficha, study_dir=REFERENCE_DIR,
     )
     assert len(inc_txt) >= 2
     joined_txt = " | ".join(i.texto.lower() for i in inc_txt)
@@ -147,7 +148,7 @@ def test_verify_entities_blocks_saludaldia_and_revistaoftalmologica_in_text_and_
         }
     )
     bad_plan = plan.model_copy(update={"acciones": [bad_action, *plan.acciones[1:]]})
-    inc_plan = verify_entities("Texto limpio de prueba.", ficha=ficha, plan=bad_plan)
+    inc_plan = verify_entities("Texto limpio de prueba.", ficha=ficha, plan=bad_plan, study_dir=REFERENCE_DIR)
     assert len(inc_plan) >= 2
     joined_plan = " | ".join(i.texto.lower() for i in inc_plan)
     assert "saludaldia" in joined_plan
@@ -195,6 +196,7 @@ def test_writer_rewrite_loop_fixes_numbers_entities_and_compliance_with_provider
         run_id="test_rewrite",
         provider="anthropic",
         use_cache=False,
+        study_dir=REFERENCE_DIR,
     )
 
     before_rev = prop.metadatos["revision_antes_reescritura"]

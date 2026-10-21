@@ -11,6 +11,7 @@ from geo.judge_rules import judge_rules
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas
 from geo.market import build_market, discover_uncataloged_brands
 from geo.metrics import bundle
+from geo.reference import REFERENCE_DIR
 
 
 def _extract_numbers_from_text(text: str) -> list[float]:
@@ -21,9 +22,9 @@ def _extract_numbers_from_text(text: str) -> list[float]:
 
 def test_generate_findings_alborada_rules_and_traceability() -> None:
     """Comprueba estructura, trazabilidad de cifras y presencia de hallazgos clave para Alborada."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
     df_det = detect(df_ej, marcas)
     evals = judge_rules(df_det, df_ej, marcas, catalogo)
     tablas = bundle(evals, df_ej, marcas)
@@ -71,9 +72,9 @@ def test_generate_findings_alborada_rules_and_traceability() -> None:
 
 def test_build_market_and_discover_uncataloged_f8() -> None:
     """Comprueba F8: Valdecruz con rol lider, Vistalia en no_declaradas_relevantes, cifras en discrepancias y descubrimiento N3."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
     df_det = detect(df_ej, marcas)
     evals = judge_rules(df_det, df_ej, marcas, catalogo)
     tablas = bundle(evals, df_ej, marcas)

@@ -1,5 +1,6 @@
 """Simulador what-if del Score de Citación (F14)."""
 
+from pathlib import Path
 from typing import Any, Sequence
 import numpy as np
 import pandas as pd
@@ -8,6 +9,16 @@ from geo.loader import load_ejecuciones
 from geo.metrics import _enrich_evals, score
 from geo.schemas import Ejecucion, Objetivo, Plan
 
+def _resolver_ejecuciones(
+    ejecuciones: "pd.DataFrame | Sequence[Ejecucion] | None", study_dir: Path | None
+) -> "pd.DataFrame | Sequence[Ejecucion]":
+    if ejecuciones is not None:
+        return ejecuciones
+    if study_dir is None:
+        raise ValueError("Se necesita `ejecuciones` o `study_dir` para simular.")
+    return load_ejecuciones(study_dir)
+
+
 DISCLAIMER_SIMULADOR: str = "Escenario hipotético, no una predicción."
 
 
@@ -15,9 +26,10 @@ def get_brand_baseline_params(
     evals: pd.DataFrame,
     marca: str,
     ejecuciones: pd.DataFrame | Sequence[Ejecucion] | None = None,
+    study_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Extrae los parámetros espontáneos actuales de `marca` para inicializar los controles del simulador."""
-    df_ej = ejecuciones if ejecuciones is not None else load_ejecuciones()
+    df_ej = _resolver_ejecuciones(ejecuciones, study_dir)
     full = _enrich_evals(evals, df_ej)
     esp = full[(full["espontanea"] == True) & (full["marca"] == marca)].copy()  # noqa: E712
 
@@ -94,6 +106,7 @@ def simulate(
     cambios: dict[str, Any] | None = None,
     *,
     ejecuciones: pd.DataFrame | Sequence[Ejecucion] | None = None,
+    study_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Simula el impacto en el Score de Citación espontáneo y el puesto en el ranking aplicando `cambios`.
 
@@ -107,7 +120,7 @@ def simulate(
       - `pct_fuentes_calidad`: float (0..1, proporción de apariciones con fuentes de calidad >= 0.9)
       - `calidad_fuente_objetivo`: float (0.2..1.0, calidad media de fuente directa opcional)
     """
-    df_ej = ejecuciones if ejecuciones is not None else load_ejecuciones()
+    df_ej = _resolver_ejecuciones(ejecuciones, study_dir)
     full = _enrich_evals(evals, df_ej)
     esp_all = full[full["espontanea"] == True].copy()  # noqa: E712
 

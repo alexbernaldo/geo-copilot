@@ -22,6 +22,7 @@ from geo.loader import (
     load_muestra,
     load_prompts,
 )
+from geo.reference import REFERENCE_DIR
 
 
 def test_no_bom_in_raw_csv_columns() -> None:
@@ -40,7 +41,7 @@ def test_no_bom_in_raw_csv_columns() -> None:
 
 def test_load_marcas() -> None:
     """Comprueba las 10 marcas, alias separados y la marca del brief identificada."""
-    marcas = load_marcas()
+    marcas = load_marcas(REFERENCE_DIR)
     assert len(marcas) == 10
 
     marcas_brief = [m for m in marcas if m.es_marca_brief]
@@ -52,7 +53,7 @@ def test_load_marcas() -> None:
 
 def test_load_prompts() -> None:
     """Comprueba los 25 prompts y sus tipos de instanciación."""
-    prompts = load_prompts()
+    prompts = load_prompts(REFERENCE_DIR)
     assert len(prompts) == 25
     counts: dict[str, int] = {}
     for p in prompts:
@@ -62,15 +63,15 @@ def test_load_prompts() -> None:
 
 def test_load_fuentes_and_dominios_desconocidos() -> None:
     """Comprueba las 25 fuentes del catálogo y que no hay dominios desconocidos en el kit."""
-    fuentes = load_fuentes()
+    fuentes = load_fuentes(REFERENCE_DIR)
     assert len(fuentes) == 25
     assert fuentes["wikipedia.org"] == ("Ranking / institución", 1.0)
-    assert dominios_desconocidos() == []
+    assert dominios_desconocidos(REFERENCE_DIR) == []
 
 
 def test_load_ejecuciones_and_as_ejecuciones() -> None:
     """Comprueba las 624 ejecuciones, reparto por motor, espontáneas/asistidas y ciudades."""
-    df = load_ejecuciones()
+    df = load_ejecuciones(REFERENCE_DIR)
     assert len(df) == 624
     for col in df.columns:
         assert "\ufeff" not in col
@@ -91,8 +92,8 @@ def test_load_ejecuciones_and_as_ejecuciones() -> None:
     assert ciudades == {"Madrid": 24, "Barcelona": 24}
     assert int(df["ciudad"].isna().sum()) == 624 - 48
 
-    # Validación Pydantic completa con as_ejecuciones()
-    objs = as_ejecuciones()
+    # Validación Pydantic completa con as_ejecuciones(REFERENCE_DIR)
+    objs = as_ejecuciones(REFERENCE_DIR)
     assert len(objs) == 624
     total_marcas_evaluar = sum(len(e.marcas_a_evaluar) for e in objs)
     assert total_marcas_evaluar == 2928
@@ -100,7 +101,7 @@ def test_load_ejecuciones_and_as_ejecuciones() -> None:
 
 def test_load_muestra() -> None:
     """Comprueba las 133 filas y 15 Ejecucion_ID únicos en muestra_evaluada.csv."""
-    df = load_muestra()
+    df = load_muestra(REFERENCE_DIR)
     assert len(df) == 133
     assert df["ejecucion_id"].nunique() == 15
     for col in df.columns:
@@ -137,3 +138,18 @@ def test_load_brief_example_md_and_docx_mock() -> None:
         assert len(ficha.restricciones_normativas) > 0
         assert "Comité" in ficha.audiencia
         assert "Clínica Alborada Visión" in ficha_resumen(ficha)
+
+
+def test_ciudad_se_detecta_comparando_con_la_plantilla() -> None:
+    """Sin lista de ciudades, la ciudad sale de comparar el prompt con la plantilla del banco."""
+    from geo.loader import detect_city_from_template
+
+    plantilla = "Busco una clínica de cataratas con buena reputación en [CIUDAD]. ¿Cuál me recomiendas?"
+    prompt = "Busco una clínica de cataratas con buena reputación en San Sebastián. ¿Cuál me recomiendas?"
+    assert detect_city_from_template(plantilla, prompt) == "San Sebastián"
+    assert detect_city_from_template("Sin marcador", "Sin marcador") is None
+    assert detect_city_from_template(plantilla, "Otra frase distinta") is None
+    df = load_ejecuciones(REFERENCE_DIR)
+    assert set(df.loc[df["instanciacion"] == "ciudad", "ciudad"].dropna()) == {"Madrid", "Barcelona"}
+    df2 = load_ejecuciones(REFERENCE_DIR, ciudades=["Madrid", "Barcelona"])
+    assert df["ciudad"].fillna("").tolist() == df2["ciudad"].fillna("").tolist()

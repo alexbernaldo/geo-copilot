@@ -76,11 +76,11 @@ def run_kit(root: Path) -> Path:
     from geo.reference import REFERENCE_DIR
 
     run = Run(
-        run_id="regresion",
         modo="cliente",
         brief_path=REFERENCE_DIR / "Brief_de_ejemplo_Clinica_Alborada.md",
         provider="mock",
-        runs_root=root,
+        run_dir=root / "regresion",
+        study_dir=REFERENCE_DIR,
     )
     run.run_all(auto_approve=True)
     return run.run_dir

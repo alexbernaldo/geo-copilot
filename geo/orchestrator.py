@@ -11,7 +11,7 @@ from typing import Any, Literal
 import pandas as pd
 
 from geo.budget import validate_and_adjust_plan
-from geo.config import BRIEF_MD, LLM_MODEL, LLM_PROVIDER, RUNS_DIR
+from geo.config import BRIEF_MD, LLM_MODEL, LLM_PROVIDER, REFERENCE_DATA_DIR, RUNS_DIR
 from geo.detection import detect
 from geo.export import export_docx, export_md
 from geo.findings import generate_findings
@@ -76,8 +76,13 @@ class Run:
         brief_path: str | Path | None = None,
         marca_prospecto: str | None = None,
         provider: str | None = None,
+        run_dir: Path | None = None,
+        study_dir: Path | None = None,
         runs_root: Path = RUNS_DIR,
     ) -> None:
+        # `run_dir` y `study_dir` son la firma pública. Si no se pasan (uso heredado:
+        # `run_id` + `runs_root`), la ejecución va a `runs_root/run_id` y el estudio es el del kit.
+        self.study_dir: Path = Path(study_dir) if study_dir is not None else REFERENCE_DATA_DIR
         self.modo: Literal["cliente", "prospecto"] = modo
         self.brief_path: Path = Path(brief_path) if brief_path else BRIEF_MD
         self.marca_prospecto: str | None = marca_prospecto
@@ -85,6 +90,8 @@ class Run:
             provider or os.getenv("LLM_PROVIDER", LLM_PROVIDER) or "mock"
         ).strip().lower()
 
+        if run_id is None and run_dir is not None:
+            run_id = Path(run_dir).name
         if run_id is None:
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             seed = f"{ts}|{self.modo}|{self.brief_path}|{self.marca_prospecto}"
@@ -92,7 +99,7 @@ class Run:
             run_id = f"{ts}_{h}"
 
         self.run_id: str = run_id
-        self.run_dir: Path = runs_root / self.run_id
+        self.run_dir: Path = Path(run_dir) if run_dir is not None else runs_root / self.run_id
         self.run_dir.mkdir(parents=True, exist_ok=True)
         self.state_path: Path = self.run_dir / "state.json"
         self.trace_path: Path = self.run_dir / "trace.jsonl"
@@ -370,9 +377,9 @@ class Run:
         )
 
     def estimate(self) -> dict[str, Any]:
-        marcas = load_marcas()
-        df_ej = load_ejecuciones()
-        catalogo = load_fuentes()
+        marcas = load_marcas(self.study_dir)
+        df_ej = load_ejecuciones(self.study_dir)
+        catalogo = load_fuentes(self.study_dir)
         df_det = detect(df_ej, marcas)
         juez_model = self.state.get("models", {}).get("juez_y_revisor") or _settings.get("LLM_MODEL")
         writer_model = self.state.get("models", {}).get("estrategia_y_redaccion") or _settings.get("LLM_MODEL_WRITER")
@@ -432,9 +439,9 @@ class Run:
         if force:
             self.state["degradados"] = {}
             self._save_state()
-        marcas = load_marcas()
-        df_ej = load_ejecuciones()
-        catalogo = load_fuentes()
+        marcas = load_marcas(self.study_dir)
+        df_ej = load_ejecuciones(self.study_dir)
+        catalogo = load_fuentes(self.study_dir)
 
         # 1. intake
         ficha_file = self.run_dir / "ficha.json"
@@ -592,6 +599,7 @@ class Run:
                     marcas_catalogo=marcas,
                     run_id=self.run_id,
                     provider=prov,
+                    study_dir=self.study_dir,
                 )
             else:
                 prop = write_client(
@@ -601,6 +609,7 @@ class Run:
                     plan,
                     run_id=self.run_id,
                     provider=prov,
+                    study_dir=self.study_dir,
                 )
             propuesta_file.write_text(prop.model_dump_json(indent=2), encoding="utf-8")
 
@@ -632,6 +641,7 @@ class Run:
                 ficha=ficha,
                 contexto_cifras=ctx,
                 provider=prov,
+                study_dir=self.study_dir,
             )
             revision_file.write_text(rev.model_dump_json(indent=2), encoding="utf-8")
             propuesta.revision = rev
@@ -682,11 +692,14 @@ class Run:
         return propuesta
 
 
-def estimate_pipeline(provider: str, models: dict[str, str] | None = None) -> dict[str, Any]:
+def estimate_pipeline(
+    provider: str, models: dict[str, str] | None = None, study_dir: Path | None = None
+) -> dict[str, Any]:
     """Estima el coste del pipeline sin crear carpeta, usando un run temporal en memoria."""
     r = Run.__new__(Run)
     # minimal init
     r.modo = "cliente"
+    r.study_dir = Path(study_dir) if study_dir is not None else REFERENCE_DATA_DIR
     r.brief_path = BRIEF_MD
     r.marca_prospecto = None
     r.provider = (provider or "mock").strip().lower()

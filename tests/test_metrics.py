@@ -7,6 +7,7 @@ from geo.detection import detect
 from geo.judge_rules import judge_rules
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas
 from geo.metrics import bundle, score
+from geo.reference import REFERENCE_DIR
 
 
 def test_a_score_synthetic_hand_calculated() -> None:
@@ -68,9 +69,9 @@ def test_c_negative_mean_fuerza_truncated_to_zero() -> None:
 
 def test_d_sum_of_components_equals_score_and_e_t1_disjoint(tmp_path) -> None:
     """(d) La suma de los 4 componentes es igual al score; (e) T1 espontánea y asistida no comparten filas/ejecuciones."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
     df_det = detect(df_ej, marcas)
     evals = judge_rules(df_det, df_ej, marcas, catalogo)
 

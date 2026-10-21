@@ -11,6 +11,7 @@ from geo.judge_rules import judge_rules
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas
 from geo.metrics import bundle
 from geo.strategy import _allowed_metric_values, build_plan
+from geo.reference import REFERENCE_DIR
 
 
 def test_action_library_has_at_least_20_templates() -> None:
@@ -40,9 +41,9 @@ def test_action_library_has_at_least_20_templates() -> None:
 
 def test_build_plan_and_budget_constraints_f9() -> None:
     """Comprueba F9: coste <= 27000 €, hallazgos válidos, KPI, responsable, entregables, sin ciclos y valor_actual real."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
     df_det = detect(df_ej, marcas)
     evals = judge_rules(df_det, df_ej, marcas, catalogo)
     tablas = bundle(evals, df_ej, marcas)

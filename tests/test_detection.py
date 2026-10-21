@@ -5,6 +5,7 @@ import pandas as pd
 from geo.detection import detect, detect_in_response
 from geo.loader import load_ejecuciones, load_marcas, load_muestra
 from geo.text import find_first_offset, normalize, segmentos_por_marca
+from geo.reference import REFERENCE_DIR
 
 
 def test_normalize_basic() -> None:
@@ -15,7 +16,7 @@ def test_normalize_basic() -> None:
 
 def test_false_positive_nitida_lowercase_adjective() -> None:
     """'nítida' en minúscula como adjetivo ('visión nítida') no debe dar positivo para Láser Nítida."""
-    marcas = {m.nombre: m for m in load_marcas()}
+    marcas = {m.nombre: m for m in load_marcas(REFERENCE_DIR)}
     nitida = marcas["Láser Nítida"]
 
     # Adjetivo en minúscula -> NO aparece
@@ -30,7 +31,7 @@ def test_false_positive_nitida_lowercase_adjective() -> None:
 
 def test_false_positive_lasik_generic() -> None:
     """'Lasik' o 'LASIK' como técnica quirúrgica genérica no debe activar Centro Lasik Península."""
-    marcas = {m.nombre: m for m in load_marcas()}
+    marcas = {m.nombre: m for m in load_marcas(REFERENCE_DIR)}
     lasik_peninsula = marcas["Centro Lasik Península"]
 
     assert find_first_offset("Especialistas en cirugía LASIK, PRK y lentes ICL.", lasik_peninsula) is None
@@ -43,7 +44,7 @@ def test_false_positive_lasik_generic() -> None:
 
 def test_alborada_and_street_name_aliases() -> None:
     """Comprueba detección de Alborada y documenta comportamiento de Cervantes y Santa Eulalia."""
-    marcas = {m.nombre: m for m in load_marcas()}
+    marcas = {m.nombre: m for m in load_marcas(REFERENCE_DIR)}
     alborada = marcas["Clínica Alborada Visión"]
     cervantes = marcas["Clínica del Ojo Cervantes"]
     santa_eulalia = marcas["Instituto Ocular Santa Eulalia"]
@@ -59,7 +60,7 @@ def test_alborada_and_street_name_aliases() -> None:
 
 def test_segmentos_por_marca_bullets_and_prose() -> None:
     """Comprueba la extracción de segmentos tanto en listas con viñetas como en prosa continua."""
-    marcas = load_marcas()
+    marcas = load_marcas(REFERENCE_DIR)
     marca_map = {m.nombre: m for m in marcas}
     valdecruz = marca_map["Grupo Hospitalario Valdecruz"]
     alborada = marca_map["Clínica Alborada Visión"]
@@ -94,9 +95,9 @@ def test_segmentos_por_marca_bullets_and_prose() -> None:
 
 def test_detect_2928_rows_and_100_percent_match_with_muestra() -> None:
     """Valida que detect() genera 2.928 filas y coincide al 100 % (133/133) con muestra_evaluada.csv."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    df_muestra = load_muestra()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    df_muestra = load_muestra(REFERENCE_DIR)
 
     df_det = detect(df_ej, marcas)
     assert len(df_det) == 2928

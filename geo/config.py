@@ -12,8 +12,9 @@ load_dotenv()
 # ---------- Rutas ----------
 ROOT_DIR: Path = Path(__file__).resolve().parent.parent
 KIT_DIR: Path = ROOT_DIR / "kit" / "Kit Participantes Hackaton"
-DATA_DIR: Path = KIT_DIR / "02_Datos" / "caso_oftalmologia"
-BRIEF_DIR: Path = KIT_DIR / "01_Briefings"
+REFERENCE_DATA_DIR: Path = Path(__file__).resolve().parent / "reference_data"
+DATA_DIR: Path = REFERENCE_DATA_DIR  # solo datos del kit (modo de referencia)
+BRIEF_DIR: Path = REFERENCE_DATA_DIR
 BRIEF_MD: Path = BRIEF_DIR / "Brief_de_ejemplo_Clinica_Alborada.md"
 BRIEF_DOCX: Path = BRIEF_DIR / "Brief_de_ejemplo_Clinica_Alborada.docx"
 DOCS_DIR: Path = KIT_DIR / "03_Documentacion"
