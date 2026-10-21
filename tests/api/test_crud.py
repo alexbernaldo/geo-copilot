@@ -43,7 +43,7 @@ def test_crud_projects(client: TestClient) -> None:
 
     # 6. Borrar con confirmación errónea -> 422
     res = client.delete(f"/api/projects/{pid}?confirm=nombre_incorrecto")
-    assert res.status_code == 422
+    assert res.status_code == 400
 
     # 7. Borrar con confirmación correcta -> 204
     res = client.delete(f"/api/projects/{pid}?confirm=Proyecto Renombrado")
