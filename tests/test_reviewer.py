@@ -13,13 +13,14 @@ from geo.metrics import build_brand_summary_metrics, bundle
 from geo.reviewer import compliance, verify_entities, verify_numbers
 from geo.strategy import build_plan
 from geo.writer import write_client, write_prospect
+from geo.reference import REFERENCE_DIR
 
 
 def _sample_context() -> tuple[dict, object, object]:
     """Construye un contexto real de cifras (metrics + hallazgos + plan + ficha) para los tests de F10."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
     df_det = detect(df_ej, marcas)
     evals = judge_rules(df_det, df_ej, marcas, catalogo)
     tablas = bundle(evals, df_ej, marcas)
@@ -67,7 +68,7 @@ def test_compliance_promise_and_denigratory_comparison() -> None:
         plan=plan,
         ficha=ficha,
         contexto_cifras=ctx,
-        provider="mock",
+        provider="mock", study_dir=REFERENCE_DIR,
     )
     assert rev_promise.aprobado is False
     assert any(
@@ -80,7 +81,7 @@ def test_compliance_promise_and_denigratory_comparison() -> None:
         plan=plan,
         ficha=ficha,
         contexto_cifras=ctx,
-        provider="mock",
+        provider="mock", study_dir=REFERENCE_DIR,
     )
     assert rev_denig.aprobado is False
     assert any(
@@ -98,7 +99,7 @@ def test_compliance_promise_and_denigratory_comparison() -> None:
         plan=plan,
         ficha=ficha,
         contexto_cifras=ctx,
-        provider="mock",
+        provider="mock", study_dir=REFERENCE_DIR,
     )
     assert rev_clean.aprobado is True
     assert rev_clean.cifras_no_trazables == 0
@@ -106,9 +107,9 @@ def test_compliance_promise_and_denigratory_comparison() -> None:
 
 def test_writer_and_export_client_and_prospect_f11() -> None:
     """Comprueba F11: write_client, write_prospect, export_md y export_docx verificando con python-docx."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
     df_det = detect(df_ej, marcas)
     evals = judge_rules(df_det, df_ej, marcas, catalogo)
     tablas = bundle(evals, df_ej, marcas)
@@ -128,6 +129,7 @@ def test_writer_and_export_client_and_prospect_f11() -> None:
         plan,
         run_id=run_id,
         provider="mock",
+        study_dir=REFERENCE_DIR,
     )
     assert prop_cliente.modo == "cliente"
     assert len(prop_cliente.secciones) == 10
@@ -153,6 +155,7 @@ def test_writer_and_export_client_and_prospect_f11() -> None:
         marcas_catalogo=marcas,
         run_id=run_id,
         provider="mock",
+        study_dir=REFERENCE_DIR,
     )
     assert prop_vistalia.modo == "prospecto"
     assert prop_vistalia.revision.aprobado is True
@@ -175,12 +178,12 @@ def test_verify_entities_blocks_mirasierra_and_uncataloged_entities() -> None:
         "Grupo Hospitalario Valdecruz (valdecruz.example), Instituto Oftálmico Tramuntana "
         "y Vistalia Oftalmología, según rankings como guiaoftalmologia.example."
     )
-    assert verify_entities(valid_text, ficha=ficha) == []
+    assert verify_entities(valid_text, ficha=ficha, study_dir=REFERENCE_DIR) == []
 
     # 2. Falla explícitamente con "Mirasierra" (tanto en 'Instituto Oftalmológico Mirasierra' como sola)
     inc_mirasierra = verify_entities(
         "El segundo actor es Instituto Oftalmológico Mirasierra (o Mirasierra).",
-        ficha=ficha,
+        ficha=ficha, study_dir=REFERENCE_DIR,
     )
     assert len(inc_mirasierra) >= 1
     assert all(i.bloqueante for i in inc_mirasierra)
@@ -191,7 +194,7 @@ def test_verify_entities_blocks_mirasierra_and_uncataloged_entities() -> None:
         plan=plan,
         ficha=ficha,
         contexto_cifras=ctx,
-        provider="mock",
+        provider="mock", study_dir=REFERENCE_DIR,
     )
     assert rev_mirasierra.aprobado is False
 
@@ -203,7 +206,7 @@ def test_verify_entities_blocks_mirasierra_and_uncataloged_entities() -> None:
         "Falta contenido para el perfil de paciente con miedo quirúrgico.",
         "Crecimiento previsto en la clínica de Valencia.",
     ):
-        incs = verify_entities(bad_snippet, ficha=ficha)
+        incs = verify_entities(bad_snippet, ficha=ficha, study_dir=REFERENCE_DIR)
         assert len(incs) >= 1, f"Debería bloquear: {bad_snippet}"
         assert all(i.bloqueante for i in incs)
 

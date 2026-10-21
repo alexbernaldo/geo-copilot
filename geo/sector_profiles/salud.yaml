@@ -1,0 +1,231 @@
+id: salud
+descripcion: Perfil exacto del caso de referencia del kit (Clínica Alborada Visión).
+acciones:
+  TPL-01:
+    titulo: Datos estructurados schema.org (MedicalClinic, Physician, MedicalProcedure,
+      FAQPage)
+    descripcion: Implementar marcado JSON-LD completo en las fichas de cirugía refractiva,
+      cataratas, miopía infantil y sedes de {ciudades}, vinculando cuadro médico y
+      acreditaciones.
+    kpi_tipo: 100 % de fichas prioritarias y sedes con schema.org validado sin errores
+    entregables_tipo:
+    - Especificación JSON-LD por tipo de página (MedicalClinic, Physician, FAQPage)
+    - Validación en Rich Results Test y Schema Markup Validator
+  TPL-02:
+    titulo: Auditoría técnica de rastreabilidad para bots de IA (robots.txt, sitemap,
+      renderizado HTML)
+    descripcion: Configurar acceso explícito para GPTBot, OAI-SearchBot, ClaudeBot,
+      PerplexityBot y Google-Extended, optimizando tiempos de respuesta y contenido
+      sin dependencia de JS.
+    kpi_tipo: Acceso 200 OK verificado para bots de OpenAI, Anthropic, Google y Perplexity
+    entregables_tipo:
+    - Archivo robots.txt y sitemap.xml actualizados
+    - Informe técnico de renderizado SSR/HTML limpio en las 60 URLs
+  TPL-03:
+    titulo: Normalización de entidad y NAP en directorios sanitarios citados ({dom_directorios_coma})
+    descripcion: Unificar nombre oficial, sedes ({ciudades}), especialidades, cuadro
+      médico y horarios en {dom_directorios}.
+    kpi_tipo: 100 % de fichas de directorios sectoriales actualizadas y coherentes
+      en Madrid y Barcelona
+    entregables_tipo:
+    - Matriz maestra de atributos NAP y servicios por sede
+    - Fichas verificadas en {dom_directorios}
+  TPL-04:
+    titulo: Creación y enriquecimiento de entidad en Wikidata con referencias verificables
+    descripcion: Dar de alta y estructurar la entidad de {marca} en Wikidata con datos
+      verificables (año de fundación 2009, sedes, especialidades, identificadores
+      y referencias de prensa).
+    kpi_tipo: Entidad activa en Wikidata con >= 10 propiedades y referencias externas
+    entregables_tipo:
+    - Ficha de entidad publicada en Wikidata
+    - Enlace sameAs integrado en el marcado schema.org de la web
+  TPL-05:
+    titulo: Páginas locales en Barcelona por tratamiento prioritario (refractiva,
+      cataratas y miopía infantil)
+    descripcion: Crear landing pages específicas del centro de Barcelona (abierto
+      en 2024) con equipo médico local, tecnología diagnóstica, tiempos de cita y
+      preguntas frecuentes locales.
+    kpi_tipo: Incremento de aparición espontánea en consultas de Barcelona hacia el
+      rango 20 % - 35 %
+    entregables_tipo:
+    - 3 páginas locales de Barcelona (cirugía refractiva, control de miopía infantil,
+      cataratas)
+    - Ficha local de sede Barcelona con perfiles de los oftalmólogos
+  TPL-06:
+    titulo: Programa de activación y respuesta de reseñas verificadas en la sede de
+      Barcelona
+    descripcion: Sistematizar la solicitud de reseñas post-revisión en el centro de
+      Barcelona en {dom_resenas}, respondiendo con detalle informativo.
+    kpi_tipo: '>= 100 nuevas reseñas verificadas en la sede de Barcelona con tasa
+      de respuesta del 100 %'
+    entregables_tipo:
+    - Protocolo de captación de reseñas en clínica de Barcelona
+    - Guía de respuesta sanitaria conforme a normativa
+  TPL-07:
+    titulo: Hub de FAQ citables construidas desde el banco de prompts reales (DG,
+      DP, CO, PR)
+    descripcion: Redactar bloques de respuesta directa (40-80 palabras + tabla de
+      criterios) para las dudas recurrentes que lanzan los usuarios a ChatGPT, Claude,
+      Gemini y Perplexity.
+    kpi_tipo: Publicación de 25 bloques Q&A estructurados con datos verificables de
+      la clínica
+    entregables_tipo:
+    - 25 módulos FAQ optimizados para citación generativa y validados por dirección
+      médica
+    - Marcado FAQPage integrado en las páginas de servicio
+  TPL-08:
+    titulo: Página transparente de precios orientativos, qué incluye el tratamiento
+      y financiación
+    descripcion: Publicar desglose claro de rangos de inversión por técnica (LASIK,
+      PRK, lentes fáquicas, cataratas), detallando que incluye valoración de 1 visita
+      y 12 meses de seguimiento.
+    kpi_tipo: Aumento de aparición espontánea en fase de Decisión desde el 25 % hacia
+      el 38 % - 48 %
+    entregables_tipo:
+    - Página pública de tarifas orientativas, alcance clínico y opciones de financiación
+    - Tabla comparativa de qué incluye el protocolo asistencial de {marca}
+  TPL-09:
+    titulo: Contenido de puesta en valor del seguimiento postoperatorio de 12 meses
+      (diferencial propio)
+    descripcion: Explicar con rigor médico el protocolo de revisiones durante 12 meses
+      con el mismo oftalmólogo, respondiendo a la principal inquietud del paciente
+      sin nombrar ni comparar con terceros.
+    kpi_tipo: Incremento de menciones de recomendación activa basadas en seguimiento
+      postoperatorio
+    entregables_tipo:
+    - Guía clínica del protocolo de seguimiento postoperatorio de 12 meses firmada
+      por el equipo médico
+    - Infografía de cronograma de revisiones (24 h, 1 semana, 1 mes, 3, 6 y 12 meses)
+  TPL-10:
+    titulo: Guías específicas por perfil de paciente (miopía infantil para padres,
+      mayores de 60, pilotos)
+    descripcion: Crear guías clínicas dedicadas a padres de niños con miopía progresiva,
+      acompañantes de mayores con cataratas y opositores/pilotos con requisitos visuales.
+    kpi_tipo: Incremento de visibilidad espontánea en prompts de familia DP (Descubrimiento
+      por perfil)
+    entregables_tipo:
+    - Guía para familias sobre control de miopía infantil
+    - Guía sobre cirugía refractiva según edad y profesión (25-50 años, pilotos)
+    - Guía de cirugía de cataratas con lentes premium para pacientes y familiares
+  TPL-11:
+    titulo: Plan de PR digital en prensa de salud citada ({dom_medios_coma})
+    descripcion: Publicar tribunas médicas y notas con datos clínicos propios (~7.500
+      intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento)
+      en {dom_medios}.
+    kpi_tipo: '>= 6 apariciones editoriales en {dom_medios}'
+    entregables_tipo:
+    - Informe anual de datos clínicos y tendencias en cirugía refractiva y miopía
+      infantil
+    - 6 artículos/entrevistas con portavoces médicos publicados en {dom_medios}
+  TPL-12:
+    titulo: Dossier y candidatura a rankings y guías sectoriales ({dom_rankings_coma})
+    descripcion: Presentar memoria clínica y asistencial ante {dom_rankings} para
+      mejorar respaldo institucional.
+    kpi_tipo: Presencia activa en >= 3 rankings/guías sectoriales de calidad 1.0
+    entregables_tipo:
+    - Dossier institucional de indicadores médicos, equipamiento y sedes
+    - Solicitudes de inclusión/actualización en {dom_rankings}
+  TPL-13:
+    titulo: Cápsulas de vídeo divulgativo del equipo médico en YouTube y comunidades
+      de salud
+    descripcion: Producir vídeos breves de oftalmólogos de {marca} con transcripción
+      estructurada respondiendo dudas sobre LASIK vs PRK, postoperatorio y miopía
+      infantil.
+    kpi_tipo: 6 vídeos médicos publicados con transcripción completa embebida en fichas
+      web
+    entregables_tipo:
+    - 6 cápsulas de vídeo divulgativo en YouTube con capítulos y transcripción
+    - Integración de VideoObject schema en las páginas de tratamiento
+  TPL-14:
+    titulo: Guía comparativa objetiva de técnicas quirúrgicas (LASIK, PRK, ICL) con
+      criterios médicos
+    descripcion: Publicar tablas clínicas comparativas de indicaciones, tiempos de
+      recuperación y perfiles candidatos entre técnicas, ayudando a los motores en
+      prompts de Comparación.
+    kpi_tipo: Mejora de tasa de aparición y posición media en prompts de Comparación
+    entregables_tipo:
+    - Matriz comparativa LASIK vs PRK vs lentes fáquicas ICL avalada por comité médico
+    - Bloques HTML tabulares fácilmente extraíbles por buscadores de IA
+  TPL-15:
+    titulo: Fichas individuales de los 14 oftalmólogos con colegiación, publicaciones
+      y subespecialidad
+    descripcion: Reforzar criterios E-E-A-T sanitarios mediante perfiles detallados
+      de cada especialista en Madrid y Barcelona, enlazados como revisores de las
+      guías médicas.
+    kpi_tipo: 14 perfiles médicos completos con marcado Physician y autoría clínica
+      visible
+    entregables_tipo:
+    - 14 páginas de perfil médico con número de colegiado y experiencia
+    - Sello de revisión médica con fecha en las 60 URLs informativas
+  TPL-16:
+    titulo: Optimización de conversión de citas y gestión de expectativas en franjas
+      horarias
+    descripcion: Atender las menciones puntuales sobre disponibilidad de franjas de
+      cita mediante agenda online visible y tiempos medios de espera transparentes
+      por sede.
+    kpi_tipo: Reducción de menciones negativas asistidas por debajo del 5 %
+    entregables_tipo:
+    - Bloque informativo de tiempos medios de primera consulta en Madrid y Barcelona
+    - Protocolo de seguimiento de incidencias en reseñas sobre citas
+  TPL-17:
+    titulo: Página de datos institucionales verificables (Memoria de actividad y calidad
+      asistencial)
+    descripcion: Concentrar en una URL pública de referencia las cifras oficiales
+      de {marca} (fundada en 2009, 14 oftalmólogos, ~7.500 intervenciones/año, 4,7/5
+      en 1.800 reseñas) para alimentar grounding web.
+    kpi_tipo: Reducción de apariciones en zona de azar y mejora de consistencia 3/3
+      repeticiones
+    entregables_tipo:
+    - Página 'Cifras y Calidad Asistencial' con datos estructurados y fuentes descargables
+    - Hoja de datos rápida (Fact Sheet) para periodistas y asistentes de IA
+  TPL-18:
+    titulo: Participación informativa en foros y portales de pacientes oftalmológicos
+    descripcion: Aportar contenido educativo verificado en {dom_foros} y comunidades
+      de salud ocular sobre preparación preoperatoria y cuidados post-LASIK.
+    kpi_tipo: Presencia en hilos informativos citados por motores en la categoría
+      de oftalmología
+    entregables_tipo:
+    - Calendario de 12 colaboraciones divulgativas supervisadas por equipo médico
+    - Guía de participación ética sin promoción encubierta
+  TPL-19:
+    titulo: Optimización semántica de las 60 URLs del blog hacia intenciones de Comparación
+      y Decisión
+    descripcion: Reestructurar los artículos existentes del blog con resúmenes ejecutivos
+      iniciales, tablas de decisión, enlaces a sedes de Madrid/Barcelona y autoría
+      médica explícita.
+    kpi_tipo: 30 artículos prioritarios actualizados con estructura citable y enlaces
+      a conversión
+    entregables_tipo:
+    - Auditoría y priorización de las 60 URLs actuales de la web
+    - 30 artículos reestructurados con bloques TL;DR y validación clínica
+  TPL-20:
+    titulo: Monitorización competitiva de actores multicentro no declarados (Vistalia,
+      Oftalmos Centro)
+    descripcion: Incorporar en el cuadro de mando a Vistalia Oftalmología y Oftalmos
+      Centro junto a Valdecruz, Tramuntana y Láser Nítida para vigilar cambios de
+      cuota en Madrid y Barcelona.
+    kpi_tipo: Seguimiento trimestral de las 10 marcas reales del mercado en los 4
+      motores
+    entregables_tipo:
+    - Panel comparativo actualizado con competidores declarados y emergentes
+    - Alertas de cambios en fuentes citadas de la competencia
+  TPL-21:
+    titulo: Alianzas de contenido con ópticas, colegios y asociaciones en Barcelona
+    descripcion: Generar menciones locales de autoridad en Barcelona mediante jornadas
+      de cribado visual infantil y acuerdos con centros educativos y deportivos locales.
+    kpi_tipo: '>= 4 menciones en webs y medios locales de Barcelona vinculadas a salud
+      visual'
+    entregables_tipo:
+    - Programa de divulgación local sobre miopía infantil en Barcelona
+    - Cobertura en portales locales y sanitarios catalanes
+  TPL-22:
+    titulo: 'Re-medición trimestral del estudio GEO (4 oleadas: semanas 12, 24, 36
+      y 48) e informe a Comité'
+    descripcion: Re-ejecutar el banco de 25 prompts en ChatGPT, Gemini, Perplexity
+      y Claude cada trimestre para medir evolución del Score de Citación, con hito
+      intermedio en el mes 6.
+    kpi_tipo: 4 oleadas trimestrales ejecutadas (S12, S24, S36, S48) con atribución
+      a primeras visitas
+    entregables_tipo:
+    - 4 informes trimestrales de evolución GEO para el Comité de Dirección
+    - Revisión de mitad de horizonte (mes 6) con recalibración de acciones

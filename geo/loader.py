@@ -1,18 +1,13 @@
-"""Carga y validación de los archivos CSV del kit."""
+"""Carga y validación de los CSV de un estudio (formato canónico del kit).
+
+Todas las funciones reciben la carpeta del estudio (`study_dir`); no hay rutas por defecto.
+"""
 
 from pathlib import Path
 import re
 import pandas as pd
 
-from geo.config import (
-    BANCO_PROMPTS_CSV,
-    CIUDADES_CONOCIDAS,
-    EJECUCIONES_CSV,
-    FUENTES_CATALOGO_CSV,
-    INSTANCIACIONES_ESPONTANEAS,
-    MARCAS_CSV,
-    MUESTRA_EVALUADA_CSV,
-)
+from geo.config import INSTANCIACIONES_ESPONTANEAS
 from geo.schemas import (
     Ejecucion,
     Marca,
@@ -20,14 +15,32 @@ from geo.schemas import (
     TipoFuente,
 )
 
+MARCAS_FILE = "marcas.csv"
+BANCO_PROMPTS_FILE = "banco_prompts.csv"
+EJECUCIONES_FILE = "ejecuciones.csv"
+FUENTES_CATALOGO_FILE = "fuentes_catalogo.csv"
+MUESTRA_EVALUADA_FILE = "muestra_evaluada.csv"
+
+_MARCADOR_CIUDAD = "[CIUDAD]"
+
 
 def _extract_city(prompt_text: str, ciudades: list[str] | None = None) -> str | None:
-    """Extrae la ciudad mencionada en un prompt de instanciación 'ciudad'."""
-    lista_ciudades = ciudades or CIUDADES_CONOCIDAS
-    for ciudad in lista_ciudades:
+    """Busca en el prompt la primera ciudad de la lista (sin distinguir mayúsculas)."""
+    for ciudad in ciudades or []:
         if re.search(rf"\b{re.escape(ciudad)}\b", prompt_text, flags=re.IGNORECASE):
             return ciudad
     return None
+
+
+def detect_city_from_template(plantilla: str, prompt_ejecutado: str) -> str | None:
+    """Obtiene la ciudad comparando el prompt instanciado con su plantilla (`[CIUDAD]`)."""
+    if _MARCADOR_CIUDAD not in plantilla:
+        return None
+    partes = [re.escape(p) for p in plantilla.strip().split(_MARCADOR_CIUDAD)]
+    patron = r"(.+?)".join(partes)
+    patron = re.sub(r"(?:\\ )+", r"\\s+", patron)
+    m = re.fullmatch(patron, prompt_ejecutado.strip(), flags=re.IGNORECASE | re.DOTALL)
+    return m.group(1).strip() if m else None
 
 
 def _split_pipe(val: object) -> list[str]:
@@ -44,9 +57,9 @@ def _split_domains(val: object) -> list[str]:
     return [item.strip().lower() for item in str(val).split(",") if item.strip()]
 
 
-def load_marcas(path: Path = MARCAS_CSV) -> list[Marca]:
-    """Carga las marcas del sector desde marcas.csv."""
-    df = pd.read_csv(path, encoding="utf-8-sig")
+def load_marcas(study_dir: Path) -> list[Marca]:
+    """Carga las marcas del estudio desde marcas.csv."""
+    df = pd.read_csv(Path(study_dir) / MARCAS_FILE, encoding="utf-8-sig")
     marcas: list[Marca] = []
     for _, row in df.iterrows():
         rol = str(row["Rol"]).strip()
@@ -63,9 +76,9 @@ def load_marcas(path: Path = MARCAS_CSV) -> list[Marca]:
     return marcas
 
 
-def load_prompts(path: Path = BANCO_PROMPTS_CSV) -> list[Prompt]:
+def load_prompts(study_dir: Path) -> list[Prompt]:
     """Carga el banco de prompts desde banco_prompts.csv."""
-    df = pd.read_csv(path, encoding="utf-8-sig")
+    df = pd.read_csv(Path(study_dir) / BANCO_PROMPTS_FILE, encoding="utf-8-sig")
     prompts: list[Prompt] = []
     for _, row in df.iterrows():
         prompts.append(
@@ -82,9 +95,9 @@ def load_prompts(path: Path = BANCO_PROMPTS_CSV) -> list[Prompt]:
     return prompts
 
 
-def load_fuentes(path: Path = FUENTES_CATALOGO_CSV) -> dict[str, tuple[TipoFuente, float]]:
+def load_fuentes(study_dir: Path) -> dict[str, tuple[TipoFuente, float]]:
     """Carga el catálogo de fuentes: dominio -> (TipoFuente, calidad)."""
-    df = pd.read_csv(path, encoding="utf-8-sig")
+    df = pd.read_csv(Path(study_dir) / FUENTES_CATALOGO_FILE, encoding="utf-8-sig")
     catalogo: dict[str, tuple[TipoFuente, float]] = {}
     for _, row in df.iterrows():
         dominio = str(row["Dominio"]).strip().lower()
@@ -94,14 +107,17 @@ def load_fuentes(path: Path = FUENTES_CATALOGO_CSV) -> dict[str, tuple[TipoFuent
     return catalogo
 
 
-def load_ejecuciones(
-    path: Path = EJECUCIONES_CSV,
-    prompts_path: Path = BANCO_PROMPTS_CSV,
-    ciudades: list[str] | None = None,
-) -> pd.DataFrame:
-    """Carga ejecuciones.csv, lo une con banco_prompts para añadir instanciación y normaliza campos."""
-    df_ej = pd.read_csv(path, encoding="utf-8-sig")
-    df_pr = pd.read_csv(prompts_path, encoding="utf-8-sig")[["Prompt_ID", "Instanciación"]]
+def load_ejecuciones(study_dir: Path, ciudades: list[str] | None = None) -> pd.DataFrame:
+    """Carga ejecuciones.csv, lo une con banco_prompts y normaliza campos.
+
+    La ciudad de los prompts `ciudad` sale de `ciudades` (p. ej. las de la ficha) si se pasa;
+    si no, de comparar el prompt ejecutado con la plantilla del banco.
+    """
+    study_dir = Path(study_dir)
+    df_ej = pd.read_csv(study_dir / EJECUCIONES_FILE, encoding="utf-8-sig")
+    df_pr_full = pd.read_csv(study_dir / BANCO_PROMPTS_FILE, encoding="utf-8-sig")
+    df_pr = df_pr_full[["Prompt_ID", "Instanciación"]]
+    plantillas = dict(zip(df_pr_full["Prompt_ID"], df_pr_full["Prompt (plantilla)"]))
 
     df = df_ej.merge(df_pr, on="Prompt_ID", how="left")
     if df["Instanciación"].isna().any():
@@ -126,14 +142,17 @@ def load_ejecuciones(
         }
     )
 
+    def _ciudad(r: pd.Series) -> str | None:
+        if r["instanciacion"] != "ciudad":
+            return None
+        texto = str(r["prompt_ejecutado"])
+        if ciudades:
+            return _extract_city(texto, ciudades)
+        return detect_city_from_template(str(plantillas.get(r["prompt_id"], "")), texto)
+
     df["instanciacion"] = df["instanciacion"].astype(str).str.strip()
     df["espontanea"] = df["instanciacion"].isin(INSTANCIACIONES_ESPONTANEAS)
-    df["ciudad"] = df.apply(
-        lambda r: _extract_city(str(r["prompt_ejecutado"]), ciudades)
-        if r["instanciacion"] == "ciudad"
-        else None,
-        axis=1,
-    )
+    df["ciudad"] = df.apply(_ciudad, axis=1)
     df["fuentes"] = df["fuentes"].apply(_split_domains)
     df["marcas_a_evaluar"] = df["marcas_a_evaluar"].apply(_split_pipe)
     df["repeticion"] = df["repeticion"].astype(int)
@@ -158,13 +177,9 @@ def load_ejecuciones(
     return df[cols_order]
 
 
-def as_ejecuciones(
-    path: Path = EJECUCIONES_CSV,
-    prompts_path: Path = BANCO_PROMPTS_CSV,
-    ciudades: list[str] | None = None,
-) -> list[Ejecucion]:
+def as_ejecuciones(study_dir: Path, ciudades: list[str] | None = None) -> list[Ejecucion]:
     """Devuelve las ejecuciones validadas como lista de objetos Pydantic Ejecucion."""
-    df = load_ejecuciones(path=path, prompts_path=prompts_path, ciudades=ciudades)
+    df = load_ejecuciones(study_dir, ciudades=ciudades)
     records = df.to_dict(orient="records")
     for rec in records:
         if pd.isna(rec.get("ciudad")):
@@ -172,9 +187,9 @@ def as_ejecuciones(
     return [Ejecucion(**rec) for rec in records]
 
 
-def load_muestra(path: Path = MUESTRA_EVALUADA_CSV) -> pd.DataFrame:
+def load_muestra(study_dir: Path) -> pd.DataFrame:
     """Carga muestra_evaluada.csv renombrando sus columnas a los campos de Evaluacion."""
-    df = pd.read_csv(path, encoding="utf-8-sig")
+    df = pd.read_csv(Path(study_dir) / MUESTRA_EVALUADA_FILE, encoding="utf-8-sig")
     df = df.rename(
         columns={
             "Ejecucion_ID": "ejecucion_id",
@@ -210,14 +225,10 @@ def load_muestra(path: Path = MUESTRA_EVALUADA_CSV) -> pd.DataFrame:
     return df
 
 
-def dominios_desconocidos(
-    ejecuciones_path: Path = EJECUCIONES_CSV,
-    prompts_path: Path = BANCO_PROMPTS_CSV,
-    fuentes_path: Path = FUENTES_CATALOGO_CSV,
-) -> list[str]:
+def dominios_desconocidos(study_dir: Path) -> list[str]:
     """Devuelve la lista ordenada de dominios citados en ejecuciones que no están en el catálogo."""
-    catalogo = load_fuentes(fuentes_path)
-    df_ej = load_ejecuciones(path=ejecuciones_path, prompts_path=prompts_path)
+    catalogo = load_fuentes(study_dir)
+    df_ej = load_ejecuciones(study_dir)
     citados: set[str] = set()
     for lista_dom in df_ej["fuentes"]:
         citados.update(lista_dom)

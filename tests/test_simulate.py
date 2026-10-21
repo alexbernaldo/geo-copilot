@@ -3,6 +3,7 @@
 import pandas as pd
 
 from geo.config import RUNS_DIR
+from geo.reference import REFERENCE_DIR
 from geo.schemas import Plan
 from geo.simulate import (
     DISCLAIMER_SIMULADOR,
@@ -17,7 +18,7 @@ def test_simulate_no_changes_equals_actual() -> None:
     evals = pd.read_parquet(RUNS_DIR / "demo" / "evaluaciones.parquet")
     marca = "Clínica Alborada Visión"
 
-    res_none = simulate(evals, marca, cambios=None)
+    res_none = simulate(evals, marca, cambios=None, study_dir=REFERENCE_DIR)
     assert res_none["score_simulado"] == res_none["score_actual"] == 27.97
     assert res_none["puesto_simulado"] == res_none["puesto_actual"] == 7
     assert res_none["delta_score"] == 0.0
@@ -25,7 +26,7 @@ def test_simulate_no_changes_equals_actual() -> None:
     assert res_none["componentes"]["simulado"] == res_none["componentes"]["actual"]
     assert res_none["aviso"] == DISCLAIMER_SIMULADOR
 
-    base = get_brand_baseline_params(evals, marca)
+    base = get_brand_baseline_params(evals, marca, study_dir=REFERENCE_DIR)
     res_same = simulate(
         evals,
         marca,
@@ -35,6 +36,7 @@ def test_simulate_no_changes_equals_actual() -> None:
             "fuerza_media_objetivo": base["fuerza_presentes"],
             "pct_fuentes_calidad": base["pct_fuentes_calidad"],
         },
+        study_dir=REFERENCE_DIR,
     )
     assert res_same["score_simulado"] == res_same["score_actual"]
     assert res_same["puesto_simulado"] == res_same["puesto_actual"]
@@ -54,6 +56,7 @@ def test_simulate_improvements_increase_score_and_rank() -> None:
             "fuerza_media_objetivo": 2.30,
             "pct_fuentes_calidad": 0.65,
         },
+        study_dir=REFERENCE_DIR,
     )
     assert res["score_simulado"] > res["score_actual"]
     assert res["puesto_simulado"] < res["puesto_actual"]
@@ -70,6 +73,7 @@ def test_apply_simulation_to_plan_objectives() -> None:
         evals,
         "Clínica Alborada Visión",
         cambios={"aparicion_por_ciudad": {"Barcelona": 0.45}, "fuerza_media_objetivo": 2.1},
+        study_dir=REFERENCE_DIR,
     )
     updated_plan = apply_simulation_to_plan_objectives(plan, sim_res)
     assert len(updated_plan.objetivos) == len(plan.objetivos) + 1

@@ -564,6 +564,8 @@ def bundle(
     for motor in MOTORES:
         sub_m = df_ej[df_ej["motor"] == motor]
         n_m = len(sub_m)
+        if n_m == 0:
+            continue  # motor sin ejecuciones en este estudio
         no_search = sub_m[sub_m["fuentes"].apply(lambda x: len(x) == 0)]
         n_no = len(no_search)
         t12_rows.append(

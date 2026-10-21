@@ -6,13 +6,14 @@ from geo.detection import detect
 from geo.judge_rules import judge_brand_mention, judge_rules
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas, load_muestra
 from geo.validation import compare
+from geo.reference import REFERENCE_DIR
 
 
 def test_judge_rules_unit_patterns() -> None:
     """Comprueba cada rama de las reglas léxicas en judge_brand_mention."""
-    marcas = {m.nombre: m for m in load_marcas()}
+    marcas = {m.nombre: m for m in load_marcas(REFERENCE_DIR)}
     alborada = marcas["Clínica Alborada Visión"]
-    catalogo = load_fuentes()
+    catalogo = load_fuentes(REFERENCE_DIR)
 
     # 1. No aparece -> fuerza 0, resto None
     res_ausente = judge_brand_mention(0, None, None, alborada, ["wikipedia.org"], catalogo)
@@ -76,10 +77,10 @@ def test_judge_rules_unit_patterns() -> None:
 
 def test_judge_rules_validation_thresholds_against_muestra() -> None:
     """Comprueba que el juez por reglas supera ampliamente los umbrales de F3 (fuerza>=85%, sentimiento>=85%, tipo_mencion>=75%)."""
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    muestra = load_muestra()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    muestra = load_muestra(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
 
     ej_ids_muestra = set(muestra["ejecucion_id"].unique())
     df_ej_muestra = df_ej[df_ej["ejecucion_id"].isin(ej_ids_muestra)].copy()
@@ -105,10 +106,10 @@ def test_judge_llm_cache_and_ensemble(tmp_path) -> None:
     from geo.judge_llm import FEW_SHOT_EJECUCION_IDS, judge_llm
     from geo.llm import get_llm_stats, reset_llm_stats
 
-    marcas = load_marcas()
-    df_ej = load_ejecuciones()
-    muestra = load_muestra()
-    catalogo = load_fuentes()
+    marcas = load_marcas(REFERENCE_DIR)
+    df_ej = load_ejecuciones(REFERENCE_DIR)
+    muestra = load_muestra(REFERENCE_DIR)
+    catalogo = load_fuentes(REFERENCE_DIR)
 
     ej_ids_muestra = set(muestra["ejecucion_id"].unique())
     df_ej_muestra = df_ej[df_ej["ejecucion_id"].isin(ej_ids_muestra)].copy()

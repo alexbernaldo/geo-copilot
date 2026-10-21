@@ -1,0 +1,209 @@
+id: general
+descripcion: Perfil por defecto para cualquier sector (publicidad general).
+detectar_si: []
+
+normativa:
+  descripcion: >-
+    Publicidad general: sin promesas de resultados, sin comparativas denigratorias
+    y sin superlativos absolutos que no se puedan demostrar.
+  prohibidas_regex:
+    - patron: '\bgarantiza(?:mos|n|do|da|r)?\b'
+      sugerencia: Sustituir garantías absolutas por rangos orientativos sujetos a re-medición.
+    - patron: '\bresultados?\s+asegurados?\b'
+      sugerencia: Eliminar 'resultados asegurados'; en GEO no se pueden prometer resultados.
+    - patron: '\b100\s*%\s*(?:de\s+)?(?:éxito|exito|eficacia|seguro|efectivo)\b'
+      sugerencia: Retirar afirmaciones del '100 % de éxito/eficacia'; usar datos verificables.
+    - patron: '\b(?:el\s+mejor\s+(?:centro|servicio)|la\s+mejor\s+(?:empresa|academia|marca)|número\s+uno|numero\s+uno)\b'
+      sugerencia: Evitar superlativos absolutos ('la mejor'); describir hechos y diferenciales verificables.
+    - patron: '\bsin\s+riesgos?\b'
+      sugerencia: Retirar 'sin riesgo'; no se pueden prometer resultados sin riesgo.
+
+responsables: [cliente_marketing, cliente_comunicacion, agencia, tercero]
+
+fases:
+  0:
+    nombre: "Fase 0 · Fundamentos técnicos, entidad y datos estructurados"
+    objetivo: "Asegurar que los bots de IA rastreen la web sin fricción y comprendan la entidad, las sedes y la oferta de {marca}."
+  1:
+    nombre: "Fase 1 · Contenidos prioritarios, páginas locales ({ciudad_crecimiento}) y reputación"
+    objetivo: "Cerrar la brecha de visibilidad en {ciudad_crecimiento} y en la fase de Decisión con páginas locales, FAQ citables, precios transparentes y los diferenciales de {marca}."
+  2:
+    nombre: "Fase 2 · Autoridad en terceros, PR digital, rankings y perfiles de cliente"
+    objetivo: "Construir respaldo en medios, rankings y guías por perfil de cliente para escalar recomendaciones en ChatGPT, Claude, Gemini y Perplexity."
+  3:
+    nombre: "Fase 3 · Medición continua y recalibración trimestral"
+    objetivo: "Medir la evolución del Score de Citación en las semanas 12, 24, 36 y 48, verificando primeros resultados visibles en el mes 6."
+
+plan:
+  medicion: >-
+    Re-ejecución trimestral del banco de {n_prompts} prompts ({n_ejecuciones} ejecuciones por oleada)
+    en las semanas 12, 24, 36 y 48, con hito de control intermedio en el mes 6 (semana 24)
+    para evaluar la evolución del Score de Citación en {ciudades}.
+  riesgos:
+    - "No determinismo y actualizaciones de los modelos de IA: las respuestas varían entre ejecuciones y por cambios de pesos de cada proveedor."
+    - "Tiempos de indexación y refresco de fuentes de terceros (rankings, directorios y prensa del sector)."
+    - "Sensibilidad regulatoria en publicidad: toda pieza requiere validación previa sin promesas de resultado."
+    - "Disponibilidad del equipo interno del cliente en semanas de lanzamiento de contenidos."
+  supuestos:
+    - "Supuestos de tarifa orientativos definidos por el equipo para servicios de consultoría GEO, desarrollo técnico y PR digital (sujetos a tarifas oficiales de agencia)."
+    - "Los objetivos de visibilidad se formulan como rangos esperados basados en las palancas GEO de la industria, nunca como resultados garantizados."
+    - "Capacidad de dedicación del equipo del cliente estimada en hasta 18 horas semanales combinadas."
+
+r9:
+  perfiles: "{servicios_prioritarios}"
+
+acciones:
+  TPL-01:
+    titulo: "Datos estructurados schema.org (Organization, LocalBusiness, Service, FAQPage)"
+    descripcion: "Implementar marcado JSON-LD completo en las fichas de {servicios_prioritarios} y en las sedes de {ciudades}, vinculando equipo y acreditaciones."
+    kpi_tipo: "100 % de fichas prioritarias y sedes con schema.org validado sin errores"
+    entregables_tipo:
+      - "Especificación JSON-LD por tipo de página (Organization, LocalBusiness, FAQPage)"
+      - "Validación en Rich Results Test y Schema Markup Validator"
+  TPL-02:
+    titulo: "Auditoría técnica de rastreabilidad para bots de IA (robots.txt, sitemap, renderizado HTML)"
+    descripcion: "Configurar acceso explícito para GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot y Google-Extended, optimizando tiempos de respuesta y contenido sin dependencia de JS."
+    kpi_tipo: "Acceso 200 OK verificado para bots de OpenAI, Anthropic, Google y Perplexity"
+    entregables_tipo:
+      - "Archivo robots.txt y sitemap.xml actualizados"
+      - "Informe técnico de renderizado SSR/HTML limpio en las URLs principales"
+  TPL-03:
+    titulo: "Normalización de entidad y NAP en directorios citados ({dom_directorios_coma})"
+    descripcion: "Unificar nombre oficial, sedes ({ciudades}), servicios y horarios en {dom_directorios}."
+    kpi_tipo: "100 % de fichas de directorios sectoriales actualizadas y coherentes en {ciudades}"
+    entregables_tipo:
+      - "Matriz maestra de atributos NAP y servicios por sede"
+      - "Fichas verificadas en {dom_directorios}"
+  TPL-04:
+    titulo: "Creación y enriquecimiento de entidad en Wikidata con referencias verificables"
+    descripcion: "Dar de alta y estructurar la entidad de {marca} en Wikidata con datos verificables (fundación, sedes, servicios, identificadores y referencias de prensa)."
+    kpi_tipo: "Entidad activa en Wikidata con >= 10 propiedades y referencias externas"
+    entregables_tipo:
+      - "Ficha de entidad publicada en Wikidata"
+      - "Enlace sameAs integrado en el marcado schema.org de la web"
+  TPL-05:
+    titulo: "Páginas locales en {ciudad_crecimiento} por servicio prioritario ({servicios_prioritarios})"
+    descripcion: "Crear landing pages específicas de la sede de {ciudad_crecimiento} con equipo local, instalaciones, calendario y preguntas frecuentes locales."
+    kpi_tipo: "Incremento de aparición espontánea en consultas de {ciudad_crecimiento}"
+    entregables_tipo:
+      - "Páginas locales de {ciudad_crecimiento} para los servicios prioritarios"
+      - "Ficha local de la sede de {ciudad_crecimiento} con el equipo"
+  TPL-06:
+    titulo: "Programa de activación y respuesta de reseñas verificadas en la sede de {ciudad_crecimiento}"
+    descripcion: "Sistematizar la solicitud de reseñas tras el servicio en la sede de {ciudad_crecimiento} en {dom_resenas}, respondiendo con detalle informativo."
+    kpi_tipo: "Aumento sostenido de reseñas verificadas en la sede de {ciudad_crecimiento} con tasa de respuesta del 100 %"
+    entregables_tipo:
+      - "Protocolo de captación de reseñas para la sede de {ciudad_crecimiento}"
+      - "Guía de respuesta a reseñas conforme a normativa"
+  TPL-07:
+    titulo: "Hub de FAQ citables construidas desde el banco de prompts reales"
+    descripcion: "Redactar bloques de respuesta directa (40-80 palabras + tabla de criterios) para las dudas recurrentes que lanzan los usuarios a ChatGPT, Claude, Gemini y Perplexity."
+    kpi_tipo: "Publicación de 25 bloques Q&A estructurados con datos verificables de {marca}"
+    entregables_tipo:
+      - "25 módulos FAQ optimizados para citación generativa y validados por la dirección"
+      - "Marcado FAQPage integrado en las páginas de servicio"
+  TPL-08:
+    titulo: "Página transparente de precios orientativos, qué incluye el servicio y financiación"
+    descripcion: "Publicar un desglose claro de precios orientativos de {servicios_prioritarios}, detallando qué incluye cada opción y las condiciones de pago."
+    kpi_tipo: "Aumento de la aparición espontánea en fase de Decisión"
+    entregables_tipo:
+      - "Página pública de tarifas orientativas, alcance de cada servicio y opciones de pago"
+      - "Tabla comparativa de qué incluye cada servicio de {marca}"
+  TPL-09:
+    titulo: "Contenido de puesta en valor del diferencial propio de {marca}"
+    descripcion: "Explicar con rigor el diferencial de {marca} ({diferencial}), respondiendo a la principal inquietud del cliente sin nombrar ni comparar con terceros."
+    kpi_tipo: "Incremento de menciones de recomendación activa basadas en el diferencial propio"
+    entregables_tipo:
+      - "Guía detallada del diferencial de {marca} con datos verificables"
+      - "Infografía del proceso paso a paso"
+  TPL-10:
+    titulo: "Guías específicas por perfil de cliente"
+    descripcion: "Crear guías dedicadas a cada perfil de cliente objetivo de {marca}, enfocadas en {servicios_prioritarios}."
+    kpi_tipo: "Incremento de visibilidad espontánea en prompts de familia DP (Descubrimiento por perfil)"
+    entregables_tipo:
+      - "Una guía por cada perfil de cliente objetivo"
+      - "Bloques de respuesta directa por perfil integrados en las fichas de servicio"
+  TPL-11:
+    titulo: "Plan de PR digital en prensa citada ({dom_medios_coma})"
+    descripcion: "Publicar tribunas y notas con datos propios de {marca} en {dom_medios}."
+    kpi_tipo: ">= 6 apariciones editoriales en {dom_medios_coma}"
+    entregables_tipo:
+      - "Informe anual de datos propios y tendencias del sector"
+      - "6 artículos/entrevistas con portavoces de {marca} publicados en {dom_medios_coma}"
+  TPL-12:
+    titulo: "Dossier y candidatura a rankings y guías sectoriales ({dom_rankings_coma})"
+    descripcion: "Presentar una memoria de actividad ante {dom_rankings} para mejorar el respaldo institucional."
+    kpi_tipo: "Presencia activa en >= 3 rankings/guías sectoriales de calidad 1.0"
+    entregables_tipo:
+      - "Dossier institucional de indicadores, equipamiento y sedes"
+      - "Solicitudes de inclusión/actualización en {dom_rankings}"
+  TPL-13:
+    titulo: "Cápsulas de vídeo divulgativo del equipo en YouTube y comunidades del sector"
+    descripcion: "Producir vídeos breves del equipo de {marca} con transcripción estructurada respondiendo dudas sobre {servicios_prioritarios}."
+    kpi_tipo: "6 vídeos publicados con transcripción completa embebida en fichas web"
+    entregables_tipo:
+      - "6 cápsulas de vídeo divulgativo en YouTube con capítulos y transcripción"
+      - "Integración de VideoObject schema en las páginas de servicio"
+  TPL-14:
+    titulo: "Guía comparativa objetiva de opciones de {servicios_prioritarios} con criterios verificables"
+    descripcion: "Publicar tablas comparativas de indicaciones, plazos y perfiles recomendados entre opciones, ayudando a los motores en prompts de Comparación."
+    kpi_tipo: "Mejora de tasa de aparición y posición media en prompts de Comparación"
+    entregables_tipo:
+      - "Matriz comparativa de opciones avalada por la dirección"
+      - "Bloques HTML tabulares fácilmente extraíbles por buscadores de IA"
+  TPL-15:
+    titulo: "Fichas individuales del equipo con credenciales, publicaciones y especialidad"
+    descripcion: "Reforzar criterios E-E-A-T mediante perfiles detallados de cada integrante del equipo de {marca} en {ciudades}, enlazados como autores de las guías."
+    kpi_tipo: "Perfiles completos del equipo con marcado Person y autoría visible"
+    entregables_tipo:
+      - "Páginas de perfil con credenciales y experiencia"
+      - "Sello de revisión con fecha en las URLs informativas"
+  TPL-16:
+    titulo: "Optimización de conversión de citas y gestión de expectativas"
+    descripcion: "Atender las menciones puntuales sobre disponibilidad mediante agenda online visible y plazos de espera transparentes por sede."
+    kpi_tipo: "Reducción de menciones negativas asistidas por debajo del 5 %"
+    entregables_tipo:
+      - "Bloque informativo de plazos medios de primera cita en {ciudades}"
+      - "Protocolo de seguimiento de incidencias en reseñas"
+  TPL-17:
+    titulo: "Página de datos institucionales verificables (memoria de actividad)"
+    descripcion: "Concentrar en una URL pública de referencia las cifras oficiales de {marca} para alimentar grounding web."
+    kpi_tipo: "Reducción de apariciones en zona de azar y mejora de consistencia 3/3 repeticiones"
+    entregables_tipo:
+      - "Página 'Cifras y Calidad' con datos estructurados y fuentes descargables"
+      - "Hoja de datos rápida (Fact Sheet) para periodistas y asistentes de IA"
+  TPL-18:
+    titulo: "Participación informativa en foros y comunidades del sector"
+    descripcion: "Aportar contenido educativo verificado en {dom_foros} sobre {servicios_prioritarios}."
+    kpi_tipo: "Presencia en hilos informativos citados por los motores en la categoría"
+    entregables_tipo:
+      - "Calendario de 12 colaboraciones divulgativas supervisadas por el equipo"
+      - "Guía de participación ética sin promoción encubierta"
+  TPL-19:
+    titulo: "Optimización semántica del blog hacia intenciones de Comparación y Decisión"
+    descripcion: "Reestructurar los artículos existentes del blog con resúmenes ejecutivos iniciales, tablas de decisión, enlaces a las sedes de {ciudades} y autoría explícita."
+    kpi_tipo: "30 artículos prioritarios actualizados con estructura citable y enlaces a conversión"
+    entregables_tipo:
+      - "Auditoría y priorización de las URLs actuales de la web"
+      - "30 artículos reestructurados con bloques TL;DR y validación"
+  TPL-20:
+    titulo: "Monitorización competitiva de actores no declarados en el brief"
+    descripcion: "Incorporar en el cuadro de mando a los competidores relevantes que aparecen en las respuestas de los asistentes pero no figuran en el brief, para vigilar cambios de cuota en {ciudades}."
+    kpi_tipo: "Seguimiento trimestral de las marcas del estudio en los 4 motores"
+    entregables_tipo:
+      - "Panel comparativo actualizado con competidores declarados y emergentes"
+      - "Alertas de cambios en fuentes citadas de la competencia"
+  TPL-21:
+    titulo: "Alianzas de contenido con asociaciones y centros locales en {ciudad_crecimiento}"
+    descripcion: "Generar menciones locales de autoridad en {ciudad_crecimiento} mediante jornadas y acuerdos con entidades locales relacionadas con {servicios_prioritarios}."
+    kpi_tipo: ">= 4 menciones en webs y medios locales de {ciudad_crecimiento}"
+    entregables_tipo:
+      - "Programa de divulgación local en {ciudad_crecimiento}"
+      - "Cobertura en portales y medios locales"
+  TPL-22:
+    titulo: "Re-medición trimestral del estudio GEO (4 oleadas: semanas 12, 24, 36 y 48) e informe a la dirección"
+    descripcion: "Re-ejecutar el banco de {n_prompts} prompts en ChatGPT, Gemini, Perplexity y Claude cada trimestre para medir evolución del Score de Citación, con hito intermedio en el mes 6."
+    kpi_tipo: "4 oleadas trimestrales ejecutadas (S12, S24, S36, S48) con atribución a los resultados de negocio"
+    entregables_tipo:
+      - "4 informes trimestrales de evolución GEO para la dirección"
+      - "Revisión de mitad de horizonte (mes 6) con recalibración de acciones"
