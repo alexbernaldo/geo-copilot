@@ -3,6 +3,8 @@
 import math
 import re
 
+import pytest
+
 from geo.config import BRIEF_MD
 from geo.detection import detect
 from geo.findings import generate_findings
@@ -31,7 +33,11 @@ def test_generate_findings_alborada_rules_and_traceability() -> None:
 
     valid_ej_ids = set(df_ej["ejecucion_id"].astype(str).unique())
 
-    hallazgos = generate_findings(tablas, ficha=None, contraste_mercado=None)
+    hallazgos = generate_findings(
+        tablas, ficha=load_brief(BRIEF_MD, provider="mock")[0], contraste_mercado=None
+    )
+    with pytest.raises(ValueError):
+        generate_findings(tablas, ficha=None)
     assert 3 <= len(hallazgos) <= 7
 
     for idx, h in enumerate(hallazgos, start=1):

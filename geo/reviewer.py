@@ -162,6 +162,10 @@ def _add_number_variants(allowed: set[float], val: float) -> None:
         allowed.add(round(candidate, 1))
         if abs(candidate - round(candidate, 0)) <= 0.28:
             allowed.add(round(candidate, 0))
+    if abs(val) >= 1000 and abs(val) < 1e7:  # importes con coma de miles ("20,300 €") leídos como decimales
+        allowed.add(round(val / 1000.0, 3))
+        allowed.add(round(val / 1000.0, 2))
+        allowed.add(round(val / 1000.0, 1))
 
 
 def _extract_numbers_from_any(obj: Any, allowed: set[float]) -> None:
@@ -214,7 +218,31 @@ def build_allowed_numbers(contexto_cifras: Any) -> set[float]:
         _add_number_variants(allowed, float(q))
 
     _extract_numbers_from_any(contexto_cifras, allowed)
+    plan = contexto_cifras.get("plan") if isinstance(contexto_cifras, dict) else None
+    if plan is not None:
+        _add_plan_derived_numbers(plan, allowed)
     return allowed
+
+
+def _add_plan_derived_numbers(plan: Any, allowed: set[float]) -> None:
+    """Cifras que las tablas de código derivan del plan: totales por fase y por responsable, cuotas y miles."""
+    try:
+        total = float(plan.coste_total_eur)
+        valores: list[float] = [total]
+        por_resp: dict[str, list[float]] = {}
+        por_fase: dict[int, float] = {}
+        for a in plan.acciones:
+            por_resp.setdefault(str(a.responsable), []).append(float(a.coste_estimado_eur))
+            por_fase[int(a.fase_plan)] = por_fase.get(int(a.fase_plan), 0.0) + float(a.coste_estimado_eur)
+        for costes in por_resp.values():
+            valores.extend([float(len(costes)), sum(costes)])
+            if total:
+                valores.append(100.0 * sum(costes) / total)
+        valores.extend(por_fase.values())
+        for v in valores:
+            _add_number_variants(allowed, v)
+    except Exception:
+        return
 
 
 def _parse_spanish_number(raw_num: str) -> float | None:
@@ -603,7 +631,15 @@ def verify_entities(
         normalize(dom.split(".")[0]) for dom in allowed_domains if "." in dom
     }
 
-    allowed_cities_norm: set[str] = {"madrid", "barcelona"}
+    allowed_cities_norm: set[str] = set()
+    if study_dir is not None:
+        try:
+            from geo.loader import load_ejecuciones
+
+            _df = load_ejecuciones(study_dir)
+            allowed_cities_norm |= {normalize(str(c)) for c in _df["ciudad"].dropna().unique()}
+        except Exception:
+            pass
     if ficha is not None:
         if ficha.marca:
             fmn = normalize(ficha.marca)
@@ -712,7 +748,7 @@ def verify_entities(
         if city_norm not in allowed_cities_norm and re.search(rf"\b{re.escape(city_norm)}\b", texto_norm):
             _add_inc(
                 f"Ciudad no catalogada en el estudio: '{city_norm}'",
-                "Ceñirse a las ciudades presentes en banco_prompts.csv y FichaMarca (Madrid y Barcelona).",
+                "Ceñirse a las ciudades presentes en banco_prompts.csv y FichaMarca (las del estudio y la ficha).",
             )
 
     # 6. Perfiles de paciente fuera de banco_prompts.csv / FichaMarca
@@ -736,7 +772,10 @@ def _check_regex_compliance(
 
     if texto:
         # 1. Promesas de resultado o superlativos absolutos
-        for pat, sug in _PROMISE_PATTERNS:
+        from geo.sectors import compliance_rules, select_profile
+
+        reglas = compliance_rules(select_profile(ficha)) or _PROMISE_PATTERNS
+        for pat, sug in reglas:
             for m in pat.finditer(texto):
                 s_start = max(0, m.start() - 30)
                 s_end = min(len(texto), m.end() + 30)

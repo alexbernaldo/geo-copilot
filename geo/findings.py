@@ -14,49 +14,6 @@ from geo.schemas import (
 )
 
 
-def default_ficha_alborada() -> FichaMarca:
-    """Devuelve la ficha por defecto de Clínica Alborada Visión para pruebas cuando `ficha` es None."""
-    return FichaMarca(
-        marca="Clínica Alborada Visión",
-        web="alboradavision.example",
-        sector="Clínicas privadas (oftalmología)",
-        subsector="Cirugía refractiva, cataratas y oftalmología integral",
-        servicios=[
-            "Cirugía refractiva láser (LASIK, PRK, SMILE)",
-            "Lentes intraoculares fáquicas (ICL)",
-            "Cirugía de cataratas y presbicia",
-            "Oftalmología pediátrica y control de miopía infantil",
-            "Retina, glaucoma y córnea",
-        ],
-        servicios_prioritarios=[
-            "cirugía refractiva",
-            "control de miopía infantil",
-        ],
-        diferenciales=[
-            "Seguimiento postoperatorio incluido durante 12 meses con el mismo oftalmólogo",
-            "Valoración preoperatoria completa de 90 minutos",
-        ],
-        ciudades=["Madrid", "Barcelona", "Valencia"],
-        ciudad_principal="Madrid",
-        ciudad_crecimiento="Barcelona",
-        competidores_declarados=[
-            "Instituto Oftálmico Tramuntana",
-            "Láser Nítida",
-            "Grupo Hospitalario Valdecruz",
-        ],
-        hipotesis_cliente=[
-            "Con tan buenas reseñas deberíamos salir recomendados",
-            "En Barcelona nadie nos encuentra",
-        ],
-        objetivo_principal=(
-            "Aumentar las primeras visitas de cirugía refractiva y control de miopía infantil, "
-            "con foco especial en Barcelona."
-        ),
-        presupuesto_min_eur=18000.0,
-        presupuesto_max_eur=27000.0,
-    )
-
-
 def _calc_confianza(n: int) -> Literal["alta", "media", "baja"]:
     """Calcula el nivel de confianza según el tamaño muestral (n>=40 alta, 15..39 media, <15 baja)."""
     if n >= 40:
@@ -80,10 +37,17 @@ def generate_findings(
     contraste_mercado: ContrasteMercado | None = None,
 ) -> list[Hallazgo]:
     """Convierte las tablas T1-T12 en hasta 7 hallazgos priorizados, deterministas y con evidencias trazables."""
-    ficha_activa = ficha or default_ficha_alborada()
+    if ficha is None:
+        raise ValueError("generate_findings necesita la ficha del proyecto.")
+    ficha_activa = ficha
     marca = ficha_activa.marca
-    ciudad_crecimiento = ficha_activa.ciudad_crecimiento or "Barcelona"
-    ciudad_principal = ficha_activa.ciudad_principal or "Madrid"
+    # Sin ciudades en la ficha, R1 compara las dos ciudades con más ejecuciones de la marca.
+    _t4m = tablas["T4"][tablas["T4"]["marca"] == marca].sort_values("n", ascending=False)
+    _top = [str(c) for c in _t4m["ciudad"].tolist()]
+    ciudad_principal = ficha_activa.ciudad_principal or (_top[0] if _top else "")
+    ciudad_crecimiento = ficha_activa.ciudad_crecimiento or next(
+        (c for c in _top if c != ciudad_principal), ""
+    )
 
     t1_esp = tablas["T1_espontanea"]
     t2 = tablas["T2"]
