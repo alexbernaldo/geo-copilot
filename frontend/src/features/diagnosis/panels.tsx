@@ -5,9 +5,11 @@ import { describir } from './charts'
 import type { PaletaGrafico } from './colors'
 import { evidenciaDe, nDe, type Col, type Especificacion, type Fila } from './especificaciones'
 
+const vacio = (v: unknown): string => (v === null || v === undefined || v === '' ? '—' : String(v))
+
 function TablaEquivalente({ columnas, filas }: { columnas: Col[]; filas: Fila[] }) {
   const defs = useMemo<ColumnDef<Fila, unknown>[]>(
-    () => columnas.map((c) => ({ header: c.header, accessorFn: (r: Fila) => (c.formato ?? texto)(r[c.clave]) })),
+    () => columnas.map((c) => ({ header: c.header, accessorFn: (r: Fila) => (c.formato ?? vacio)(r[c.clave]) })),
     [columnas],
   )
   return <DataTable columns={defs} data={filas} />

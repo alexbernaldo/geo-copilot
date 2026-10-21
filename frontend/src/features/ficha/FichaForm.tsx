@@ -1,5 +1,5 @@
 import { useEffect, useId, type ReactNode } from 'react'
-import { useForm, type FieldPath } from 'react-hook-form'
+import { useController, useForm, type Control, type FieldPath } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Chip, Input, Textarea } from '@/components'
 import { ETIQUETAS_SITUACION, fichaSchema, type FichaFormValues } from './fichaValores'
@@ -34,6 +34,22 @@ function Campo({ etiqueta, ayuda, falta, error, origen, children }: CampoProps) 
 
 const LISTA = 'Una por línea.'
 
+/** Los componentes `Input`/`Textarea` del kit no reenvían `ref`, así que el campo va por `useController` (sin `register`). */
+function Entrada({ control, name, id, multilinea, filas, describedBy, invalido }: {
+  control: Control<FichaFormValues>
+  name: FieldPath<FichaFormValues>
+  id: string
+  multilinea: boolean
+  filas: number
+  describedBy?: string
+  invalido: boolean
+}) {
+  const { field } = useController({ control, name })
+  const { ref: _ref, value, ...props } = field
+  const comun = { id, 'aria-describedby': describedBy, 'aria-invalid': invalido ? true : undefined, value: typeof value === 'string' ? value : '' }
+  return multilinea ? <Textarea rows={filas} {...comun} {...props} /> : <Input {...comun} {...props} />
+}
+
 /** Formulario completo de la ficha. Sin red: recibe valores y devuelve valores válidos en `onSubmit`. */
 export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmit, onDirtyChange }: {
   valores: FichaFormValues
@@ -44,7 +60,7 @@ export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmi
   onDirtyChange?: (dirty: boolean) => void
 }) {
   const form = useForm<FichaFormValues>({ values: valores, resolver: zodResolver(fichaSchema), mode: 'onBlur' })
-  const { register, handleSubmit, formState } = form
+  const { control, handleSubmit, formState } = form
   const errores = formState.errors
   const sucio = formState.isDirty
   useEffect(() => { onDirtyChange?.(sucio) }, [sucio, onDirtyChange])
@@ -55,11 +71,7 @@ export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmi
     return (
       <Campo etiqueta={etiqueta} ayuda={opts.ayuda ?? (opts.lista ? LISTA : undefined)} falta={faltantes.includes(campo)} error={mensaje} origen={origenCampos[campo]}>
         {({ id, describedBy }) =>
-          opts.lista || opts.filas ? (
-            <Textarea id={id} rows={opts.filas ?? 4} aria-describedby={describedBy} aria-invalid={mensaje ? true : undefined} {...register(campo)} />
-          ) : (
-            <Input id={id} aria-describedby={describedBy} aria-invalid={mensaje ? true : undefined} {...register(campo)} />
-          )
+          <Entrada control={control} name={campo} id={id} multilinea={Boolean(opts.lista || opts.filas)} filas={opts.filas ?? 4} describedBy={describedBy} invalido={Boolean(mensaje)} />
         }
       </Campo>
     )
@@ -94,7 +106,7 @@ export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmi
         <legend>Situación y objetivos</legend>
         {situacion.map((clave) => (
           <Campo key={clave} etiqueta={`Situación digital · ${ETIQUETAS_SITUACION[clave] ?? clave}`} falta={false}>
-            {({ id }) => <Textarea id={id} rows={3} {...register(`situacion_digital.${clave}` as const)} />}
+            {({ id }) => <Entrada control={control} name={`situacion_digital.${clave}`} id={id} multilinea filas={3} invalido={false} />}
           </Campo>
         ))}
         {texto('hipotesis_cliente', 'Hipótesis del cliente', { lista: true })}
