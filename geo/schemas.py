@@ -1,4 +1,4 @@
-"""Contratos de datos Pydantic de GEO Copilot."""
+"""Contratos de datos Pydantic de Preload."""
 
 from enum import Enum
 from typing import Literal, Optional

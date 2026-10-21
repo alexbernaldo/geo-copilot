@@ -1,4 +1,4 @@
-# DESIGN · GEO Copilot
+# DESIGN · Preload
 
 Dirección visual de la web (W1). Escrito por el agente D antes de implementar componentes. Fuentes: Parte A6 y H de la guía, `PRODUCT.md`, skill `design-taste-frontend` (principios aplicables a una herramienta: sin Inter por defecto, un solo acento, bloqueo de radios, sin guiones largos ni emojis) y reglas de movimiento de `emil-design-eng`.
 

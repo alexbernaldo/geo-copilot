@@ -124,9 +124,9 @@ export function Shell() {
   return (
     <div className="shell">
       <header className="topbar">
-        <Link to="/" className="brandmark" aria-label="GEO Copilot, ir a proyectos">
+        <Link to="/" className="brandmark" aria-label="Preload, ir a proyectos">
           <Logo />
-          <span>GEO Copilot <small>visibilidad en IA</small></span>
+          <span>Preload <small>visibilidad en IA</small></span>
         </Link>
         <nav className="topnav" aria-label="Navegación global">
           <NavLink to="/" end className="navlink">Proyectos</NavLink>

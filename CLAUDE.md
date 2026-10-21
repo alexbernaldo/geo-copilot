@@ -1,4 +1,4 @@
-# GEO Copilot · reglas del proyecto
+# Preload · reglas del proyecto
 
 - Plan activo: `GUIA_WEB_GEO_COPILOT.md` (la guía de la aplicación web React + FastAPI). `PLAN_OPENROUTER.md` y `PLAN.md` son referencia histórica.
 - Python 3.11+, pandas, pydantic v2, FastAPI. Frontend: React + Vite + TypeScript estricto. Tipado en todas las funciones.

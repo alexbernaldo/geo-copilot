@@ -13,7 +13,7 @@ import requests
 from geo.settings import get, get_float
 
 DEFAULT_BASE_URL = "https://openrouter.ai/api/v1"
-APP_TITLE = "GEO Copilot"
+APP_TITLE = "Preload"
 
 NON_RETRYABLE = {400, 401, 402, 403, 404}
 RETRYABLE = {408, 429, 500, 502, 503, 504}

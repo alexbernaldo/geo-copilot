@@ -13,9 +13,9 @@ from geo.orchestrator import Run
 
 
 def main() -> None:
-    """Punto de entrada CLI del orquestador GEO Copilot."""
+    """Punto de entrada CLI del orquestador Preload."""
     parser = argparse.ArgumentParser(
-        description="Ejecuta el pipeline completo de GEO Copilot de extremo a extremo."
+        description="Ejecuta el pipeline completo de Preload de extremo a extremo."
     )
     parser.add_argument(
         "--brief",

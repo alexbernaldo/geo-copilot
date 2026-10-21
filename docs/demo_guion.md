@@ -1,4 +1,4 @@
-# 🎙️ Guion de Demostración en Vivo (5 minutos) · GEO Copilot
+# 🎙️ Guion de Demostración en Vivo (5 minutos) · Preload
 
 **Reto `reload. × UFV-EPS`** · Duración total: **5:00 min**
 **Plataforma:** Aplicación Web React + FastAPI (`make app`)
@@ -25,7 +25,7 @@
 
 ### 1. El Gancho y Creación del Proyecto (0:00 – 0:45 · 45 s) · *Pantalla: `Proyectos` y `Nuevo proyecto (Asistente)`*
 - **Qué decir:**
-  > «Clínica Alborada Visión tiene 4,7 estrellas, más de 1.800 reseñas de pacientes y es líder percibida en Madrid. Su Comité de Dirección cree que con esa reputación los asistentes de IA ya la recomiendan. Pero cuando un paciente pregunta a ChatGPT o Claude sin mencionar ninguna marca, **Alborada cae al puesto 7 de 10 con un Score de Citación de solo 28 sobre 100**. Hoy os presentamos **GEO Copilot**: la plataforma web que convierte datos crudos de visibilidad conversacional en una propuesta estratégica verificada, trazable hasta cada respuesta original y lista para el cliente.»
+  > «Clínica Alborada Visión tiene 4,7 estrellas, más de 1.800 reseñas de pacientes y es líder percibida en Madrid. Su Comité de Dirección cree que con esa reputación los asistentes de IA ya la recomiendan. Pero cuando un paciente pregunta a ChatGPT o Claude sin mencionar ninguna marca, **Alborada cae al puesto 7 de 10 con un Score de Citación de solo 28 sobre 100**. Hoy os presentamos **Preload**: la plataforma web que convierte datos crudos de visibilidad conversacional en una propuesta estratégica verificada, trazable hasta cada respuesta original y lista para el cliente.»
 - **Qué mostrar:**
   - Pulsar **«Nuevo proyecto»**. Seleccionar **Cliente (tengo su brief)** y asignar nombre.
   - En Paso 2, subir `Brief_de_ejemplo_Clinica_Alborada.docx`. Señalar la vista previa de la ficha (marca, sector, ciudades y objetivo).

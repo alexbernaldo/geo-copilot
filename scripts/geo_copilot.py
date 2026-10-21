@@ -1,4 +1,4 @@
-"""Lanzador de la aplicación GEO Copilot (FastAPI + React)."""
+"""Lanzador de la aplicación Preload (FastAPI + React)."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ def main() -> None:
     # Windows crea el intérprete en Scripts\python.exe; macOS y Linux en bin/python
     python_bin = str(venv / "Scripts" / "python.exe") if os.name == "nt" else str(venv / "bin" / "python")
 
-    print(f"Iniciando GEO Copilot en http://localhost:{port} ...", flush=True)
+    print(f"Iniciando Preload en http://localhost:{port} ...", flush=True)
     proc = subprocess.Popen(
         [
             python_bin,
@@ -82,7 +82,7 @@ def main() -> None:
         proc.terminate()
         sys.exit(1)
 
-    print(f"GEO Copilot listo en {url}", flush=True)
+    print(f"Preload listo en {url}", flush=True)
 
     # Abrir navegador en modo ventana app si es posible
     opened = False
@@ -115,7 +115,7 @@ def main() -> None:
     try:
         proc.wait()
     except KeyboardInterrupt:
-        print("\nCerrando GEO Copilot limpiamente...")
+        print("\nCerrando Preload limpiamente...")
         proc.terminate()
         try:
             proc.wait(timeout=5)

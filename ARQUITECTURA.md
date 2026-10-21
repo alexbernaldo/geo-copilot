@@ -1,4 +1,4 @@
-# 🏗️ Arquitectura de GEO Copilot
+# 🏗️ Arquitectura de Preload
 
 **Reto `reload. × UFV-EPS` · De los datos de visibilidad en IA a la propuesta estratégica y comercial**
 
@@ -6,7 +6,7 @@
 
 ## 1. Visión general del sistema
 
-GEO Copilot opera con una arquitectura de tres capas claramente desacopladas: una interfaz de usuario reactiva moderna (React 18 + TypeScript), una API backend RESTful con streaming de eventos en tiempo real (FastAPI) y un motor analítico determinista acoplado a modelos de lenguaje acotados (`geo/`).
+Preload opera con una arquitectura de tres capas claramente desacopladas: una interfaz de usuario reactiva moderna (React 18 + TypeScript), una API backend RESTful con streaming de eventos en tiempo real (FastAPI) y un motor analítico determinista acoplado a modelos de lenguaje acotados (`geo/`).
 
 ```
 ┌───────────────────────────────── NAVEGADOR ─────────────────────────────────┐

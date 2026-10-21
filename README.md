@@ -1,8 +1,8 @@
-# 🧭 GEO Copilot · Auditoría y Estrategia de Visibilidad en Motores de IA
+# 🧭 Preload · Auditoría y Estrategia de Visibilidad en Motores de IA
 
 **Reto `reload. × UFV-EPS`**
 
-GEO Copilot es una plataforma web completa (**FastAPI + React 18 + TypeScript + Tailwind**) que transforma los datos de presencia de marcas en motores conversacionales (**ChatGPT, Gemini, Perplexity y Claude**) y el briefing de un cliente (o una marca en frío) en un diagnóstico riguroso, un plan estratégico a 12 meses y una propuesta comercial ejecutiva verificada y auditable.
+Preload es una plataforma web completa (**FastAPI + React 18 + TypeScript + Tailwind**) que transforma los datos de presencia de marcas en motores conversacionales (**ChatGPT, Gemini, Perplexity y Claude**) y el briefing de un cliente (o una marca en frío) en un diagnóstico riguroso, un plan estratégico a 12 meses y una propuesta comercial ejecutiva verificada y auditable.
 
 ---
 

@@ -168,7 +168,7 @@ export default function ProyectosPage() {
         <Panel>
           <EmptyState
             title="Sin proyectos que mostrar"
-            description="GEO Copilot evalúa la visibilidad de marcas en asistentes de IA y redacta planes de optimización fundamentados en datos reales."
+            description="Preload evalúa la visibilidad de marcas en asistentes de IA y redacta planes de optimización fundamentados en datos reales."
             action={
               <div className="flex items-center justify-center gap-3 mt-4">
                 <Button variant="primary" onClick={() => navigate('/proyectos/nuevo')}>

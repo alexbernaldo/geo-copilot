@@ -28,7 +28,7 @@ export function Avatar({ nombre, size }: { nombre: string; size?: 'lg' }) {
   return <span className="avatar" data-size={size} aria-hidden>{initials(nombre)}</span>
 }
 
-/** Marca de GEO Copilot: ondas de visibilidad que salen de un punto (la marca) con los colores de proyecto y espontánea. */
+/** Marca de Preload: ondas de visibilidad que salen de un punto (la marca) con los colores de proyecto y espontánea. */
 export function Logo({ size = 26 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden>

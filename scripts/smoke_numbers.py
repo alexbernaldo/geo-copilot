@@ -40,7 +40,7 @@ def main() -> None:
     n_sin_fuentes = int(df_ej["fuentes"].apply(lambda x: len(x) == 0).sum())
     pares_evaluar = sum(len(e.marcas_a_evaluar) for e in ejecuciones)
 
-    print("=== GEO Copilot · Smoke Numbers (F1: Carga de datos) ===")
+    print("=== Preload · Smoke Numbers (F1: Carga de datos) ===")
     print(f"Marcas cargadas           : {len(marcas)} (Marca del brief: {marca_brief})")
     print(f"Prompts cargados          : {len(prompts)}")
     print(f"Fuentes en catálogo       : {len(fuentes)} (Dominios desconocidos: {len(desconocidos)})")
