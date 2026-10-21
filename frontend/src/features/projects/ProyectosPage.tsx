@@ -1,13 +1,22 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Chip, Dialog, EmptyState, Input, PageHeader, Panel } from '@/components'
+import { ArrowRight, Building2, Clock, Search } from 'lucide-react'
+import { Avatar, Button, Checkbox, Chip, Dialog, EmptyState, Input, PageHeader, Panel, Skeleton } from '@/components'
 import type { Tone } from '@/components'
 import { api } from '@/api/client'
 import { formatDate, formatEur } from '@/lib/format'
 import type { components } from '@/api/schema'
 
 type Project = components['schemas']['Project']
+
+const FILTROS = [
+  { valor: 'todos', texto: 'Todos' },
+  { valor: 'borrador', texto: 'Borrador' },
+  { valor: 'en_ejecucion', texto: 'En ejecución' },
+  { valor: 'esperando_revision', texto: 'Esperando revisión' },
+  { valor: 'completado', texto: 'Completados' },
+]
 
 function ProjectStatusChip({ status }: { status: string }) {
   const map: Record<string, { tone: Tone; label: string }> = {
@@ -92,7 +101,7 @@ export default function ProyectosPage() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
-      if (data && 'id' in data) navigate(`/proyectos/${data.id}/resumen`)
+      if (data && 'id' in data) navigate(`/proyectos/${data.id}`)
     },
   })
 
@@ -123,66 +132,46 @@ export default function ProyectosPage() {
   }, [projects, q])
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-5">
       <PageHeader
         title="Proyectos"
         description="Auditorías de optimización para motores generativos (GEO) y análisis comparativos."
         actions={
-          <Button variant="primary" onClick={() => navigate('/nuevo')}>
+          <Button variant="primary" onClick={() => navigate('/proyectos/nuevo')}>
             Nuevo proyecto
           </Button>
         }
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <Input
-            placeholder="Buscar por nombre o marca..."
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="w-64"
-          />
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className="text-[var(--fg-muted)]">Estado:</span>
-            {['todos', 'borrador', 'en_ejecucion', 'esperando_revision', 'completado'].map((st) => (
-              <button
-                key={st}
-                type="button"
-                onClick={() => setFiltroEstado(st)}
-                className="cursor-pointer"
-              >
-                <Chip tone={filtroEstado === st ? 'accent' : 'neutral'}>
-                  {st === 'todos' ? 'Todos' : st.replace('_', ' ')}
-                </Chip>
+      <div className="toolbar">
+        <div className="toolbar-left">
+          <div className="search">
+            <Search size={15} strokeWidth={1.75} aria-hidden />
+            <Input placeholder="Buscar por nombre o marca" aria-label="Buscar proyectos" value={q} onChange={(e) => setQ(e.target.value)} />
+          </div>
+          <div className="segmented" role="group" aria-label="Filtrar por estado">
+            {FILTROS.map((f) => (
+              <button key={f.valor} type="button" aria-pressed={filtroEstado === f.valor} onClick={() => setFiltroEstado(f.valor)}>
+                {f.texto}
               </button>
             ))}
           </div>
         </div>
-
-        <label className="flex items-center gap-2 text-xs text-[var(--fg-muted)] cursor-pointer">
-          <input
-            type="checkbox"
-            checked={verArchivados}
-            onChange={(e) => setVerArchivados(e.target.checked)}
-          />
-          Ver archivados
-        </label>
+        <Checkbox checked={verArchivados} onCheckedChange={setVerArchivados} label="Ver archivados" />
       </div>
 
       {isLoading ? (
-        <Panel>
-          <div className="py-12 text-center text-sm text-[var(--fg-muted)]">
-            Cargando proyectos...
-          </div>
-        </Panel>
+        <div className="project-list" aria-busy>
+          {[0, 1].map((i) => <Skeleton key={i} height={84} />)}
+        </div>
       ) : filtrados.length === 0 ? (
         <Panel>
           <EmptyState
             title="Sin proyectos que mostrar"
-            description="GEO Copilot evalúa la visibilidad de marcas en asistentes de IA y redacta planes de optimización fundamentados en datos reales."
+            description="Preload evalúa la visibilidad de marcas en asistentes de IA y redacta planes de optimización fundamentados en datos reales."
             action={
               <div className="flex items-center justify-center gap-3 mt-4">
-                <Button variant="primary" onClick={() => navigate('/nuevo')}>
+                <Button variant="primary" onClick={() => navigate('/proyectos/nuevo')}>
                   Nuevo proyecto
                 </Button>
                 {!settings?.clave_configurada && (
@@ -195,76 +184,32 @@ export default function ProyectosPage() {
           />
         </Panel>
       ) : (
-        <div className="grid gap-3">
+        <div className="project-list">
           {filtrados.map((p) => (
-            <Panel key={p.id}>
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2.5">
-                    <Link
-                      to={`/proyectos/${p.id}/resumen`}
-                      className="font-semibold hover:text-[var(--brand-project)]"
-                    >
-                      {p.nombre}
-                    </Link>
-                    <ProjectStatusChip status={p.estado} />
-                    {p.archivado && <Chip tone="neutral">Archivado</Chip>}
-                  </div>
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--fg-muted)]">
-                    {p.marca && <span>Marca: <strong className="text-[var(--fg)]">{p.marca}</strong></span>}
-                    {p.sector && <span>Sector: {p.sector}</span>}
-                    <span>Tipo: {p.tipo}</span>
-                    <span>Coste: {formatEur(p.coste_eur)}</span>
-                    <span>Actualizado: {formatDate(p.actualizado)}</span>
-                  </div>
+            <article key={p.id} className="project-card">
+              <Avatar nombre={p.marca ?? p.nombre} size="lg" />
+              <div className="project-card-main">
+                <div className="project-card-title">
+                  <Link to={`/proyectos/${p.id}`} className="project-name">{p.nombre}</Link>
+                  <ProjectStatusChip status={p.estado} />
+                  {p.archivado && <Chip tone="neutral">Archivado</Chip>}
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={() => navigate(`/proyectos/${p.id}/resumen`)}
-                  >
-                    Abrir
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => mutDuplicate.mutate(p.id)}
-                  >
-                    Duplicar
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setRenombrando(p)
-                      setNuevoNombre(p.nombre)
-                    }}
-                  >
-                    Renombrar
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => mutArchive.mutate({ id: p.id, archivado: !p.archivado })}
-                  >
-                    {p.archivado ? 'Desarchivar' : 'Archivar'}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-[var(--bad)] hover:bg-[var(--bad)]/10"
-                    onClick={() => {
-                      setBorrando(p)
-                      setConfirmBorrado('')
-                    }}
-                  >
-                    Borrar
-                  </Button>
+                <div className="project-meta">
+                  {p.marca && <span><Building2 size={13} strokeWidth={1.75} aria-hidden /><b>{p.marca}</b></span>}
+                  {p.sector && <span>{p.sector}</span>}
+                  <span>{p.tipo === 'cliente' ? 'Cliente' : 'Prospecto'}</span>
+                  <span className="num">{formatEur(p.coste_eur, 2)}</span>
+                  <span><Clock size={13} strokeWidth={1.75} aria-hidden />{formatDate(p.actualizado)}</span>
                 </div>
               </div>
-            </Panel>
+              <div className="project-actions">
+                <Button variant="ghost" size="sm" onClick={() => mutDuplicate.mutate(p.id)}>Duplicar</Button>
+                <Button variant="ghost" size="sm" onClick={() => { setRenombrando(p); setNuevoNombre(p.nombre) }}>Renombrar</Button>
+                <Button variant="ghost" size="sm" onClick={() => mutArchive.mutate({ id: p.id, archivado: !p.archivado })}>{p.archivado ? 'Desarchivar' : 'Archivar'}</Button>
+                <Button variant="ghost" size="sm" data-tone="bad" onClick={() => { setBorrando(p); setConfirmBorrado('') }}>Borrar</Button>
+                <Button size="sm" onClick={() => navigate(`/proyectos/${p.id}`)}>Abrir <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Button>
+              </div>
+            </article>
           ))}
         </div>
       )}

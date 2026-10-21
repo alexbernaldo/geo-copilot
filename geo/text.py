@@ -23,6 +23,39 @@ def strip_accents(s: str) -> str:
     )
 
 
+# Número con separadores que no forma parte de un identificador (EJ-0001, claude-4.5, v1.2, 2026-10-21, schema.org)
+_NUM_TOKEN = re.compile(r"(?<![\w.,/])(?<!\w-)(\d+(?:[.,]\d+)+)(?![\w]|[.,]\d)(\s?€)?")
+_PCT_PEGADO = re.compile(r"(?<=\d)%")
+
+
+def _numero_es(m: re.Match[str]) -> str:
+    tok, euro = m.group(1), m.group(2) or ""
+    if "." in tok and "," in tok:
+        if tok.rfind(",") < tok.rfind("."):  # 1,234.5 (inglés) -> 1.234,5
+            tok = tok.replace(",", "\0").replace(".", ",").replace("\0", ".")
+        return tok + euro
+    partes = re.split(r"[.,]", tok)
+    miles = len(partes[0]) <= 3 and not partes[0].startswith("0") and all(len(p) == 3 for p in partes[1:])
+    if "." in tok:
+        # 1.800 / 90.000 ya son miles en español; 27.97 o 0.3875 son decimales en inglés
+        if not miles and len(partes) == 2:
+            tok = tok.replace(".", ",")
+    elif euro and miles:
+        # 24,300 € es un importe en inglés; 4,7 o 0,479 sin € son decimales en español y se dejan
+        tok = tok.replace(",", ".")
+    return tok + euro
+
+
+def formato_es(texto: str) -> str:
+    """Pasa a formato es-ES las cifras escritas en formato inglés: `27.97` -> `27,97`, `24,300 €` -> `24.300 €`, `41.2%` -> `41,2 %`.
+
+    Deja intactas las cifras que ya están en español (`1.800`, `38,8 %`) y los identificadores con números.
+    """
+    if not texto:
+        return texto
+    return _PCT_PEGADO.sub(" %", _NUM_TOKEN.sub(_numero_es, texto))
+
+
 def normalize(s: str) -> str:
     """Normaliza un texto: minúsculas, sin tildes (NFKD), sin '**', sin citas '[1]' y espacios colapsados."""
     if not s:

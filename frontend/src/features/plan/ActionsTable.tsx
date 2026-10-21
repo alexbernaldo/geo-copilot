@@ -7,15 +7,15 @@ import { FASES, PALANCA, parseList, RESPONSABLE, TALLA, TALLAS } from './labels'
 
 type Patch = Partial<PlanAccion>
 
-const cell = 'w-full min-w-24 rounded border border-[var(--brand-neutral)]/40 bg-transparent px-1.5 py-1 text-sm'
+const cell = 'cell-edit'
 
 function NumberCell({ value, label, onChange, min = 0 }: { value: number; label: string; onChange: (v: number) => void; min?: number }) {
-  return <input className={`${cell} w-20 tabular-nums`} type="number" min={min} value={value} aria-label={label} onChange={(e) => onChange(Number(e.target.value))} />
+  return <input className={`field ${cell} cell-num`} type="number" min={min} value={value} aria-label={label} onChange={(e) => onChange(Number(e.target.value))} />
 }
 
 function SelectCell<V extends string | number>({ value, label, options, onChange }: { value: V; label: string; options: { value: V; label: string }[]; onChange: (v: V) => void }) {
   return (
-    <select className={cell} value={String(value)} aria-label={label} onChange={(e) => onChange((typeof value === 'number' ? Number(e.target.value) : e.target.value) as V)}>
+    <select className={`field ${cell} cell-select`} value={String(value)} aria-label={label} onChange={(e) => onChange((typeof value === 'number' ? Number(e.target.value) : e.target.value) as V)}>
       {options.map((o) => <option key={String(o.value)} value={String(o.value)}>{o.label}</option>)}
     </select>
   )
@@ -33,9 +33,9 @@ export function ActionsTable({ acciones, avisos, onEdit }: { acciones: PlanAccio
         header: 'Título',
         accessorKey: 'titulo',
         cell: ({ row }) => (
-          <div className="flex min-w-56 items-start gap-2">
+          <div className="flex min-w-72 items-center gap-2">
             <Input className={cell} value={row.original.titulo} aria-label={`Título de ${row.original.id}`} onChange={(e) => onEdit(row.original.id, { titulo: e.target.value })} />
-            <Button className="shrink-0 rounded border border-[var(--brand-neutral)]/40 px-2 py-1 text-sm" aria-label={`Editar detalle de ${row.original.id}`} onClick={() => setOpenId(row.original.id)}>Detalle</Button>
+            <Button size="sm" className="shrink-0" aria-label={`Editar detalle de ${row.original.id}`} onClick={() => setOpenId(row.original.id)}>Detalle</Button>
           </div>
         ),
       },

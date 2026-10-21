@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   license:
     name: Uso interno
-  title: GEO Copilot API
+  title: Preload API
   version: 1.0.0
   description: Contrato de la API (fuente de verdad). Todas las rutas van bajo /api. Textos de error en español. Ninguna GET llama a OpenRouter.
 servers:

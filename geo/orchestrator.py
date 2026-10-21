@@ -34,7 +34,7 @@ from geo.schemas import (
     Propuesta,
 )
 from geo.strategy import build_plan
-from geo.writer import build_default_prospect_ficha as _prospect_ficha, write_client, write_prospect
+from geo.writer import build_default_prospect_ficha as _prospect_ficha, plan_aggregates, write_client, write_prospect
 
 StepStatus = Literal["pending", "done", "error", "awaiting_human"]
 
@@ -634,6 +634,7 @@ class Run:
                 "hallazgos": hallazgos,
                 "plan": plan,
                 "ficha": ficha,
+                "agregados_plan": plan_aggregates(plan),
             }
             rev = compliance(
                 "\n\n".join(propuesta.secciones.values()),

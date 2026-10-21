@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && rm -f dist/mockServiceWorker.js",
+    "build": "tsc -b && vite build && node -e \"require('fs').rmSync('dist/mockServiceWorker.js', { force: true })\"",
     "typecheck": "tsc -b --noEmit",
     "lint": "oxlint --ignore-pattern lovable_import",
     "preview": "vite preview",

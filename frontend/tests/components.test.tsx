@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { CheckpointBar, Chip, CostConfirm, EmptyState, ErrorState, EvidenceLink, KpiStrip, OriginTag, PendingState, ScopeToggle } from '@/components'
-import { applyEvent } from '@/components/ProgressPanel'
+import { applyEvent, progressSignature } from '@/components/ProgressPanel'
 import type { Estimate, Progress } from '@/api/types'
 import { formatDate, formatEur, formatNum, formatPct } from '@/lib/format'
 
@@ -131,5 +131,12 @@ describe('applyEvent (SSE)', () => {
   })
   it('el snapshot sustituye todo', () => {
     expect(applyEvent(undefined, 'snapshot', { ...base, llamadas: 5 })!.llamadas).toBe(5)
+  })
+  it('la huella cambia al cambiar un paso, no con contadores ni coste', () => {
+    const s0 = progressSignature(base)
+    expect(progressSignature(applyEvent(base, 'counter', { paso: 'judge', hechos: 1, total: 624 }))).toBe(s0)
+    expect(progressSignature(applyEvent(base, 'cost', { llamadas: 1, coste_eur: 0.1, coste_real: true }))).toBe(s0)
+    expect(progressSignature(applyEvent(base, 'step', { paso: 'judge', estado: 'hecho' }))).not.toBe(s0)
+    expect(progressSignature(undefined)).toBe('')
   })
 })

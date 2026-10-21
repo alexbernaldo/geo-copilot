@@ -85,7 +85,7 @@ def post_projects_id_plan_simulate(
     body: SimulateRequest,
     store: ProjectStore = Depends(get_store),
 ) -> Any:
-    return results.simulate_plan(store, id, body.model_dump())
+    return results.simulate_plan(store, id, body.cambios)
 
 
 @router.get("/projects/{id}/diagnosis", summary="Indicadores y gráficos agregados")
@@ -113,14 +113,11 @@ def get_projects_id_executions(
     familia: str | None = None,
     intencion: str | None = None,
     ambito: str | None = None,
-    marca: str | None = None,
-    solo_con_marca: bool = False,
-    fuente_tipo: str | None = None,
-    fuera_de_territorio: bool | None = None,
+    ciudad: str | None = None,
+    ids: str | None = None,
     q: str | None = None,
-    orden: str = "-fecha",
     pagina: int = Query(1, ge=1),
-    por_pagina: int = Query(25, ge=1, le=100),
+    tamano: int = Query(50, ge=1, le=200),
     store: ProjectStore = Depends(get_store),
 ) -> Any:
     return results.list_executions(
@@ -130,14 +127,11 @@ def get_projects_id_executions(
         familia=familia,
         intencion=intencion,
         ambito=ambito,
-        marca=marca,
-        solo_con_marca=solo_con_marca,
-        fuente_tipo=fuente_tipo,
-        fuera_de_territorio=fuera_de_territorio,
+        ciudad=ciudad,
+        ids=ids,
         q=q,
-        orden=orden,
         pagina=pagina,
-        por_pagina=por_pagina,
+        tamano=tamano,
     )
 
 

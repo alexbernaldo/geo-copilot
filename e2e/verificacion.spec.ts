@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Verificación Q · GEO Copilot', () => {
+test.describe('Verificación Q · Preload', () => {
   test('1. Primer uso: arranca sin proyectos y sin botón ni texto demo', async ({ page }) => {
     await page.goto('/')
-    await expect(page).toHaveTitle(/GEO Copilot/)
+    await expect(page).toHaveTitle(/Preload/)
 
     // Comprobar que no hay textos prohibidos de demo o mock en primer uso
     const bodyText = await page.textContent('body')

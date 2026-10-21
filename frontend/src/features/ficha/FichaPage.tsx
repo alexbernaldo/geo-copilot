@@ -61,7 +61,7 @@ export default function FichaPage() {
       {guardar.isError && <ErrorState error={guardar.error} />}
       {recalcular.isError && <ErrorState error={recalcular.error} />}
       {pendiente && <RecalcConfirm id={id} cambio="ficha" onConfirm={(p, c) => void confirmar(p, c)} onCancel={() => setPendiente(null)} />}
-      <div>
+      <div className="ficha-layout">
         <FichaForm
           valores={valores}
           faltantes={faltantes}

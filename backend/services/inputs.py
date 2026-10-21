@@ -77,6 +77,17 @@ def ficha_preview_from_brief(text: str) -> dict[str, Any]:
     return {"ficha": ficha.model_dump(mode="json"), "faltantes": list(faltantes), "origen_campos": {}}
 
 
+def ingest_brief(store: ProjectStore, pid: str, texto: str) -> dict[str, Any]:
+    """Guarda el brief, su vista previa de ficha y la marca/sector del proyecto; devuelve la vista previa."""
+    save_brief(store, pid, texto)
+    prev = ficha_preview_from_brief(texto)
+    atomic_write_json(store.inputs_dir(pid) / "ficha_preview.json", prev)
+    store.update(pid, marca=prev["ficha"].get("marca"), sector=prev["ficha"].get("sector"))
+    detect_and_store(store, pid)
+    refresh_readiness(store, pid)
+    return prev
+
+
 # ---------------------------------------------------------------- prospecto
 def read_prospect(store: ProjectStore, pid: str) -> dict[str, Any] | None:
     return read_json(store.inputs_dir(pid) / "prospect.json")

@@ -1,4 +1,4 @@
-# Producto: GEO Copilot
+# Producto: Preload
 
 Regenerado en W0 a partir de la Parte A de `GUIA_WEB_GEO_COPILOT.md` (producto web, cualquier sector, un consultor, sin demo).
 

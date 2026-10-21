@@ -80,6 +80,23 @@ def test_full_pipeline_continuo(
     assert res_prop.status_code == 200
     assert res_prop.json()["secciones"]
 
+    # Explorador de ejecuciones (destino de «Ver evidencia»), con los parámetros del contrato
+    res_ex = client.get(f"/api/projects/{pid}/executions", params={"pagina": 1, "tamano": 50})
+    assert res_ex.status_code == 200
+    assert res_ex.json()["total"] == 624
+    res_ids = client.get(f"/api/projects/{pid}/executions", params={"ids": "EJ-0001,EJ-0002"})
+    assert res_ids.status_code == 200
+    assert {f["ejecucion_id"] for f in res_ids.json()["filas"]} == {"EJ-0001", "EJ-0002"}
+
+    # Simulador del plan
+    res_sim = client.post(f"/api/projects/{pid}/plan/simulate", json={"cambios": {}})
+    assert res_sim.status_code == 200
+    sim = res_sim.json()
+    assert sim["score_simulado"] == sim["score_actual"]
+    res_sim = client.post(f"/api/projects/{pid}/plan/simulate", json={"cambios": {"aparicion_por_ciudad": {"Barcelona": 0.5}}})
+    assert res_sim.status_code == 200
+    assert res_sim.json()["score_simulado"] > res_sim.json()["score_actual"]
+
     # 8. Descargar docx y abrirlo con python-docx
     res_docx = client.get(f"/api/projects/{pid}/exports/docx")
     assert res_docx.status_code == 200

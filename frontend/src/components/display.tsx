@@ -17,6 +17,35 @@ export function Chip({ tone, dot, children }: { tone: Tone; dot?: boolean; child
   )
 }
 
+/** Iniciales de una marca («Clínica Alborada Visión» -> «CA»), sin palabras vacías. */
+export function initials(nombre: string): string {
+  const vacias = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'y', '·', 'ejemplo'])
+  const palabras = nombre.split(/\s+/).filter((w) => w && !vacias.has(w.toLowerCase()))
+  return palabras.slice(0, 2).map((w) => w[0]!.toUpperCase()).join('') || '·'
+}
+
+export function Avatar({ nombre, size }: { nombre: string; size?: 'lg' }) {
+  return <span className="avatar" data-size={size} aria-hidden>{initials(nombre)}</span>
+}
+
+/** Marca de Preload: ondas de visibilidad que salen de un punto (la marca) con los colores de proyecto y espontánea. */
+export function Logo({ size = 26 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden>
+      <defs>
+        <linearGradient id="geo-logo" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" style={{ stopColor: 'var(--brand-project)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--spont)' }} />
+        </linearGradient>
+      </defs>
+      <rect width="32" height="32" rx="9" fill="url(#geo-logo)" />
+      <circle cx="11" cy="21" r="3" fill="#fff" />
+      <path d="M11 13.5a7.5 7.5 0 0 1 7.5 7.5" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" fill="none" opacity="0.9" />
+      <path d="M11 7.5A13.5 13.5 0 0 1 24.5 21" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" fill="none" opacity="0.55" />
+    </svg>
+  )
+}
+
 export function PageHeader({ title, description, actions, checkpoint }: { title: string; description?: string; actions?: ReactNode; checkpoint?: { n: number; approved: boolean } }) {
   return (
     <header className="page-header">

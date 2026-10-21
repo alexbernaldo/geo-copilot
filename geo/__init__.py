@@ -1,1 +1,1 @@
-"""Paquete principal de GEO Copilot."""
+"""Paquete principal de Preload."""

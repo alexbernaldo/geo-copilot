@@ -31,13 +31,7 @@ async def post_projects_id_brief(
         texto = body.get("texto", "")
         if not texto or not texto.strip():
             raise unprocessable("brief_vacio", "El texto del brief no puede estar vacío.")
-        inputs.save_brief(store, id, texto)
-        prev = inputs.ficha_preview_from_brief(texto)
-        inputs.atomic_write_json(store.inputs_dir(id) / "ficha_preview.json", prev)
-        store.update(id, marca=prev["ficha"].get("marca"), sector=prev["ficha"].get("sector"))
-        inputs.detect_and_store(store, id)
-        inputs.refresh_readiness(store, id)
-        return prev
+        return inputs.ingest_brief(store, id, texto)
     else:
         form = await request.form()
         archivo = form.get("archivo")
@@ -46,13 +40,7 @@ async def post_projects_id_brief(
         data = await archivo.read()
         filename = getattr(archivo, "filename", "brief.txt") or "brief.txt"
         texto = inputs.extract_brief_text(filename, data, store.inputs_dir(id))
-        inputs.save_brief(store, id, texto)
-        prev = inputs.ficha_preview_from_brief(texto)
-        inputs.atomic_write_json(store.inputs_dir(id) / "ficha_preview.json", prev)
-        store.update(id, marca=prev["ficha"].get("marca"), sector=prev["ficha"].get("sector"))
-        inputs.detect_and_store(store, id)
-        inputs.refresh_readiness(store, id)
-        return prev
+        return inputs.ingest_brief(store, id, texto)
 
 
 @router.post("/projects/{id}/prospect", response_model=FichaPreview, summary="Datos de la marca prospecto")
