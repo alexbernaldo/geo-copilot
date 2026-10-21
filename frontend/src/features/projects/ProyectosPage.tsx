@@ -92,7 +92,7 @@ export default function ProyectosPage() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })
-      if (data && 'id' in data) navigate(`/proyectos/${data.id}/resumen`)
+      if (data && 'id' in data) navigate(`/proyectos/${data.id}`)
     },
   })
 
@@ -128,7 +128,7 @@ export default function ProyectosPage() {
         title="Proyectos"
         description="Auditorías de optimización para motores generativos (GEO) y análisis comparativos."
         actions={
-          <Button variant="primary" onClick={() => navigate('/nuevo')}>
+          <Button variant="primary" onClick={() => navigate('/proyectos/nuevo')}>
             Nuevo proyecto
           </Button>
         }
@@ -182,7 +182,7 @@ export default function ProyectosPage() {
             description="GEO Copilot evalúa la visibilidad de marcas en asistentes de IA y redacta planes de optimización fundamentados en datos reales."
             action={
               <div className="flex items-center justify-center gap-3 mt-4">
-                <Button variant="primary" onClick={() => navigate('/nuevo')}>
+                <Button variant="primary" onClick={() => navigate('/proyectos/nuevo')}>
                   Nuevo proyecto
                 </Button>
                 {!settings?.clave_configurada && (
@@ -202,7 +202,7 @@ export default function ProyectosPage() {
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2.5">
                     <Link
-                      to={`/proyectos/${p.id}/resumen`}
+                      to={`/proyectos/${p.id}`}
                       className="font-semibold hover:text-[var(--brand-project)]"
                     >
                       {p.nombre}
@@ -223,7 +223,7 @@ export default function ProyectosPage() {
                   <Button
                     variant="default"
                     size="sm"
-                    onClick={() => navigate(`/proyectos/${p.id}/resumen`)}
+                    onClick={() => navigate(`/proyectos/${p.id}`)}
                   >
                     Abrir
                   </Button>

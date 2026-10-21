@@ -216,7 +216,7 @@ export default function AsistentePage() {
       return res.data
     },
     onSuccess: () => {
-      if (projectId) navigate(`/proyectos/${projectId}/resumen`)
+      if (projectId) navigate(`/proyectos/${projectId}`)
     },
   })
 

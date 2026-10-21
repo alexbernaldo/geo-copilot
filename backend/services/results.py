@@ -122,7 +122,7 @@ def _candidatas(store: ProjectStore, pid: str) -> list[str]:
         from geo.market import discover_uncataloged_brands
 
         d = store.study_dir(pid)
-        ej = load_ejecuciones(sf.study_file(d, "ejecuciones"), sf.study_file(d, "banco_prompts"))
+        ej = load_ejecuciones(path=sf.study_file(d, "ejecuciones"), prompts_path=sf.study_file(d, "banco_prompts"))
         return list(discover_uncataloged_brands(ej, load_marcas(sf.study_file(d, "marcas"))))
     except Exception:
         return []
@@ -268,7 +268,7 @@ def simulate_plan(store: ProjectStore, pid: str, cambios: dict[str, Any]) -> dic
     ficha = FichaMarca.model_validate(read_json(run_file(store, pid, "ficha.json", "intake")))
     d = store.study_dir(pid)
     try:
-        ej = load_ejecuciones(sf.study_file(d, "ejecuciones"), sf.study_file(d, "banco_prompts"))
+        ej = load_ejecuciones(path=sf.study_file(d, "ejecuciones"), prompts_path=sf.study_file(d, "banco_prompts"))
         res = simulate(pd.read_parquet(ev_path), ficha.marca, cambios, ejecuciones=ej)
     except HTTPExceptionTypes:
         raise
@@ -374,7 +374,7 @@ def _executions_df(store: ProjectStore, pid: str) -> pd.DataFrame:
 def _exec_row(r: pd.Series) -> dict[str, Any]:
     return {"ejecucion_id": r["Ejecucion_ID"], "prompt_id": r["Prompt_ID"], "familia": r.get("Familia", ""), "intencion": r.get("Intención", ""),
             "instanciacion": r["instanciacion"], "ambito": r["ambito"], "motor": r["Motor"], "repeticion": int(r["Repetición"] or 0),
-            "ciudad": r["ciudad"], "prompt": r["Prompt ejecutado"],
+            "ciudad": r["ciudad"] if isinstance(r["ciudad"], str) else None, "prompt": r["Prompt ejecutado"],
             "marcas_a_evaluar": [m.strip() for m in r["Marcas a evaluar"].split("|") if m.strip()], "fecha": r.get("Fecha/hora", "")}
 
 
