@@ -1,0 +1,194 @@
+[
+  {
+    "route": "/_kit",
+    "theme": "light",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/_kit",
+    "theme": "light",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/_kit",
+    "theme": "light",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/_kit",
+    "theme": "dark",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/_kit",
+    "theme": "dark",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/_kit",
+    "theme": "dark",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/",
+    "theme": "light",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/",
+    "theme": "light",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/",
+    "theme": "light",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/",
+    "theme": "dark",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/",
+    "theme": "dark",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/",
+    "theme": "dark",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/ajustes",
+    "theme": "light",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/ajustes",
+    "theme": "light",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/ajustes",
+    "theme": "light",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/ajustes",
+    "theme": "dark",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/ajustes",
+    "theme": "dark",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/ajustes",
+    "theme": "dark",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/proyectos/p_20261021_153012_ab12cd",
+    "theme": "light",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/proyectos/p_20261021_153012_ab12cd",
+    "theme": "light",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/proyectos/p_20261021_153012_ab12cd",
+    "theme": "light",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/proyectos/p_20261021_153012_ab12cd",
+    "theme": "dark",
+    "width": 1024,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/proyectos/p_20261021_153012_ab12cd",
+    "theme": "dark",
+    "width": 1280,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  },
+  {
+    "route": "/proyectos/p_20261021_153012_ab12cd",
+    "theme": "dark",
+    "width": 1440,
+    "errors": [],
+    "paid": [],
+    "scrollX": false
+  }
+]

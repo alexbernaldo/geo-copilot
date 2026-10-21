@@ -12,14 +12,15 @@ import { routes as quality } from './features/quality/routes'
 import { routes as projects } from './features/projects/routes'
 import { routes as wizard } from './features/wizard/routes'
 import { routes as settings } from './features/settings/routes'
+import { Shell } from './components/Shell'
 import KitPage from './KitPage'
 
-/** D sustituye el Outlet por el shell (navegación global y de proyecto). E y F aportan sus rutas desde features/<x>/routes.ts. */
+/** El shell (navegación global y de proyecto) envuelve todas las rutas. E y F aportan sus rutas desde features/<x>/routes.ts. */
 const projectRoutes: RouteObject[] = [...overview, ...ficha, ...data, ...competition, ...diagnosis, ...findings, ...plan, ...proposal, ...quality]
 
 export const routes: RouteObject[] = [
   {
-    element: createElement(Outlet),
+    element: createElement(Shell),
     children: [
       ...projects,
       ...wizard,
