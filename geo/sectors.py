@@ -209,7 +209,7 @@ def phase_defs(
     profile: dict[str, Any], ctx: dict[str, str], semanas: dict[int, tuple[int, int]]
 ) -> dict[int, tuple[str, tuple[int, int], str]]:
     """Definición de las 4 fases del plan: nombre y objetivo del perfil, semanas fijas."""
-    fases = profile.get("fases", {})
+    fases = {int(k): v for k, v in profile.get("fases", {}).items()}
     return {
         n: (
             render_text(str(fases[n]["nombre"]), ctx),

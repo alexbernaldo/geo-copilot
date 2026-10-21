@@ -51,6 +51,14 @@ class _EstrategiaLLMOutput(BaseModel):
     acciones: list[_AccionSeleccionLLM]
 
 
+def _responsable_valido(resp: object, ficha: FichaMarca) -> str:
+    """Si el perfil del sector no admite el responsable (p. ej. `cliente_medico`), lo reasigna a marketing."""
+    from geo.sectors import select_profile
+
+    permitidos = select_profile(ficha).get("responsables") or []
+    return str(resp) if not permitidos or resp in permitidos else "cliente_marketing"
+
+
 def _is_reputation_strength(hallazgos: Sequence[Hallazgo]) -> bool:
     """Devuelve True si el hallazgo de reputación es una fortaleza ('reputación sólida cuando la nombran')."""
     return any(
@@ -90,7 +98,7 @@ def _build_default_objectives(
 ) -> list[Objetivo]:
     """Construye los objetivos cuantitativos con `valor_actual` extraído directamente de las métricas y evidencias."""
     marca = ficha.marca
-    ciudad_crec = ficha.ciudad_crecimiento or "Barcelona"
+    ciudad_crec = ficha.ciudad_crecimiento or (ficha.ciudades[-1] if ficha.ciudades else "")
     t1_esp = tablas["T1_espontanea"]
     t2 = tablas["T2"]
     t3 = tablas["T3"]
@@ -210,7 +218,7 @@ def _build_mock_selection(
     objetivos = _build_default_objectives(ficha, hallazgos, tablas)
     ciudades_brand = ficha.ciudades or ["Madrid", "Barcelona"]
     ciudades_str = " y ".join(ciudades_brand[:2])
-    ciudad_crec = ficha.ciudad_crecimiento or "Barcelona"
+    ciudad_crec = ficha.ciudad_crecimiento or (ficha.ciudades[-1] if ficha.ciudades else "")
 
     # Mapear cada tipo de hallazgo a sus IDs aprobados
     h_by_type: dict[str, list[str]] = {}
@@ -277,7 +285,7 @@ def _build_mock_selection(
                 hallazgos_relacionados=related_h,
                 motores_objetivo=motores_obj,
                 ciudades=ciudades_obj,
-                responsable=tpl["responsable"],  # type: ignore[arg-type]
+                responsable=_responsable_valido(tpl["responsable"], ficha),  # type: ignore[arg-type]
                 entregables=entregables,
                 semana_inicio=start_w,
                 plazo_semanas=int(tpl["plazo_semanas"]),  # type: ignore[arg-type]
@@ -443,7 +451,7 @@ def build_plan(
 
     initial_plan = Plan(
         objetivos=validated_objs,
-        fases=build_fases_from_acciones(acciones),
+        fases=build_fases_from_acciones(acciones, ficha),
         acciones=acciones,
         coste_total_eur=round(sum(a.coste_estimado_eur for a in acciones), 2),
         medicion=medicion_txt,

@@ -8,28 +8,8 @@ from geo.schemas import Accion, FasePlan, FichaMarca, Hallazgo, Plan, Talla
 
 _TALLA_SCORE: dict[Talla, int] = {"S": 1, "M": 2, "L": 3}
 
-_PHASE_DEFS: dict[Literal[0, 1, 2, 3], tuple[str, tuple[int, int], str]] = {
-    0: (
-        "Fase 0 · Fundamentos técnicos, entidad y datos estructurados",
-        (1, 4),
-        "Asegurar que los bots de IA rastreen la web sin fricción y comprendan la entidad médica, sedes y cuadro facultativo.",
-    ),
-    1: (
-        "Fase 1 · Contenidos prioritarios, páginas locales (Barcelona) y reputación",
-        (5, 10),
-        "Cerrar la brecha de visibilidad en Barcelona y en la fase de Decisión con páginas locales, FAQ citables, precios transparentes y protocolo postoperatorio.",
-    ),
-    2: (
-        "Fase 2 · Autoridad en terceros, PR digital, rankings y perfiles de paciente",
-        (11, 36),
-        "Construir respaldo en medios sanitarios, rankings institucionales y guías por perfil de paciente para escalar recomendaciones en ChatGPT, Claude, Gemini y Perplexity.",
-    ),
-    3: (
-        "Fase 3 · Medición continua y recalibración trimestral",
-        (12, 48),
-        "Medir la evolución del Score de Citación en las semanas 12, 24, 36 y 48, verificando primeros resultados visibles en el mes 6.",
-    ),
-}
+# Semanas de cada fase del plan. Nombre y objetivo salen del perfil de sector (`geo.sectors`).
+_PHASE_WEEKS: dict[int, tuple[int, int]] = {0: (1, 4), 1: (5, 10), 2: (11, 36), 3: (12, 48)}
 
 
 def cost_from_tier(
@@ -180,11 +160,17 @@ def enforce_client_capacity(
     return scheduled, final_weekly
 
 
-def build_fases_from_acciones(acciones: Sequence[Accion]) -> list[FasePlan]:
+def build_fases_from_acciones(
+    acciones: Sequence[Accion], ficha: FichaMarca | None = None
+) -> list[FasePlan]:
     """Reconstruye las 4 fases del plan (0, 1, 2, 3) con los IDs de las acciones activas."""
+    from geo.sectors import action_context, phase_defs, select_profile
+
+    ctx = action_context(ficha) if ficha is not None else {}
+    defs = phase_defs(select_profile(ficha), ctx, _PHASE_WEEKS)
     fases: list[FasePlan] = []
     for num in (0, 1, 2, 3):
-        nombre, semanas, objetivo = _PHASE_DEFS[num]  # type: ignore[index]
+        nombre, semanas, objetivo = defs[num]
         act_ids = [a.id for a in acciones if a.fase_plan == num]
         fases.append(
             FasePlan(
@@ -271,7 +257,7 @@ def validate_and_adjust_plan(
         if aviso_min not in supuestos:
             supuestos.append(aviso_min)
 
-    fases = build_fases_from_acciones(valid_acciones)
+    fases = build_fases_from_acciones(valid_acciones, ficha)
 
     return Plan(
         objetivos=plan.objetivos,

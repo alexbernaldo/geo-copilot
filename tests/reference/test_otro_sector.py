@@ -36,3 +36,18 @@ def test_pipeline_sector_academia_idiomas_sin_menciones_oftalmologia(tmp_path: P
     ]
     for termino in terminos_oftalmologia:
         assert termino not in prop_content, f"Se encontró el término oftalmológico '{termino}' en la propuesta de la academia"
+
+
+def test_academia_propuesta_aprobada_y_sin_responsable_medico(tmp_path: Path) -> None:
+    run = Run(
+        modo="cliente",
+        brief_path=BRIEF_ACADEMIA,
+        provider="mock",
+        run_dir=tmp_path / "run",
+        study_dir=STUDY_DIR,
+    )
+    prop = run.run_all(auto_approve=True)
+    assert prop is not None
+    assert prop.revision.aprobado is True
+    assert prop.revision.cifras_no_trazables == 0
+    assert all(a.responsable != "cliente_medico" for a in prop.plan.acciones)

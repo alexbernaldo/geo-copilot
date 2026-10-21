@@ -666,7 +666,7 @@ def write_client(
             f"{narrative.intro_diagnostico_espontaneo}\n\n"
             f"#### Desglose por motor (Espontánea)\n{code_tables['t2']}\n\n"
             f"#### Desglose por fase del embudo (Espontánea)\n{code_tables['t3']}\n\n"
-            f"#### Desglose geográfico: Madrid vs Barcelona (Espontánea)\n{code_tables['t4']}\n\n"
+            f"#### Desglose geográfico: {' vs '.join(ficha.ciudades[:2]) or 'por ciudad'} (Espontánea)\n{code_tables['t4']}\n\n"
             f"#### Desglose por familia de prompt (Espontánea)\n{code_tables['t5']}\n\n"
             f"#### Perfil de fuentes en apariciones de {ficha.marca}\n{code_tables['t6_alb']}\n\n"
             f"### 3.2 Visibilidad asistida (apartado independiente: consultas con marca)\n\n"
