@@ -19,3 +19,4 @@ node_modules/
 frontend/dist/
 data/projects/
 data/cache/
+.claude/worktrees/
