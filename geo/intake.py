@@ -19,6 +19,10 @@ def read_brief_text(path_or_text: str | Path) -> str:
         and Path(path_or_text).exists()
     ):
         p = Path(path_or_text)
+        if p.suffix.lower() == ".pdf":
+            import pypdf
+            reader = pypdf.PdfReader(str(p))
+            return "\n\n".join(page.extract_text() or "" for page in reader.pages)
         if p.suffix.lower() == ".docx":
             doc = docx.Document(str(p))
             lines: list[str] = []

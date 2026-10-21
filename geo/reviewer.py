@@ -307,6 +307,7 @@ ALLOWED_ENTITIES_TERMS: set[str] = {
     "Google-Extended",
     "Schema.org",
     "MedicalClinic",
+    "LocalBusiness",
     "Physician",
     "MedicalProcedure",
     "FAQPage",
@@ -803,8 +804,11 @@ def _check_regex_compliance(
 
             if acc.palanca == "contenido":
                 acc_text_norm = normalize(f"{acc.titulo} {acc.descripcion}")
+                marca_norm = normalize(ficha.marca) if ficha and ficha.marca else ""
                 for comp in _COMPETITOR_NAMES:
                     c_norm = normalize(comp)
+                    if marca_norm and (c_norm in marca_norm or marca_norm in c_norm):
+                        continue
                     if re.search(rf"\b{re.escape(c_norm)}\b", acc_text_norm):
                         incidencias.append(
                             Incidencia(

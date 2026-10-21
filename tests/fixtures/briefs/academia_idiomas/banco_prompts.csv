@@ -1,0 +1,6 @@
+﻿Prompt_ID,Sector,Familia,Intención,Prioridad,Uso,Instanciación,Prompt (plantilla),Notas de instanciación
+IDI-DG-01,Academias de idiomas,Descubrimiento genérico,Descubrimiento,P1,Publicable,generico,¿Cuáles son las mejores academias de inglés para preparar el Cambridge en España?,Se evalúan todas las marcas del sector
+IDI-DG-02,Academias de idiomas,Descubrimiento genérico,Descubrimiento,P1,Publicable,generico,Necesito un curso de inglés para mi empresa. ¿Qué academias me recomiendas?,Se evalúan todas las marcas del sector
+IDI-LO-01,Academias de idiomas,Localización,Descubrimiento,P1,Publicable,ciudad,¿Qué academia de inglés recomendada hay en [CIUDAD] para sacar el B2?,Se instancia con cada ciudad
+IDI-VR-01,Academias de idiomas,Validación reputacional,Validación,P2,Publicable,marca,¿Es buena academia [MARCA_A] para preparar exámenes oficiales?,Se instancia con cada marca foco
+IDI-CM-01,Academias de idiomas,Comparación de marcas,Comparación,P1,Publicable,par,"¿Qué es mejor para el Cambridge, [MARCA_A] o [MARCA_B]?",Pares estratégicos

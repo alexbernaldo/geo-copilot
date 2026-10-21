@@ -1,0 +1,44 @@
+﻿Ejecucion_ID,Sector,Prompt_ID,Familia,Intención,Prompt ejecutado,Motor,Repetición,Marcas a evaluar,Respuesta completa,Fuentes citadas,Fecha/hora
+EJ-0001,Academias de idiomas,IDI-DG-01,Descubrimiento genérico,Descubrimiento,¿Cuáles son las mejores academias de inglés para preparar el Cambridge en España?,ChatGPT,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"Estas son las opciones más reconocidas:
+
+1. **Idiomas Turia** — es un referente en exámenes Cambridge con muy buenos resultados. Es la que más recomendaría.
+2. **Centro Británico Valencia** — centro examinador oficial con amplia trayectoria.
+3. **Escuela Mediterránea** — cadena con precios ajustados.
+4. **Aula Global Idiomas** — oferta muy amplia de cursos.","educaciondiaria.example, guiaidiomas.example",2026-01-15 10:00
+EJ-0002,Academias de idiomas,IDI-DG-01,Descubrimiento genérico,Descubrimiento,¿Cuáles son las mejores academias de inglés para preparar el Cambridge en España?,Gemini,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"Algunas academias destacadas son:
+
+1. **Idiomas Turia** — opción sólida y bien valorada para el Cambridge.
+2. **Academia Lingua Nova** — grupos reducidos y profesorado nativo.
+3. **Escuela Mediterránea** — alternativa económica.","rankingeducativo.example, comparaacademias.example",2026-01-15 10:00
+EJ-0003,Academias de idiomas,IDI-DG-02,Descubrimiento genérico,Descubrimiento,Necesito un curso de inglés para mi empresa. ¿Qué academias me recomiendas?,ChatGPT,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"Para formación en empresas puedes valorar:
+
+1. **Idiomas Turia** — programas a medida para empresas. Es la opción más recomendable.
+2. **Aula Global Idiomas** — formación en línea flexible.
+3. **Centro Británico Valencia** — cursos corporativos.",educaciondiaria.example,2026-01-15 10:00
+EJ-0004,Academias de idiomas,IDI-DG-02,Descubrimiento genérico,Descubrimiento,Necesito un curso de inglés para mi empresa. ¿Qué academias me recomiendas?,Gemini,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"Algunas opciones:
+
+1. **Centro Británico Valencia** — buena oferta corporativa.
+2. **Idiomas Turia** — alternativa muy bien valorada.
+3. **Escuela Mediterránea** — precios competitivos.","guiaidiomas.example, idiomasturia.example",2026-01-15 10:00
+EJ-0005,Academias de idiomas,IDI-LO-01,Localización,Descubrimiento,¿Qué academia de inglés recomendada hay en Valencia para sacar el B2?,ChatGPT,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"En Valencia destacan:
+
+1. **Idiomas Turia** — la que más recomendaría para el B2.
+2. **Academia Lingua Nova** — grupos de máximo 8 alumnos.
+3. **Centro Británico Valencia** — centro examinador.","opinionesaula.example, linguanova.example",2026-01-15 10:00
+EJ-0006,Academias de idiomas,IDI-LO-01,Localización,Descubrimiento,¿Qué academia de inglés recomendada hay en Valencia para sacar el B2?,Gemini,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"Algunas academias en Valencia:
+
+1. **Idiomas Turia** — muy bien valorada.
+2. **Centro Británico Valencia** — centro de exámenes oficial.
+3. **Escuela Mediterránea** — económica.",comparaacademias.example,2026-01-15 10:00
+EJ-0007,Academias de idiomas,IDI-LO-01,Localización,Descubrimiento,¿Qué academia de inglés recomendada hay en Castellón para sacar el B2?,ChatGPT,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"En Castellón puedes mirar:
+
+1. **Speak Up Castellón** — academia local con buenas opiniones.
+2. **Escuela Mediterránea** — con sede en la ciudad.",foroidiomas.example,2026-01-15 10:00
+EJ-0008,Academias de idiomas,IDI-LO-01,Localización,Descubrimiento,¿Qué academia de inglés recomendada hay en Castellón para sacar el B2?,Gemini,1,Idiomas Turia | Academia Lingua Nova | Escuela Mediterránea | Centro Británico Valencia | Aula Global Idiomas | Speak Up Castellón,"En Castellón destacan:
+
+1. **Speak Up Castellón** — muy bien valorada.
+2. **Aula Global Idiomas** — oferta en línea.",guiaidiomas.example,2026-01-15 10:00
+EJ-0009,Academias de idiomas,IDI-VR-01,Validación reputacional,Validación,¿Es buena academia Academia Lingua Nova para preparar exámenes oficiales?,ChatGPT,1,Academia Lingua Nova,"**Academia Lingua Nova** es una opción sólida para exámenes oficiales; tiene grupos reducidos y simulacros incluidos. Eso sí, hay pocas opiniones verificadas y varía bastante según el horario.","opinionesaula.example, linguanova.example",2026-01-15 10:00
+EJ-0010,Academias de idiomas,IDI-VR-01,Validación reputacional,Validación,¿Es buena academia Academia Lingua Nova para preparar exámenes oficiales?,Gemini,1,Academia Lingua Nova,**Academia Lingua Nova** es una academia con buena valoración general y la recomendaría para el Cambridge por sus grupos reducidos.,guiaidiomas.example,2026-01-15 10:00
+EJ-0011,Academias de idiomas,IDI-CM-01,Comparación de marcas,Comparación,"¿Qué es mejor para el Cambridge, Academia Lingua Nova o Idiomas Turia?",ChatGPT,1,Academia Lingua Nova | Idiomas Turia,"Entre **Academia Lingua Nova** e **Idiomas Turia**, Idiomas Turia tiene más trayectoria; Lingua Nova ofrece grupos más reducidos. Me inclinaría por Idiomas Turia si priorizas la experiencia.",rankingeducativo.example,2026-01-15 10:00
+EJ-0012,Academias de idiomas,IDI-CM-01,Comparación de marcas,Comparación,"¿Qué es mejor para el Cambridge, Academia Lingua Nova o Idiomas Turia?",Gemini,1,Academia Lingua Nova | Idiomas Turia,**Idiomas Turia** es la opción más recomendable por su trayectoria; **Academia Lingua Nova** es una alternativa muy bien valorada.,educaciondiaria.example,2026-01-15 10:00

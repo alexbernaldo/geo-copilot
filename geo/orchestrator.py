@@ -571,10 +571,10 @@ class Run:
             "strategy_v1",
             _hash_obj({"ficha": ficha.marca, "h": [h.id for h in hallazgos if h.aprobado]}),
             lambda: self.save_plan(
-                build_plan(ficha, hallazgos, tablas, provider=self.provider)
+                build_plan(ficha, hallazgos, tablas, provider=self.provider, study_dir=self.study_dir)
             ),
             fallback_fn=lambda: self.save_plan(
-                build_plan(ficha, hallazgos, tablas, provider="mock")
+                build_plan(ficha, hallazgos, tablas, provider="mock", study_dir=self.study_dir)
             ),
             force=force,
         )

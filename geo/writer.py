@@ -291,12 +291,91 @@ def _build_code_tables_client(
     }
 
 
+def _is_kit_brand(marca: str) -> bool:
+    from geo.reference import REFERENCE_BRAND, normalize_for_fingerprint
+
+    return normalize_for_fingerprint(marca) == normalize_for_fingerprint(REFERENCE_BRAND)
+
+
+def _generic_client_narrative(
+    ficha: FichaMarca,
+    metrics_summary: dict[str, Any],
+    plan: Plan,
+) -> _ClientNarrativeLLM:
+    marca = ficha.marca
+    sc_esp = metrics_summary["score_espontaneo"]
+    ap_esp = round(metrics_summary["tasa_aparicion_espontanea"] * 100.0, 1)
+    puesto = metrics_summary["puesto_espontaneo"]
+    total_m = metrics_summary["total_marcas"]
+    lider = metrics_summary["lider_espontaneo"]
+    sc_lider = metrics_summary["score_lider_espontaneo"]
+    ap_lider = round(metrics_summary["tasa_aparicion_lider_espontanea"] * 100.0, 1)
+    rec_esp = round(metrics_summary["pct_recomendacion_activa_espontanea"] * 100.0, 1)
+    neg_asis = round(metrics_summary["pct_negativo_asistida"] * 100.0, 1)
+    fm_asis = metrics_summary["fuerza_media_asistida"]
+    coste_total = plan.coste_total_eur
+
+    sector_nombre = ficha.sector or "el sector analizado"
+
+    resumen = (
+        f"{marca} registra en las consultas espontáneas del estudio un {ap_esp:.1f} % de aparición "
+        f"(puesto {puesto} de {total_m}) con un Score de Citación de {sc_esp:.2f} puntos y un {rec_esp:.1f} % "
+        f"de recomendación activa frente al líder {lider} ({ap_lider:.1f} % de aparición y score {sc_lider:.2f}). "
+        f"En menciones asistidas presenta un {neg_asis:.1f} % de menciones con advertencias y una fuerza media de {fm_asis:.2f}. "
+        f"Para corregir las brechas detectadas se propone un plan de acción de {len(plan.acciones)} iniciativas en 4 fases "
+        f"con una inversión total estimada de {coste_total:,.0f} €."
+    )
+
+    contexto = (
+        f"Este diagnóstico evalúa la visibilidad generativa de {marca} en {sector_nombre} en España a partir "
+        f"de las ejecuciones registradas en los motores de IA del estudio."
+    )
+
+    diag_esp = (
+        f"En visibilidad espontánea, donde el usuario no nombra a la marca, {marca} alcanza un Score de Citación "
+        f"de {sc_esp:.2f} sobre 100 y aparece en el {ap_esp:.1f} % de las respuestas evaluadas."
+    )
+
+    diag_asis = (
+        f"En visibilidad asistida, donde el prompt nombra expresamente a la marca, {marca} registra una fuerza "
+        f"media de {fm_asis:.2f} y un {neg_asis:.1f} % de menciones con advertencias."
+    )
+
+    competencia = (
+        f"El análisis competitivo confirma que el líder del mercado en visibilidad en IA es {lider} "
+        f"con un {ap_lider:.1f} % de aparición espontánea y un score de {sc_lider:.2f}. "
+        f"{marca} se sitúa en la posición {puesto} con un {ap_esp:.1f} % de aparición."
+    )
+
+    estrategia = (
+        f"La estrategia recomendada conecta cada hallazgo del diagnóstico con objetivos realistas "
+        f"a {ficha.horizonte_meses} meses, priorizando datos estructurados, contenidos y autoridad."
+    )
+
+    medicion = (
+        f"El sistema de seguimiento contempla la medición periódica de la visibilidad generativa en las semanas de control "
+        f"del plan estratégico a {ficha.horizonte_meses} meses."
+    )
+
+    return _ClientNarrativeLLM(
+        resumen_ejecutivo=resumen,
+        contexto_y_alcance=contexto,
+        intro_diagnostico_espontaneo=diag_esp,
+        intro_diagnostico_asistido=diag_asis,
+        intro_competencia=competencia,
+        intro_estrategia=estrategia,
+        medicion_y_seguimiento=medicion,
+    )
+
+
 def _mock_client_narrative(
     ficha: FichaMarca,
     metrics_summary: dict[str, Any],
     plan: Plan,
 ) -> _ClientNarrativeLLM:
     """Construye los párrafos interpretativos deterministas (modo mock) usando solo cifras trazables."""
+    if not _is_kit_brand(ficha.marca):
+        return _generic_client_narrative(ficha, metrics_summary, plan)
     marca = ficha.marca
     sc_esp = metrics_summary["score_espontaneo"]
     ap_esp = round(metrics_summary["tasa_aparicion_espontanea"] * 100.0, 1)
@@ -541,7 +620,7 @@ def write_client(
         ),
         None,
     )
-    if rep_strength_h is not None:
+    if rep_strength_h is not None and _is_kit_brand(ficha.marca):
         res_low = narrative.resumen_ejecutivo.lower()
         if "con tan buenas reseñas deberíamos salir recomendados" not in res_low:
             neg_asis = round(metrics_summary["pct_negativo_asistida"] * 100.0, 1)

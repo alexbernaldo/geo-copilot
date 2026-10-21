@@ -2,6 +2,7 @@
 
 import json
 import math
+from pathlib import Path
 from typing import Any, Literal, Sequence
 import pandas as pd
 from pydantic import BaseModel
@@ -203,6 +204,7 @@ def _build_mock_selection(
     ficha: FichaMarca,
     hallazgos: Sequence[Hallazgo],
     tablas: dict[str, pd.DataFrame],
+    domains_by_type: dict[str, list[str]] | None = None,
 ) -> _EstrategiaLLMOutput:
     """Construye la selección de objetivos y 13 acciones personalizadas en modo determinista (mock)."""
     objetivos = _build_default_objectives(ficha, hallazgos, tablas)
@@ -243,7 +245,12 @@ def _build_mock_selection(
         ("TPL-22", 12, "bajo", ["ChatGPT", "Gemini", "Perplexity", "Claude"], ciudades_brand[:2]),
     ]
 
-    tpl_lookup = {str(t["template_id"]): t for t in ACTION_LIBRARY}
+    from geo.sectors import action_context, raw_action_library, render_text, select_profile
+
+    prof = select_profile(ficha)
+    raw_tpls = raw_action_library(prof["id"])
+    tpl_lookup = {str(t["template_id"]): t for t in raw_tpls}
+    ctx = action_context(ficha, domains_by_type=domains_by_type)
     acciones_out: list[_AccionSeleccionLLM] = []
 
     for tpl_id, start_w, tier, motores_obj, ciudades_obj in chosen_specs:
@@ -256,19 +263,16 @@ def _build_mock_selection(
         if not related_h:
             related_h = [all_h_ids[0]]
 
-        desc = str(tpl["descripcion"]).format(
-            marca=ficha.marca,
-            ciudades=ciudades_str,
-        )
+        desc = render_text(str(tpl["descripcion"]), ctx)
         entregables = [
-            str(e).format(marca=ficha.marca, ciudades=ciudades_str)
-            for e in tpl["entregables_tipo"]  # type: ignore[union-attr]
+            render_text(str(e), ctx)
+            for e in tpl.get("entregables_tipo", [])  # type: ignore[union-attr]
         ]
 
         acciones_out.append(
             _AccionSeleccionLLM(
                 template_id=tpl_id,
-                titulo=str(tpl["titulo"]),
+                titulo=render_text(str(tpl["titulo"]), ctx),
                 descripcion=desc,
                 hallazgos_relacionados=related_h,
                 motores_objetivo=motores_obj,
@@ -278,7 +282,7 @@ def _build_mock_selection(
                 semana_inicio=start_w,
                 plazo_semanas=int(tpl["plazo_semanas"]),  # type: ignore[arg-type]
                 nivel_coste=tier,
-                kpi=str(tpl["kpi_tipo"]),
+                kpi=render_text(str(tpl["kpi_tipo"]), ctx),
             )
         )
 
@@ -293,15 +297,19 @@ def build_plan(
     provider: str | None = None,
     model: str | None = None,
     use_cache: bool = True,
+    study_dir: Path | None = None,
 ) -> Plan:
     """Construye el Plan completo (Objetivos, Fases, Acciones y Presupuesto) validado por código."""
     candidates = select_candidate_templates(hallazgos)
     system_prompt = (PROMPTS_DIR / "strategy_v1.md").read_text(encoding="utf-8")
 
+    cat_path = (study_dir / "fuentes_catalogo.csv") if study_dir and (study_dir / "fuentes_catalogo.csv").exists() else None
+    domains_by_type = get_catalog_domains_by_type(cat_path)
+
     payload = {
         "ficha": ficha.model_dump(),
         "hallazgos_aprobados": [h.model_dump() for h in hallazgos if h.aprobado],
-        "fuentes_catalogo_por_tipo": get_catalog_domains_by_type(),
+        "fuentes_catalogo_por_tipo": domains_by_type,
         "plantillas_candidatas": candidates,
     }
     user_prompt = (
@@ -309,7 +317,7 @@ def build_plan(
         f"<datos>\n{json.dumps(payload, ensure_ascii=False, indent=2)}\n</datos>"
     )
 
-    mock_out = _build_mock_selection(ficha, hallazgos, tablas)
+    mock_out = _build_mock_selection(ficha, hallazgos, tablas, domains_by_type=domains_by_type)
     llm_out = complete_json(
         system=system_prompt,
         user=user_prompt,
@@ -401,17 +409,32 @@ def build_plan(
             )
         )
 
-    medicion_txt = (
-        "Re-ejecución trimestral del banco de 25 prompts (624 ejecuciones por oleada en ChatGPT, "
-        "Gemini, Perplexity y Claude) en las semanas 12, 24, 36 y 48, con hito de control intermedio "
-        "en el mes 6 (semana 24) para evaluar evolución del Score de Citación y primeras visitas de cirugía refractiva."
-    )
-    riesgos = [
-        "No determinismo y actualizaciones de los modelos de IA: las respuestas varían entre ejecuciones y por cambios de pesos de cada proveedor.",
-        "Tiempos de indexación y refresco de fuentes de terceros (rankings, directorios y prensa sanitaria).",
-        "Sensibilidad regulatoria en publicidad sanitaria: toda pieza requiere validación médico-legal previa sin promesas de resultado.",
-        "Disponibilidad del equipo interno (1 responsable de marketing + 0,5 comunicación) en semanas de lanzamiento de contenidos.",
-    ]
+    from geo.writer import _is_kit_brand
+
+    if _is_kit_brand(ficha.marca):
+        medicion_txt = (
+            "Re-ejecución trimestral del banco de 25 prompts (624 ejecuciones por oleada en ChatGPT, "
+            "Gemini, Perplexity y Claude) en las semanas 12, 24, 36 y 48, con hito de control intermedio "
+            "en el mes 6 (semana 24) para evaluar evolución del Score de Citación y primeras visitas de cirugía refractiva."
+        )
+        riesgos = [
+            "No determinismo y actualizaciones de los modelos de IA: las respuestas varían entre ejecuciones y por cambios de pesos de cada proveedor.",
+            "Tiempos de indexación y refresco de fuentes de terceros (rankings, directorios y prensa sanitaria).",
+            "Sensibilidad regulatoria en publicidad sanitaria: toda pieza requiere validación médico-legal previa sin promesas de resultado.",
+            "Disponibilidad del equipo interno (1 responsable de marketing + 0,5 comunicación) en semanas de lanzamiento de contenidos.",
+        ]
+    else:
+        obj_txt = ficha.objetivo_principal or "los objetivos de negocio"
+        medicion_txt = (
+            "Re-ejecución periódica del banco de prompts en los asistentes de IA en las semanas de control, "
+            f"con hito de revisión intermedia para evaluar evolución del Score de Citación y su impacto en {obj_txt}."
+        )
+        riesgos = [
+            "No determinismo y actualizaciones de los modelos de IA: las respuestas varían entre ejecuciones y por cambios de pesos de cada proveedor.",
+            "Tiempos de indexación y refresco de fuentes de terceros y medios de referencia sectoriales.",
+            "Exigencias normativas y de veracidad: toda pieza requiere validación previa sin promesas de resultado.",
+            "Disponibilidad del equipo interno para la revisión y aprobación de contenidos.",
+        ]
     supuestos = [
         "Supuestos de tarifa orientativos definidos por el equipo para servicios de consultoría GEO, desarrollo técnico y PR digital (sujetos a tarifas oficiales de agencia).",
         "Los objetivos de visibilidad se formulan como rangos esperados basados en las palancas GEO de la industria, nunca como resultados garantizados.",
