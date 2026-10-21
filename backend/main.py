@@ -1,5 +1,8 @@
 """Crea la app FastAPI, monta los routers bajo /api y sirve frontend/dist en /."""
 
+import logging
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -8,13 +11,24 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.api_models import Health
-from backend.deps import VERSION
+from backend.deps import VERSION, get_runner, get_store
 from backend.routers import checkpoints, estimates, exports, inputs, projects, results, run, settings, study, traces
+from backend.services.example import ensure_example
 
 ROOT = Path(__file__).resolve().parent.parent
 FRONTEND_DIST = ROOT / "frontend" / "dist"
 
-app = FastAPI(title="GEO Copilot API", version=VERSION, docs_url="/api/docs", openapi_url="/api/openapi.json")
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    try:
+        ensure_example(get_store(), get_runner())
+    except Exception:  # el ejemplo nunca impide arrancar la aplicación
+        logging.getLogger(__name__).exception("No se pudo preparar el proyecto de ejemplo")
+    yield
+
+
+app = FastAPI(title="GEO Copilot API", version=VERSION, docs_url="/api/docs", openapi_url="/api/openapi.json", lifespan=lifespan)
 
 
 def _error(status: int, code: str, message: str, detail: dict | None = None) -> JSONResponse:

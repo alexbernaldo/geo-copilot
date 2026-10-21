@@ -16,7 +16,7 @@
 3. Tener en el escritorio o en carpeta accesible:
    - `Brief_de_ejemplo_Clinica_Alborada.docx` (o formato markdown)
    - Carpeta del kit `caso_oftalmologia` con los 5 archivos CSV (`ejecuciones.csv`, `marcas.csv`, `banco_prompts.csv`, `fuentes_catalogo.csv`, `muestra_evaluada.csv`).
-4. Ensayar el recorrido completo y borrar o archivar proyectos de ensayo para comenzar la demo con la lista limpia o con un proyecto previo de otro sector.
+4. Ensayar el recorrido completo y borrar o archivar proyectos de ensayo. La lista siempre arranca con **«Ejemplo · Clínica Alborada Visión»** ya analizado (se crea solo al arrancar; si se borra, vuelve al reiniciar). Sirve de plan B: si algo falla en directo, se abre ese proyecto y se sigue la demo desde el Diagnóstico.
 5. (Opcional) Tener ya ejecutado un proyecto de otro sector con estudio en vivo en modo «Rápido» para enseñar el funcionamiento y coste real.
 
 ---
