@@ -267,8 +267,22 @@ def list_models(force: bool = False) -> list[dict]:
     return list(out)
 
 
+def cached_models() -> list[dict] | None:
+    """Catálogo ya descargado (sin red). `None` si todavía no se ha pedido."""
+    with _lock():
+        data = _models_cache["data"]
+        return list(data) if data is not None else None
+
+
 def model_price(model_id: str) -> tuple[float, float] | None:
-    for m in list_models():
+    """Precio por token (entrada, salida). Sin clave configurada y sin catálogo en caché no se sale a la red."""
+    if cached_models() is None and not get("OPENROUTER_API_KEY").strip():
+        return None
+    try:
+        models = list_models()
+    except Exception:
+        return None
+    for m in models:
         if m.get("id") == model_id:
             return (m["price_in_per_m"] / 1_000_000.0, m["price_out_per_m"] / 1_000_000.0)
     return None
