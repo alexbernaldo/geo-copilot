@@ -38,4 +38,5 @@ export function renderRoute(ui: ReactElement, path: string, pattern: string) {
 /** ECharts necesita canvas, que jsdom no tiene: el gráfico se sustituye por un doble inerte. */
 export const echartsStub = {
   init: () => ({ setOption: () => undefined, resize: () => undefined, dispose: () => undefined }),
+  registerTheme: () => undefined,
 }

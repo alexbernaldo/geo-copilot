@@ -43,6 +43,9 @@ export function useTheme(): { choice: ThemeChoice; resolved: 'light' | 'dark'; s
 }
 
 function subscribe(cb: () => void): () => void {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return () => {}
+  }
   const mq = window.matchMedia('(prefers-color-scheme: dark)')
   const mo = new MutationObserver(cb)
   mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
@@ -54,9 +57,14 @@ function subscribe(cb: () => void): () => void {
 }
 
 function snapshot(): 'light' | 'dark' {
-  const forced = document.documentElement.getAttribute('data-theme')
-  if (forced === 'light' || forced === 'dark') return forced
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  if (typeof document !== 'undefined') {
+    const forced = document.documentElement.getAttribute('data-theme')
+    if (forced === 'light' || forced === 'dark') return forced
+  }
+  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  return 'light'
 }
 
 /** Tema resuelto y reactivo: lo usan los gráficos para recrear su tema. */
@@ -66,12 +74,13 @@ export function useResolvedTheme(): 'light' | 'dark' {
 
 /** Lee una variable CSS ya resuelta a color. */
 export function cssVar(name: string): string {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  return typeof document !== 'undefined' ? getComputedStyle(document.documentElement).getPropertyValue(name).trim() : ''
 }
 
 export function usePrefersReducedMotion(): boolean {
-  const [r, setR] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  const [r, setR] = useState(() => (typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false))
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     const f = () => setR(mq.matches)
     mq.addEventListener('change', f)
