@@ -1,0 +1,179 @@
+{
+ "plantillas": [
+  {
+   "familia": "DG",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Cuáles son las mejores opciones de {sector} en España?"
+  },
+  {
+   "familia": "DG",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "Estoy buscando {servicio}. ¿Qué empresas o centros me recomendarías en España?"
+  },
+  {
+   "familia": "DG",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué proveedores de {sector} destacan ahora mismo en España?"
+  },
+  {
+   "familia": "DP",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "Soy un particular y necesito {servicio}. ¿Qué opciones de {sector} me recomendarías?"
+  },
+  {
+   "familia": "DP",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "Tengo poco presupuesto y quiero {servicio}. ¿Qué alternativas fiables hay en {sector}?"
+  },
+  {
+   "familia": "DP",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "Busco {servicio} para mi familia. ¿Qué opciones de {sector} son más adecuadas?"
+  },
+  {
+   "familia": "DP",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "Somos una empresa y necesitamos {servicio}. ¿Qué proveedores de {sector} recomiendas?"
+  },
+  {
+   "familia": "LO",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "ciudad",
+   "plantilla": "¿Qué opciones de {sector} recomendadas hay en [CIUDAD]?"
+  },
+  {
+   "familia": "LO",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "ciudad",
+   "plantilla": "Busco {servicio} en [CIUDAD]. ¿Cuál me recomiendas?"
+  },
+  {
+   "familia": "CO",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué diferencias hay entre las principales opciones de {sector} en España?"
+  },
+  {
+   "familia": "CO",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué criterios importan más al comparar opciones de {sector}?"
+  },
+  {
+   "familia": "CO",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué ventajas e inconvenientes tienen las grandes cadenas frente a los centros independientes en {sector}?"
+  },
+  {
+   "familia": "CM",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "par",
+   "plantilla": "Diferencias entre [MARCA_A] y [MARCA_B] a la hora de elegir {sector}."
+  },
+  {
+   "familia": "CM",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "par",
+   "plantilla": "¿[MARCA_A] o [MARCA_B]? ¿Cuál elegirías para {servicio} y por qué?"
+  },
+  {
+   "familia": "CM",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "marca",
+   "plantilla": "¿Qué ventajas tiene [MARCA_A] frente a otras opciones de {sector}?"
+  },
+  {
+   "familia": "VR",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "marca",
+   "plantilla": "¿Qué opinión tienen los clientes de [MARCA_A]?"
+  },
+  {
+   "familia": "VR",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "marca",
+   "plantilla": "¿Qué debería revisar antes de contratar a [MARCA_A]?"
+  },
+  {
+   "familia": "VR",
+   "prioridad": "P2",
+   "uso": "Diagnóstico",
+   "instanciacion": "marca",
+   "plantilla": "¿Qué riesgos o inconvenientes debería considerar antes de elegir [MARCA_A]?"
+  },
+  {
+   "familia": "FU",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué fuentes fiables recomiendan para elegir {sector}?"
+  },
+  {
+   "familia": "FU",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Dónde puedo encontrar rankings u opiniones independientes sobre {sector}?"
+  },
+  {
+   "familia": "DF",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "Voy a decidirme ya por {servicio}. ¿Qué opción de {sector} elegirías?"
+  },
+  {
+   "familia": "DF",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "marca",
+   "plantilla": "Estoy a punto de contratar a [MARCA_A]. ¿Es una buena elección o mirarías otra opción?"
+  },
+  {
+   "familia": "DF",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué opción de {sector} elegirías por relación calidad-precio?"
+  },
+  {
+   "familia": "PR",
+   "prioridad": "P1",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Cuánto cuesta {servicio} en España y de qué depende el precio?"
+  },
+  {
+   "familia": "PR",
+   "prioridad": "P2",
+   "uso": "Publicable",
+   "instanciacion": "generico",
+   "plantilla": "¿Qué opciones de {sector} ofrecen mejor relación calidad-precio?"
+  }
+ ]
+}

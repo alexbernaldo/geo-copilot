@@ -1,0 +1,44 @@
+{
+ "pool": [
+  {
+   "nombre": "Grupo Meridiano",
+   "dominio": "grupomeridiano.example",
+   "alias": [
+    "Meridiano"
+   ]
+  },
+  {
+   "nombre": "Centro Atlas",
+   "dominio": "centroatlas.example",
+   "alias": [
+    "Atlas"
+   ]
+  },
+  {
+   "nombre": "Instituto Cardinal",
+   "dominio": "institutocardinal.example",
+   "alias": [
+    "Cardinal"
+   ]
+  },
+  {
+   "nombre": "Casa Faro",
+   "dominio": "casafaro.example",
+   "alias": [
+    "Faro"
+   ]
+  },
+  {
+   "nombre": "Estudio Delta",
+   "dominio": "estudiodelta.example",
+   "alias": []
+  },
+  {
+   "nombre": "Red Horizonte",
+   "dominio": "redhorizonte.example",
+   "alias": [
+    "Horizonte"
+   ]
+  }
+ ]
+}

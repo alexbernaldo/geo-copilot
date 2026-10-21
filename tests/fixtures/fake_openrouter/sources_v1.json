@@ -1,0 +1,9 @@
+{
+ "overrides": {
+  "directorio-sector.example": "Directorio / comparador",
+  "diario-economia.example": "Medio",
+  "opiniones-clientes.example": "Plataforma de reseñas",
+  "foro-consumidores.example": "Red social / foro",
+  "guia-profesionales.example": "Ranking / institución"
+ }
+}
