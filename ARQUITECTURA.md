@@ -32,7 +32,7 @@ GEO Copilot opera con una arquitectura de tres capas claramente desacopladas: un
         data/projects/<id>/  ·  data/cache/  ·  .env
 ```
 
-En producción local (`make app`), FastAPI monta y sirve también el frontend estático compilado (`frontend/dist`) en `/`, garantizando **un único proceso y un solo puerto**. En desarrollo (`make dev`), Vite (puerto 5173) realiza proxy transparente de `/api` hacia el backend en el puerto 8000.
+En producción local (`make app`), FastAPI monta y sirve también el frontend estático compilado (`frontend/dist`) en `/`, garantizando **un único proceso y un solo puerto**. En desarrollo (`make dev`), Vite realiza proxy transparente de `/api` hacia el backend.
 
 ---
 

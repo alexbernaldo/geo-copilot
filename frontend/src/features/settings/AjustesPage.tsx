@@ -153,7 +153,7 @@ export default function AjustesPage() {
               {settings?.clave_configurada ? (
                 <span>Clave activa configurada ({settings.clave_mascara}). Introduce un nuevo valor para sustituirla.</span>
               ) : (
-                <span>No hay clave configurada. Los análisis se ejecutarán en modo de referencia/simulado.</span>
+                <span>No hay clave configurada. Los análisis se ejecutarán con los datos base del estudio.</span>
               )}{' '}
               <a
                 href="https://openrouter.ai/keys"

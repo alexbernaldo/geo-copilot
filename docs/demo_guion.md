@@ -11,7 +11,7 @@
    ```bash
    make app
    ```
-   La aplicación arranca en `http://localhost:8000` (o el primer puerto libre) y abre la ventana en modo aplicación.
+   La aplicación arranca en el navegador en modo aplicación.
 2. En **Ajustes**: clave de OpenRouter configurada y probada (para demostrar conectividad real con modelos LLM) y roles de modelos asignados.
 3. Tener en el escritorio o en carpeta accesible:
    - `Brief_de_ejemplo_Clinica_Alborada.docx` (o formato markdown)
@@ -75,7 +75,7 @@
 - **Qué decir:**
   > «Llegamos a la Propuesta Ejecutiva. Cada sección incluye su etiqueta de origen (`Calculado`, `Generado automáticamente`, `Revisado`).»
   > «El **Sello del Revisor** certifica de forma automática que el **100 % de las cifras proceden de las tablas calculadas** y que existen **0 incidencias deontológicas o normativas** en materia sanitaria.»
-  > «Descargamos el informe en `.docx` con formato corporativo impecable listo para entregar al cliente. Y si se tratara de una prospección comercial en frío, disponemos del modo Prospecto con un correo de 150 palabras listo para enviar.»
+  > «Descargamos el informe en `.docx` con formato corporativo impecable listo para entregar al cliente. Y si se tratara de una prospección comercial en frío, disponemos del modo Prospecto con un correo comercial ejecutivo listo para enviar.»
 - **Qué mostrar:**
   - Vista previa de la propuesta y etiquetas `OriginTag`.
   - Sello verde del Agente Revisor con 0 incidencias.

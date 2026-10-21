@@ -33,14 +33,14 @@ cd frontend && npm ci && cd ..
 ```bash
 make app
 ```
-Compila el frontend (si no está ya compilado en `frontend/dist`), inicia el servidor FastAPI en el primer puerto libre (a partir del 8000), comprueba `/api/health` y abre la interfaz en el navegador en modo aplicación.
+Compila el frontend (si no está ya compilado en `frontend/dist`), inicia el servidor FastAPI en el primer puerto libre disponible, comprueba `/api/health` y abre la interfaz en el navegador en modo aplicación.
 
 ### Modo desarrollo (Backend con recarga + Vite HMR)
 ```bash
 make dev
 ```
-- Backend FastAPI en `http://localhost:8000` (con documentación Swagger en `/api/docs`).
-- Frontend Vite con hot-reload en `http://localhost:5173` (con proxy automático hacia `/api`).
+- Backend FastAPI con documentación Swagger en `/api/docs`.
+- Frontend Vite con hot-reload y proxy automático hacia `/api`.
 
 ---
 
@@ -113,7 +113,7 @@ cd frontend && npm run typecheck && npm test
 
 ## 7. Solución de problemas comunes
 
-- **Puerto en uso**: `make app` detecta automáticamente puertos ocupados y se vincula al siguiente disponible (8000, 8001...).
+- **Puerto en uso**: `make app` detecta automáticamente puertos ocupados y se vincula al siguiente libre.
 - **El frontend no carga o muestra página en blanco**: Ejecuta `make build` para regenerar la compilación estática en `frontend/dist`.
 - **Falta la clave de OpenRouter**: La plataforma puede utilizarse íntegramente con los archivos del kit del reto sin ninguna clave configurada. Para análisis en vivo, añade tu clave en la pantalla de Ajustes.
 - **Error en subida de CSV**: Comprueba que los archivos CSV tengan codificación UTF-8 y contengan las columnas mínimas especificadas en `contracts/openapi.yaml`.
