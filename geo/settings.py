@@ -15,6 +15,8 @@ DEFAULTS: dict[str, str] = {
     "OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
     "LLM_MODEL": "google/gemini-2.5-flash",
     "LLM_MODEL_WRITER": "anthropic/claude-sonnet-4.5",
+    "LLM_MODEL_PROPOSER": "google/gemini-2.5-flash",
+    "GEO_DATA_DIR": "./data",
     "LLM_CONCURRENCY": "8",
     "MAX_LLM_CALLS": "1500",
     "MAX_BUDGET_EUR": "5.0",
