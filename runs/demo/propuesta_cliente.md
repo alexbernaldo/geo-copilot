@@ -1,6 +1,6 @@
 # Propuesta GEO (CLIENTE) — Clínica Alborada Visión
 
-> **Aviso:** Datos sintéticos del kit UFV-EPS × reload. · `run_id=demo` · Fecha: `2026-10-20 23:00`  
+> **Aviso:** Datos sintéticos del kit UFV-EPS × reload. · `run_id=demo` · Fecha: `2026-10-21 15:56`  
 > **Verificador GEO: 578/578 cifras trazables · 0 incidencias normativas · Estado: APROBADO**
 
 ## Índice de secciones
@@ -287,4 +287,4 @@ La inversión total asciende a **24,300 €**, dentro del rango presupuestario d
 
 
 ---
-_Datos sintéticos · run_id: demo · fecha: 2026-10-20 23:00_
+_Datos sintéticos · run_id: demo · fecha: 2026-10-21 15:56_

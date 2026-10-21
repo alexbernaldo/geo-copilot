@@ -358,11 +358,18 @@ def shell() -> None:
         "No representan el comportamiento real de ningún modelo de lenguaje.</span></div>",
         unsafe_allow_html=True,
     )
+    # guardia de run activo
+    try:
+        from app import ui_jobs
+        ui_jobs.guard_active_run()
+    except Exception:
+        pass
     run = get_active_run()
     ficha = run.load_ficha()
     cps = run.state.get("checkpoints", {})
     done = sum(1 for k in _CP_KEYS if cps.get(k))
     segs = "".join(f'<i class="{"on" if cps.get(k) else ""}"></i>' for k in _CP_KEYS)
+    degradados = run.state.get("degradados", {}) or {}
     with st.sidebar:
         st.markdown(
             f'<div class="geo-run"><div class="name">{escape(ficha.marca)}</div>'
@@ -371,6 +378,31 @@ def shell() -> None:
             f'<div class="cpl">Puntos de control: {done} de 4</div></div>',
             unsafe_allow_html=True,
         )
+        # coste del run si hay progress.json
+        try:
+            import json
+            from pathlib import Path
+            from geo.config import RUNS_DIR
+            prog = RUNS_DIR / run.run_id / "progress.json"
+            if prog.exists():
+                pd_ = json.loads(prog.read_text(encoding="utf-8"))
+                if pd_.get("cost_eur") is not None:
+                    st.caption(f"Coste: {pd_.get('cost_eur')} €")
+        except Exception:
+            pass
+        if degradados:
+            st.warning("Pasos en modo simulado: " + ", ".join(degradados.keys()))
+        # indicador de conexión
+        from geo import settings
+        if not settings.has_openrouter_key():
+            st.markdown(chip("OpenRouter sin configurar", ""), unsafe_allow_html=True)
+            st.page_link("pages/8_Ajustes.py", label="Ir a Ajustes")
+        elif settings.get("LLM_PROVIDER") == "openrouter":
+            st.markdown(chip(f"OpenRouter · {settings.get('LLM_MODEL')}", "good"), unsafe_allow_html=True)
+        else:
+            st.markdown(chip("Modo simulado", ""), unsafe_allow_html=True)
+        if st.button("Nuevo análisis", type="primary", use_container_width=True):
+            st.switch_page("pages/00_Nuevo_analisis.py")
         if st.button("Cargar demo", icon=":material/restart_alt:", use_container_width=True, help="Abre el análisis de demostración (runs/demo/)."):
             ensure_demo_run_ready()
             st.session_state["active_run_id"] = "demo"

@@ -1,0 +1,28 @@
+{
+  "run_id": "demo",
+  "started_at": "2026-01-01T00:00:00",
+  "elapsed_s": 12.3,
+  "provider": "mock",
+  "models": {},
+  "steps": {
+    "intake": {
+      "status": "done",
+      "duration_s": 1.2,
+      "llm_calls": 1
+    },
+    "judge": {
+      "status": "running"
+    }
+  },
+  "current": "judge",
+  "judge": {
+    "done": 214,
+    "total": 624
+  },
+  "llm_calls": 216,
+  "cost_eur": 0.081,
+  "cost_is_real": false,
+  "error": null,
+  "status": "running",
+  "degradados": {}
+}

@@ -17,8 +17,10 @@ from geo.export import export_docx, export_md
 from geo.findings import generate_findings
 from geo.intake import load_brief
 from geo.judge import judge_ensemble
+from geo.judge_llm import JUDGE_LAST_RUN
 from geo.judge_rules import judge_rules
-from geo.llm import get_llm_stats
+from geo import settings as _settings
+from geo.llm import estimate_cost_for_model, get_llm_stats, resolve_model
 from geo.loader import load_ejecuciones, load_fuentes, load_marcas
 from geo.market import build_market
 from geo.metrics import build_brand_summary_metrics, bundle
@@ -95,13 +97,34 @@ class Run:
         self.state_path: Path = self.run_dir / "state.json"
         self.trace_path: Path = self.run_dir / "trace.jsonl"
 
+        # reapertura: si existe state.json, tomar modo/provider/brief_path/marca del estado
+        if self.state_path.exists():
+            try:
+                st = json.loads(self.state_path.read_text(encoding="utf-8"))
+                if "modo" in st:
+                    self.modo = st["modo"]
+                if "provider" in st:
+                    self.provider = st["provider"]
+                if "brief_path" in st:
+                    self.brief_path = Path(st["brief_path"])
+                if "marca_prospecto" in st:
+                    self.marca_prospecto = st["marca_prospecto"]
+            except Exception:
+                pass
+
+        self.on_event = None
+        self.on_progress = None
+
         self.state: dict[str, Any] = self._load_or_init_state()
 
     def _load_or_init_state(self) -> dict[str, Any]:
         """Carga `state.json` si existe o inicializa todos los pasos en `pending`."""
         if self.state_path.exists():
             try:
-                return json.loads(self.state_path.read_text(encoding="utf-8"))
+                st = json.loads(self.state_path.read_text(encoding="utf-8"))
+                st.setdefault("models", {})
+                st.setdefault("degradados", {})
+                return st
             except Exception:
                 pass
         initial = {
@@ -111,6 +134,11 @@ class Run:
             "provider": self.provider,
             "brief_path": str(self.brief_path),
             "marca_prospecto": self.marca_prospecto,
+            "models": {
+                "juez_y_revisor": _settings.get("LLM_MODEL"),
+                "estrategia_y_redaccion": _settings.get("LLM_MODEL_WRITER"),
+            },
+            "degradados": {},
             "steps": {s: "pending" for s in PIPELINE_STEPS},
             "checkpoints": {
                 "checkpoint_0_brief": False,
@@ -135,6 +163,15 @@ class Run:
         """Actualiza y guarda el estado de un paso."""
         self.state["steps"][step] = status
         self._save_state()
+
+    def _emit(self, step: str, estado: str, info: dict[str, Any]) -> None:
+        cb = self.on_event
+        if cb is None:
+            return
+        try:
+            cb(step, estado, info or {})
+        except Exception:
+            pass
 
     def approve_checkpoint(self, checkpoint_name: str, note: str = "Aprobado") -> None:
         """Marca un checkpoint humano como aprobado y deja registro en `human_approvals`."""
@@ -244,6 +281,7 @@ class Run:
         fallback_fn=None,
         *,
         force: bool = False,
+        extra_trace=None,
     ) -> None:
         """Ejecuta un paso de forma idempotente, registrando tiempos, tokens, degradación y estado."""
         if (
@@ -294,7 +332,19 @@ class Run:
                 raise
 
         after_stats = get_llm_stats()
+        extra = {}
+        if extra_trace is not None:
+            try:
+                extra = extra_trace() or {}
+            except Exception:
+                extra = {}
+        if degradado:
+            self.state.setdefault("degradados", {})[step] = err_msg
+        else:
+            self.state.setdefault("degradados", {}).pop(step, None)
+        self._save_state()
         self.set_step_status(step, "done")
+        self._emit(step, "done", {"degradado": degradado, "llm_calls": after_stats["calls"] - before_stats["calls"], "cost_eur": round(after_stats["estimated_cost_eur"] - before_stats["estimated_cost_eur"], 6), "duration_s": round(time.perf_counter() - t0, 4)})
         self._append_trace(
             {
                 "step": step,
@@ -315,8 +365,61 @@ class Run:
                 "model": os.getenv("LLM_MODEL", LLM_MODEL) or self.provider,
                 "degradado": degradado,
                 "error": err_msg,
+                **extra,
             }
         )
+
+    def estimate(self) -> dict[str, Any]:
+        marcas = load_marcas()
+        df_ej = load_ejecuciones()
+        catalogo = load_fuentes()
+        df_det = detect(df_ej, marcas)
+        juez_model = self.state.get("models", {}).get("juez_y_revisor") or _settings.get("LLM_MODEL")
+        writer_model = self.state.get("models", {}).get("estrategia_y_redaccion") or _settings.get("LLM_MODEL_WRITER")
+        # judge workload
+        try:
+            from geo.judge_llm import estimate_judge_llm_workload
+            jw = estimate_judge_llm_workload(df_det, df_ej, model=juez_model)
+            judge_calls = int(jw.get("n_calls", 0))
+            judge_tokens_in = int(jw.get("tokens_in_est", 0))
+            judge_tokens_out = int(jw.get("tokens_out_est", 0))
+        except Exception:
+            judge_calls = 0
+            judge_tokens_in = 0
+            judge_tokens_out = 0
+        judge_eur = 0.0
+        try:
+            judge_eur = estimate_cost_for_model(juez_model, judge_tokens_in, judge_tokens_out) if judge_calls else 0.0
+        except Exception:
+            judge_eur = 0.0
+
+        conc = int(_settings.get("LLM_CONCURRENCY") or 8)
+        pasos = {
+            "intake": {"llamadas": 1, "eur": 0.0},
+            "market": {"llamadas": 0, "eur": 0.0},
+            "detect": {"llamadas": 0, "eur": 0.0},
+            "judge": {"llamadas": judge_calls, "eur": round(judge_eur, 6)},
+            "metrics": {"llamadas": 0, "eur": 0.0},
+            "findings": {"llamadas": 0, "eur": 0.0},
+            "plan": {"llamadas": 1, "eur": 0.0},
+            "review": {"llamadas": 2, "eur": 0.0},
+            "write": {"llamadas": 2, "eur": 0.0},
+            "export": {"llamadas": 0, "eur": 0.0},
+        }
+        # estimate eur for llm steps using estimate_cost_for_model with rough tokens
+        try:
+            pasos["intake"]["eur"] = round(estimate_cost_for_model(juez_model, 3000, 1000), 6)
+            pasos["plan"]["eur"] = round(estimate_cost_for_model(writer_model, 9000, 4500), 6)
+            pasos["write"]["eur"] = round(estimate_cost_for_model(writer_model, 4000, 1500) * 2, 6) if False else round(estimate_cost_for_model(writer_model, 8000, 3000), 6)
+            pasos["review"]["eur"] = round(estimate_cost_for_model(juez_model, 8000, 100), 6)
+        except Exception:
+            pass
+        total_llamadas = sum(v["llamadas"] for v in pasos.values())
+        total_eur = round(sum(v["eur"] for v in pasos.values()), 6)
+        # minutos: judge_calls/conc *3s + 60s
+        minutos = round((judge_calls / max(1, conc)) * 3 + 60, 1) / 60.0 * 60 / 60
+        minutos = round((judge_calls / max(1, conc)) * 3 / 60.0 + 1.0, 2)
+        return {"pasos": pasos, "total_llamadas": total_llamadas, "total_eur": total_eur, "minutos": minutos}
 
     def run_all(
         self,
@@ -326,6 +429,9 @@ class Run:
         stop_at_checkpoint: bool = False,
     ) -> Propuesta | None:
         """Ejecuta el pipeline desde el primer paso pendiente hasta terminar o detenerse en un checkpoint humano."""
+        if force:
+            self.state["degradados"] = {}
+            self._save_state()
         marcas = load_marcas()
         df_ej = load_ejecuciones()
         catalogo = load_fuentes()
@@ -387,11 +493,13 @@ class Run:
                 catalogo,
                 provider=self.provider,
                 persist_path=evals_file,
+                on_progress=(lambda d, t: self.on_progress("judge", d, t)) if self.on_progress else None,
             ),
             fallback_fn=lambda: judge_rules(df_det, df_ej, marcas, catalogo).to_parquet(
                 evals_file, index=False
             ),
             force=force,
+            extra_trace=lambda: {"juez_llm": dict(JUDGE_LAST_RUN)},
         )
         evals = pd.read_parquet(evals_file)
 
@@ -572,3 +680,23 @@ class Run:
         )
 
         return propuesta
+
+
+def estimate_pipeline(provider: str, models: dict[str, str] | None = None) -> dict[str, Any]:
+    """Estima el coste del pipeline sin crear carpeta, usando un run temporal en memoria."""
+    r = Run.__new__(Run)
+    # minimal init
+    r.modo = "cliente"
+    r.brief_path = BRIEF_MD
+    r.marca_prospecto = None
+    r.provider = (provider or "mock").strip().lower()
+    r.run_id = "estimate"
+    r.run_dir = RUNS_DIR / "estimate_tmp"
+    r.state_path = r.run_dir / "state.json"
+    r.trace_path = r.run_dir / "trace.jsonl"
+    r.state = {"models": models or {}, "degradados": {}, "steps": {}}
+    r.on_event = None
+    r.on_progress = None
+    if models:
+        r.state["models"] = models
+    return r.estimate()

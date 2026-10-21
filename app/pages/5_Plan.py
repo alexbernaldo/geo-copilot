@@ -39,7 +39,9 @@ from geo.simulate import (
 
 run = get_active_run()
 if not (run.run_dir / "plan.json").exists():
-    run.run_all(auto_approve=True, force=False)
+    from app.ui_shared import render_empty
+    render_empty("Análisis incompleto", "Este análisis no tiene plan todavía.")
+    st.stop()
 
 ficha = run.load_ficha()
 hallazgos = run.load_hallazgos()

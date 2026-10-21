@@ -1,10 +1,15 @@
 {
   "run_id": "demo",
-  "created_at": "2026-10-20T20:33:31",
+  "created_at": "2026-10-21T15:56:13",
   "modo": "cliente",
   "provider": "mock",
   "brief_path": "/Users/alexb/Documents/Hacking Bridge/carpeta sin título/kit/Kit Participantes Hackaton/01_Briefings/Brief_de_ejemplo_Clinica_Alborada.md",
   "marca_prospecto": null,
+  "models": {
+    "juez_y_revisor": "google/gemini-2.5-flash",
+    "estrategia_y_redaccion": "anthropic/claude-sonnet-4.5"
+  },
+  "degradados": {},
   "steps": {
     "intake": "done",
     "market": "done",
@@ -26,22 +31,22 @@
   "human_approvals": [
     {
       "checkpoint": "checkpoint_0_brief",
-      "timestamp": "2026-10-20T20:33:31",
+      "timestamp": "2026-10-21T15:56:13",
       "note": "Auto-approve CLI"
     },
     {
       "checkpoint": "checkpoint_1_competidores",
-      "timestamp": "2026-10-20T20:33:32",
+      "timestamp": "2026-10-21T15:56:14",
       "note": "Auto-approve CLI"
     },
     {
       "checkpoint": "checkpoint_2_hallazgos",
-      "timestamp": "2026-10-20T20:33:32",
+      "timestamp": "2026-10-21T15:56:14",
       "note": "Auto-approve CLI"
     },
     {
       "checkpoint": "checkpoint_3_plan",
-      "timestamp": "2026-10-20T20:33:32",
+      "timestamp": "2026-10-21T15:56:14",
       "note": "Auto-approve CLI"
     }
   ]

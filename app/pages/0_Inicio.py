@@ -96,64 +96,17 @@ with st.expander("Estado técnico del pipeline", icon=":material/account_tree:")
         items.append(f"<li><span>{STEP_LABELS.get(step_name, step_name)}</span>{chip(label, kind)}</li>")
     st.markdown(f'<ul class="geo-list">{"".join(items)}</ul>', unsafe_allow_html=True)
 
-with st.expander("Configurar una ejecución propia", icon=":material/tune:"):
-    col_a, col_b = st.columns(2, gap="large")
-    with col_a:
-        modo_sel = st.selectbox(
-            "Modo de análisis",
-            options=["cliente", "prospecto"],
-            format_func=lambda m: "Cliente (con brief)" if m == "cliente" else "Prospecto (captación sin brief)",
-        )
-        prov_sel = st.selectbox(
-            "Proveedor LLM",
-            options=["mock", "anthropic", "openai"],
-            help="Con «mock» todo el pipeline se ejecuta de forma determinista, sin red ni claves.",
-        )
-    with col_b:
-        marcas_cat = [m.nombre for m in load_marcas()]
-        marca_prospecto = None
-        uploaded_brief = None
-        if modo_sel == "prospecto":
-            marca_prospecto = st.selectbox(
-                "Marca prospecto del sector",
-                options=[m for m in marcas_cat if m != "Clínica Alborada Visión"],
-                index=2,
-            )
-        else:
-            uploaded_brief = st.file_uploader(
-                "Brief (.md, .docx o .txt)",
-                type=["md", "docx", "txt"],
-                help="Si lo dejas vacío se usa el brief de ejemplo de Clínica Alborada Visión.",
-            )
 
-    df_ej = load_ejecuciones()
-    df_det = detect(df_ej, load_marcas())
-    est = estimate_judge_llm_workload(df_det, df_ej)
-    if prov_sel == "mock":
-        st.info("Proveedor `mock`: 0 llamadas de red y coste de 0,00 €.", icon=":material/payments:")
-    else:
-        st.info(
-            f"Estimación: ~{int(est['n_calls']) + 4} llamadas (juez, estrategia, revisor y redactor), "
-            f"~{int(est['tokens_in_est']):,} tokens de entrada y ~{int(est['tokens_out_est']):,} de salida. "
-            f"Coste estimado: ~{float(est['cost_est_eur']):.4f} €.",
-            icon=":material/payments:",
-        )
-
-    if st.button("Ejecutar pipeline completo", type="primary", icon=":material/rocket_launch:"):
-        brief_target = BRIEF_MD
-        if uploaded_brief is not None:
-            tmp_brief = Path(f"/tmp/{uploaded_brief.name}")
-            tmp_brief.write_bytes(uploaded_brief.getvalue())
-            brief_target = tmp_brief
-
-        with st.spinner("Ejecutando el pipeline…"):
-            new_run = Run(
-                modo=modo_sel,  # type: ignore[arg-type]
-                brief_path=brief_target,
-                marca_prospecto=marca_prospecto,
-                provider=prov_sel,
-            )
-            new_run.run_all(auto_approve=True, force=True)
-            st.session_state["active_run_id"] = new_run.run_id
-        st.toast(f"Ejecución «{new_run.run_id}» completada.", icon=":material/check_circle:")
+st.markdown("### Empieza aquí")
+c1, c2 = st.columns(2)
+with c1:
+    st.markdown("**Abrir demostración**")
+    if st.button("Abrir demo", key="open_demo_card"):
+        from app.ui_shared import ensure_demo_run_ready
+        ensure_demo_run_ready()
+        st.session_state["active_run_id"] = "demo"
         st.rerun()
+with c2:
+    st.markdown("**Nuevo análisis con IA real**")
+    if st.button("Ir a Nuevo análisis", key="go_nuevo"):
+        st.switch_page("pages/00_Nuevo_analisis.py")

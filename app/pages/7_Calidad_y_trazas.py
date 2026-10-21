@@ -17,7 +17,9 @@ from geo.validation import CAMPOS_VALIDACION, compare
 
 run = get_active_run()
 if not (run.run_dir / "evaluaciones.parquet").exists():
-    run.run_all(auto_approve=True, force=False)
+    from app.ui_shared import render_empty
+    render_empty("Análisis incompleto", "Este análisis no tiene evaluaciones todavía.")
+    st.stop()
 
 df_eval = pd.read_parquet(run.run_dir / "evaluaciones.parquet")
 df_muestra = load_muestra()

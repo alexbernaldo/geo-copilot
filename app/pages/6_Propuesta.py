@@ -16,7 +16,9 @@ from geo.writer import write_prospect
 
 run = get_active_run()
 if not (run.run_dir / "propuesta.json").exists():
-    run.run_all(auto_approve=True, force=False)
+    from app.ui_shared import render_empty
+    render_empty("Análisis incompleto", "Este análisis no tiene propuesta todavía.")
+    st.stop()
 
 propuesta_cliente = run.load_propuesta()
 tablas = run.load_tablas()
@@ -76,7 +78,7 @@ with tab_cliente:
         )
     with col_regen:
         if st.button("Regenerar desde el plan actual", icon=":material/refresh:", use_container_width=True):
-            run.run_all(auto_approve=True, force=True)
+            st.warning("Regeneración vía jobs pendiente de implementación.")
             st.rerun()
 
     section("Lectura de la propuesta", f"{len(propuesta_cliente.secciones)} secciones")

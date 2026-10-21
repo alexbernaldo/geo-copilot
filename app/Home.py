@@ -17,7 +17,10 @@ st.set_page_config(
 )
 
 pages = {
-    "": [st.Page("pages/0_Inicio.py", title="Inicio", icon=":material/home:", default=True)],
+    "": [
+        st.Page("pages/0_Inicio.py", title="Inicio", icon=":material/home:", default=True),
+        st.Page("pages/00_Nuevo_analisis.py", title="Nuevo análisis", icon=":material/add_circle:", url_path="nuevo"),
+    ],
     "Análisis": [
         st.Page("pages/1_Brief.py", title="Ficha", icon=":material/assignment:", url_path="ficha"),
         st.Page("pages/2_Competidores.py", title="Competencia", icon=":material/groups:", url_path="competencia"),
@@ -30,6 +33,8 @@ pages = {
     ],
     "Control": [
         st.Page("pages/7_Calidad_y_trazas.py", title="Calidad y trazas", icon=":material/verified:", url_path="calidad"),
+        st.Page("pages/9_Historial.py", title="Historial", icon=":material/history:", url_path="historial"),
+        st.Page("pages/8_Ajustes.py", title="Ajustes", icon=":material/settings:", url_path="ajustes"),
     ],
 }
 

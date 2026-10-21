@@ -9,6 +9,8 @@ from typing import Any, TypeVar
 from pydantic import BaseModel, ValidationError
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
+import threading
+
 from geo.config import (
     ANTHROPIC_API_KEY,
     CACHE_DIR,
@@ -17,12 +19,18 @@ from geo.config import (
     MAX_LLM_CALLS,
     OPENAI_API_KEY,
 )
+from geo import settings as _settings
+from geo import openrouter as _openrouter
 
 T = TypeVar("T", bound=BaseModel)
 
 # Precios orientativos por millón de tokens (USD/EUR aprox. para modelos rápidos tipo Haiku / GPT-4o-mini)
 DEFAULT_PRICE_IN_PER_M: float = 0.25
 DEFAULT_PRICE_OUT_PER_M: float = 1.25
+
+
+class LLMConfigError(RuntimeError):
+    """Error no recuperable de configuración o del proveedor (clave, saldo, modelo)."""
 
 
 class LLMCallLimitError(RuntimeError):
@@ -37,6 +45,7 @@ class _LLMTracker:
     """Registro global en memoria de llamadas, tokens y aciertos de caché."""
 
     def __init__(self) -> None:
+        self.lock = threading.Lock()
         self.reset()
 
     def reset(self) -> None:
@@ -45,6 +54,8 @@ class _LLMTracker:
         self.tokens_in: int = 0
         self.tokens_out: int = 0
         self.records: list[dict[str, Any]] = []
+        self.cost_eur: float = 0.0
+        self.cost_is_real: bool = False
 
 
 _TRACKER = _LLMTracker()
@@ -52,18 +63,26 @@ _TRACKER = _LLMTracker()
 
 def get_llm_stats() -> dict[str, Any]:
     """Devuelve estadísticas acumuladas de uso del cliente LLM en el proceso actual."""
-    cost_est = estimate_cost(
-        _TRACKER.calls,
-        _TRACKER.tokens_in,
-        _TRACKER.tokens_out,
-    )
+    with _TRACKER.lock:
+        calls = _TRACKER.calls
+        cache_hits = _TRACKER.cache_hits
+        tokens_in = _TRACKER.tokens_in
+        tokens_out = _TRACKER.tokens_out
+        records = list(_TRACKER.records)
+        cost_eur = _TRACKER.cost_eur
+        cost_is_real = _TRACKER.cost_is_real
+    if cost_eur > 0:
+        estimated = cost_eur
+    else:
+        estimated = estimate_cost(calls, tokens_in, tokens_out)
     return {
-        "calls": _TRACKER.calls,
-        "cache_hits": _TRACKER.cache_hits,
-        "tokens_in": _TRACKER.tokens_in,
-        "tokens_out": _TRACKER.tokens_out,
-        "estimated_cost_eur": round(cost_est, 6),
-        "records": list(_TRACKER.records),
+        "calls": calls,
+        "cache_hits": cache_hits,
+        "tokens_in": tokens_in,
+        "tokens_out": tokens_out,
+        "estimated_cost_eur": round(estimated, 6),
+        "cost_is_real": cost_is_real,
+        "records": records,
     }
 
 
@@ -87,6 +106,39 @@ def estimate_cost(
     if n_calls <= 0:
         return 0.0
     return (tok_in * price_in + tok_out * price_out) / 1_000_000.0
+
+
+def resolve_model(provider: str, prompt_version: str, model: str | None = None) -> str:
+    if model:
+        return model
+    if (provider or "").strip().lower() == "mock":
+        return "mock"
+    pv = (prompt_version or "").lower()
+    if pv.startswith("strategy") or pv.startswith("writer"):
+        w = _settings.get("LLM_MODEL_WRITER").strip()
+        if w:
+            return w
+    m = _settings.get("LLM_MODEL").strip()
+    return m or "mock"
+
+
+def estimate_cost_for_model(model: str, tok_in: int, tok_out: int) -> float:
+    price = _openrouter.model_price(model)
+    if price is None:
+        try:
+            price = (_settings.get_float("USD_EUR") and None) or None
+        except Exception:
+            price = None
+    if price is None:
+        pin = DEFAULT_PRICE_IN_PER_M / 1_000_000.0
+        pout = DEFAULT_PRICE_OUT_PER_M / 1_000_000.0
+    else:
+        pin, pout = price
+    usd = (tok_in * pin + tok_out * pout)
+    eur_rate = _settings.get_float("USD_EUR")
+    return usd * eur_rate
+
+
 
 
 def _compute_cache_key(
@@ -130,12 +182,29 @@ def _call_provider_raw(
     system: str,
     user: str,
     temperature: float,
-) -> tuple[str, int, int]:
-    """Realiza una llamada al proveedor ('anthropic' u 'openai') con reintentos tenacity."""
-    if provider == "anthropic":
-        api_key = os.getenv("ANTHROPIC_API_KEY", ANTHROPIC_API_KEY).strip()
+) -> tuple[str, int, int, float | None]:
+    """Realiza una llamada al proveedor con reintentos tenacity. Devuelve (texto, tok_in, tok_out, coste_usd)."""
+    active_provider = (provider or "").strip().lower()
+
+    if active_provider == "openrouter":
+        try:
+            res = _openrouter.chat(
+                [{"role": "system", "content": system}, {"role": "user", "content": user}],
+                model=model,
+                temperature=temperature,
+                json_mode=True,
+                retries=2,
+            )
+            return res.text, res.tokens_in, res.tokens_out, res.cost_usd
+        except _openrouter.OpenRouterError as exc:
+            if not getattr(exc, "retryable", False):
+                raise LLMConfigError(str(exc)) from exc
+            raise LLMProviderError(str(exc)) from exc
+
+    if active_provider == "anthropic":
+        api_key = _settings.get("ANTHROPIC_API_KEY").strip() or os.getenv("ANTHROPIC_API_KEY", ANTHROPIC_API_KEY).strip()
         if not api_key:
-            raise LLMProviderError("Falta ANTHROPIC_API_KEY para usar LLM_PROVIDER=anthropic.")
+            raise LLMConfigError("Falta ANTHROPIC_API_KEY para usar LLM_PROVIDER=anthropic.")
         try:
             import anthropic  # type: ignore[import-not-found]
 
@@ -153,14 +222,14 @@ def _call_provider_raw(
             )
             tok_in = int(getattr(resp.usage, "input_tokens", len(system + user) // 4))
             tok_out = int(getattr(resp.usage, "output_tokens", len(text_out) // 4))
-            return text_out, tok_in, tok_out
+            return text_out, tok_in, tok_out, None
         except Exception as exc:
             raise LLMProviderError(f"Error en llamada Anthropic: {exc}") from exc
 
-    if provider == "openai":
-        api_key = os.getenv("OPENAI_API_KEY", OPENAI_API_KEY).strip()
+    if active_provider == "openai":
+        api_key = _settings.get("OPENAI_API_KEY").strip() or os.getenv("OPENAI_API_KEY", OPENAI_API_KEY).strip()
         if not api_key:
-            raise LLMProviderError("Falta OPENAI_API_KEY para usar LLM_PROVIDER=openai.")
+            raise LLMConfigError("Falta OPENAI_API_KEY para usar LLM_PROVIDER=openai.")
         try:
             import openai  # type: ignore[import-not-found]
 
@@ -179,7 +248,7 @@ def _call_provider_raw(
             usage = resp.usage
             tok_in = int(usage.prompt_tokens if usage else len(system + user) // 4)
             tok_out = int(usage.completion_tokens if usage else len(text_out) // 4)
-            return text_out, tok_in, tok_out
+            return text_out, tok_in, tok_out, None
         except Exception as exc:
             raise LLMProviderError(f"Error en llamada OpenAI: {exc}") from exc
 
@@ -205,8 +274,11 @@ def complete_json(
     - Si la respuesta ya está en `cache/<sha256>.json`, la devuelve sin consumir llamadas nuevas (`cache_hits += 1`).
     - Si el JSON devuelto por el proveedor no valida contra `schema`, reintenta una vez pasando el error de validación.
     """
-    active_provider = (provider or os.getenv("LLM_PROVIDER", LLM_PROVIDER) or "mock").strip().lower()
-    active_model = (model or os.getenv("LLM_MODEL", LLM_MODEL) or active_provider).strip()
+    active_provider = (provider or _settings.get("LLM_PROVIDER") or LLM_PROVIDER or "mock").strip().lower()
+    if model is None:
+        active_model = resolve_model(active_provider, prompt_version, None)
+    else:
+        active_model = resolve_model(active_provider, prompt_version, model)
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     digest = _compute_cache_key(
@@ -223,16 +295,27 @@ def complete_json(
         try:
             cached_payload = json.loads(cache_file.read_text(encoding="utf-8"))
             validated = schema.model_validate(cached_payload["data"])
-            _TRACKER.cache_hits += 1
+            with _TRACKER.lock:
+                _TRACKER.cache_hits += 1
             return validated
         except Exception:
             pass
 
-    max_calls = int(os.getenv("MAX_LLM_CALLS", str(MAX_LLM_CALLS)).strip() or MAX_LLM_CALLS)
-    if _TRACKER.calls >= max_calls:
+    max_calls = int(_settings.get("MAX_LLM_CALLS") or MAX_LLM_CALLS)
+    with _TRACKER.lock:
+        cur_calls = _TRACKER.calls
+        cur_cost = _TRACKER.cost_eur
+    if cur_calls >= max_calls:
         raise LLMCallLimitError(
             f"Se alcanzó el tope máximo de llamadas LLM ({max_calls})."
         )
+    if active_provider != "mock":
+        try:
+            budget = float(_settings.get("MAX_BUDGET_EUR") or 0)
+        except ValueError:
+            budget = 0.0
+        if budget > 0 and cur_cost >= budget:
+            raise LLMCallLimitError(f"Se alcanzó el tope de gasto de la ejecución ({budget} €).")
 
     if active_provider == "mock":
         if mock_builder is not None:
@@ -247,10 +330,11 @@ def complete_json(
 
         tok_in = max(1, len(system + user) // 4)
         tok_out = max(1, len(validated.model_dump_json()) // 4)
-        _TRACKER.calls += 1
-        _TRACKER.tokens_in += tok_in
-        _TRACKER.tokens_out += tok_out
-        _TRACKER.records.append(
+        with _TRACKER.lock:
+            _TRACKER.calls += 1
+            _TRACKER.tokens_in += tok_in
+            _TRACKER.tokens_out += tok_out
+            _TRACKER.records.append(
             {
                 "provider": "mock",
                 "model": "mock",
@@ -284,16 +368,32 @@ def complete_json(
         f"{schema_hint}"
     )
 
-    raw_text, tok_in, tok_out = _call_provider_raw(
+    raw_text, tok_in, tok_out, cost_usd = _call_provider_raw(
         provider=active_provider,
         model=active_model,
         system=enriched_system,
         user=user,
         temperature=temperature,
     )
-    _TRACKER.calls += 1
-    _TRACKER.tokens_in += tok_in
-    _TRACKER.tokens_out += tok_out
+    with _TRACKER.lock:
+        _TRACKER.calls += 1
+        _TRACKER.tokens_in += tok_in
+        _TRACKER.tokens_out += tok_out
+        if cost_usd is not None:
+            _TRACKER.cost_eur += cost_usd * _settings.get_float("USD_EUR")
+            _TRACKER.cost_is_real = True
+        else:
+            _TRACKER.cost_eur += estimate_cost_for_model(active_model, tok_in, tok_out)
+        _TRACKER.records.append(
+            {
+                "provider": active_provider,
+                "model": active_model,
+                "prompt_version": prompt_version,
+                "tokens_in": tok_in,
+                "tokens_out": tok_out,
+                "cache_file": cache_file.name,
+            }
+        )
 
     try:
         parsed = json.loads(_extract_json_str(raw_text))
@@ -308,16 +408,22 @@ def complete_json(
             f"Tu respuesta anterior falló la validación JSON/Pydantic con este error:\n{err}\n"
             "Corrige y devuelve únicamente el JSON válido."
         )
-        raw_text2, tok_in2, tok_out2 = _call_provider_raw(
+        raw_text2, tok_in2, tok_out2, cost_usd2 = _call_provider_raw(
             provider=active_provider,
             model=active_model,
             system=enriched_system,
             user=retry_user,
             temperature=temperature,
         )
-        _TRACKER.calls += 1
-        _TRACKER.tokens_in += tok_in2
-        _TRACKER.tokens_out += tok_out2
+        with _TRACKER.lock:
+            _TRACKER.calls += 1
+            _TRACKER.tokens_in += tok_in2
+            _TRACKER.tokens_out += tok_out2
+            if cost_usd2 is not None:
+                _TRACKER.cost_eur += cost_usd2 * _settings.get_float("USD_EUR")
+                _TRACKER.cost_is_real = True
+            else:
+                _TRACKER.cost_eur += estimate_cost_for_model(active_model, tok_in2, tok_out2)
         tok_in += tok_in2
         tok_out += tok_out2
         parsed2 = json.loads(_extract_json_str(raw_text2))

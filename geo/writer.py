@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from geo.config import LLM_MODEL_WRITER, LLM_PROVIDER, PROMPTS_DIR
 from geo.findings import generate_findings
-from geo.llm import complete_json, get_llm_stats
+from geo.llm import complete_json, get_llm_stats, resolve_model
 from geo.metrics import build_brand_summary_metrics
 from geo.reviewer import compliance, verify_numbers
 from geo.schemas import (
@@ -435,11 +435,7 @@ def write_client(
 ) -> Propuesta:
     """Genera la Propuesta completa en modo cliente (10 secciones + anexo), verificada por reviewer."""
     active_provider = (provider or os.getenv("LLM_PROVIDER", LLM_PROVIDER) or "mock").strip().lower()
-    active_model = (
-        model
-        or os.getenv("LLM_MODEL_WRITER", LLM_MODEL_WRITER)
-        or active_provider
-    ).strip()
+    active_model = resolve_model(active_provider, "writer_client_v1", model)
 
     metrics_summary = build_brand_summary_metrics(tablas, marca_brief=ficha.marca)
     code_tables = _build_code_tables_client(ficha, tablas, plan)
@@ -715,11 +711,7 @@ def write_prospect(
 ) -> Propuesta:
     """Genera una propuesta comercial en modo prospecto (gancho, 3 hallazgos, 3 acciones y correo de 120-180 palabras)."""
     active_provider = (provider or os.getenv("LLM_PROVIDER", LLM_PROVIDER) or "mock").strip().lower()
-    active_model = (
-        model
-        or os.getenv("LLM_MODEL_WRITER", LLM_MODEL_WRITER)
-        or active_provider
-    ).strip()
+    active_model = resolve_model(active_provider, "writer_client_v1", model)
 
     ficha_prosp = build_default_prospect_ficha(marca, marcas_catalogo)
     hallazgos_prosp = generate_findings(tablas, ficha=ficha_prosp)[:3]

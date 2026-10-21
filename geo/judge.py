@@ -5,7 +5,7 @@ from typing import Sequence
 import pandas as pd
 
 from geo.config import SOURCE_QUALITY_BY_TYPE
-from geo.judge_llm import judge_llm
+from geo.judge_llm import JUDGE_LAST_RUN, judge_llm
 from geo.judge_rules import assign_source_for_brand, judge_rules
 from geo.schemas import Ejecucion, Evaluacion, Marca, TipoFuente
 
@@ -145,6 +145,7 @@ def judge_ensemble(
     model: str | None = None,
     use_cache: bool = True,
     persist_path: Path | None = None,
+    on_progress=None,
 ) -> pd.DataFrame:
     """Ejecuta el juez por reglas y el juez LLM, los combina en ensemble y opcionalmente persiste en Parquet."""
     df_rules = judge_rules(df_detection, ejecuciones, marcas, catalogo)
@@ -156,6 +157,7 @@ def judge_ensemble(
         provider=provider,
         model=model,
         use_cache=use_cache,
+        on_progress=on_progress,
     )
     df_ens = combine_rules_and_llm(df_rules, df_llm, ejecuciones, marcas, catalogo)
     if persist_path is not None:

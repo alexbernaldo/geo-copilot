@@ -1078,12 +1078,12 @@
   },
   "metadatos": {
     "run_id": "demo",
-    "fecha": "2026-10-20 23:00",
+    "fecha": "2026-10-21 15:56",
     "proveedor": "mock",
     "modelo": "mock",
     "prompt_version": "writer_client_v1",
-    "coste_estimado_llm_eur": 0.011392,
-    "llm_calls": 4,
+    "coste_estimado_llm_eur": 0.509633,
+    "llm_calls": 629,
     "iteraciones_reescritura": 0,
     "revision_antes_reescritura": {
       "incidencias": [],

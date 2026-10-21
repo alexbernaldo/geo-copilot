@@ -13,3 +13,9 @@ venv/
 /Kit Participantes Hackaton/
 /PLAN_GEO_COPILOT.md
 .opencode/
+.playwright-mcp/
+entregables_geo_copilot.zip
+node_modules/
+frontend/dist/
+data/projects/
+data/cache/
