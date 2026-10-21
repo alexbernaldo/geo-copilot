@@ -1,0 +1,23 @@
+[
+  {
+    "id": "p_20261021_153012_ab12cd",
+    "nombre": "Clínica Alborada Visión",
+    "tipo": "cliente",
+    "marca": "Clínica Alborada Visión",
+    "sector": "Sanidad privada",
+    "origen_datos": "csv",
+    "revision": "pausas",
+    "estado": "completado",
+    "punto_control_pendiente": null,
+    "checkpoints": {
+      "ficha": true,
+      "competencia": true,
+      "hallazgos": true,
+      "plan": true
+    },
+    "coste_eur": 0.0,
+    "creado": "2026-10-21T15:30:12Z",
+    "actualizado": "2026-10-21T15:42:03Z",
+    "archivado": false
+  }
+]

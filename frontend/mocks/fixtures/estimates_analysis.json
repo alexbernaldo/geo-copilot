@@ -1,0 +1,17 @@
+{
+  "pasos": [
+    {
+      "id": "judge",
+      "nombre": "Juez",
+      "llamadas": 624,
+      "tokens_in": 900000,
+      "tokens_out": 90000,
+      "eur": 1.1
+    }
+  ],
+  "total_llamadas": 624,
+  "total_eur": 1.1,
+  "minutos": 6.5,
+  "supera_tope": false,
+  "tope_eur": 15.0
+}

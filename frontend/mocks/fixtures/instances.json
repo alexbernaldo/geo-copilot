@@ -1,0 +1,391 @@
+[
+  {
+    "prompt_id": "OFT-DG-01",
+    "prompt": "¿Cuáles son las mejores clínicas oftalmológicas de España para operarse la vista?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DG-02",
+    "prompt": "Estoy pensando en dejar de usar gafas. ¿Qué clínicas de cirugía láser me recomendarías en España?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DG-03",
+    "prompt": "¿Qué clínicas privadas destacan ahora mismo en el tratamiento de cataratas?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DP-01",
+    "prompt": "Tengo 45 años, bastante miopía y quiero dejar de usar gafas. ¿Qué clínica me recomendarías para operarme la vista?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DP-02",
+    "prompt": "A mi madre de 70 años le han diagnosticado cataratas. ¿En qué clínica oftalmológica la operaríais?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DP-03",
+    "prompt": "Soy piloto de aviación y necesito una cirugía refractiva compatible con mi licencia. ¿Qué centros valorarías?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DP-04",
+    "prompt": "Mi hijo de 12 años tiene miopía progresiva. ¿Qué clínicas oftalmológicas con unidad pediátrica recomendarías?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-CO-01",
+    "prompt": "Compara las principales clínicas de cirugía ocular en España: reputación, tecnología y precio.",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-CO-02",
+    "prompt": "¿Qué diferencias hay entre operarse con láser en una cadena low cost y en un hospital privado? ¿Qué centros compararías?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-CO-03",
+    "prompt": "Quiero comparar clínicas para una operación de cataratas con lente intraocular premium. ¿Qué opciones valorarías?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-CM-01",
+    "prompt": "Diferencias entre Instituto Oftálmico Tramuntana y Clínica Alborada Visión a la hora de elegir dónde operarme la vista.",
+    "instanciacion": "par",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-CM-02",
+    "prompt": "¿Instituto Oftálmico Tramuntana o Clínica Alborada Visión? ¿Cuál elegirías para una cirugía refractiva y por qué?",
+    "instanciacion": "par",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-CM-03",
+    "prompt": "¿Qué ventajas tiene Instituto Oftálmico Tramuntana frente a otras clínicas oftalmológicas?",
+    "instanciacion": "marca",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-VR-01",
+    "prompt": "¿Qué percepción tienen los pacientes de Instituto Oftálmico Tramuntana?",
+    "instanciacion": "marca",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-VR-02",
+    "prompt": "¿Qué debería revisar antes de operarme en Instituto Oftálmico Tramuntana?",
+    "instanciacion": "marca",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-VR-03",
+    "prompt": "¿Qué riesgos o inconvenientes debería considerar antes de elegir Instituto Oftálmico Tramuntana?",
+    "instanciacion": "marca",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DF-01",
+    "prompt": "Ya he comparado varias clínicas para operarme la vista y tengo que decidirme esta semana. ¿Cuál elegirías tú y por qué?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DF-02",
+    "prompt": "Estoy a punto de pedir cita en Instituto Oftálmico Tramuntana para operarme. ¿Es una buena elección o mirarías otra opción?",
+    "instanciacion": "marca",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-DF-03",
+    "prompt": "Dame tu recomendación final: ¿qué clínica elegirías para operarme de cataratas en España?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-PR-01",
+    "prompt": "¿Qué clínica ofrece la mejor relación calidad-precio para la cirugía láser ocular?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-PR-02",
+    "prompt": "Tengo un presupuesto ajustado para operarme la miopía, pero no quiero renunciar a seguridad. ¿Qué me recomiendas?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-FU-01",
+    "prompt": "Recomiéndame 5 clínicas oftalmológicas destacadas en España y cita las fuentes en las que te basas.",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-FU-02",
+    "prompt": "¿En qué rankings, medios o reseñas te basas para recomendar clínicas de oftalmología?",
+    "instanciacion": "generico",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-LO-01",
+    "prompt": "¿Qué clínica oftalmológica recomendada hay en Madrid para cirugía láser?",
+    "instanciacion": "ciudad",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  },
+  {
+    "prompt_id": "OFT-LO-02",
+    "prompt": "Busco una clínica de cataratas con buena reputación en Madrid. ¿Cuál me recomiendas?",
+    "instanciacion": "ciudad",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "ciudad": null
+  }
+]

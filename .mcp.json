@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp"
+    },
+    "lovable": {
+      "type": "http",
+      "url": "https://mcp.lovable.dev"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest",
+        "--isolated",
+        "--headless"
+      ],
+      "env": {}
+    }
+  }
+}

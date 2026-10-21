@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+/* Tokens provisionales de W0. D los sustituye en W1 según DESIGN.md. */
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --brand-project: #1f6feb;
+  --brand-leader: #d9822b;
+  --brand-neutral: #8b95a1;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #111418; --fg: #e8eaed; }
+}
+body { background: var(--bg); color: var(--fg); }

@@ -1,0 +1,101 @@
+{
+  "estado": "completado",
+  "paso_actual": null,
+  "pasos": [
+    {
+      "id": "intake",
+      "nombre": "Ficha",
+      "estado": "hecho",
+      "duracion_s": 0.002,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "detect",
+      "nombre": "Detección",
+      "estado": "hecho",
+      "duracion_s": 0.5546,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "judge",
+      "nombre": "Juez",
+      "estado": "hecho",
+      "duracion_s": 0.2294,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "metrics",
+      "nombre": "Métricas",
+      "estado": "hecho",
+      "duracion_s": 0.3397,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "market",
+      "nombre": "Mercado",
+      "estado": "hecho",
+      "duracion_s": 0.0052,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "findings",
+      "nombre": "Hallazgos",
+      "estado": "hecho",
+      "duracion_s": 0.0049,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "plan",
+      "nombre": "Plan",
+      "estado": "hecho",
+      "duracion_s": 0.0052,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "write",
+      "nombre": "Redacción",
+      "estado": "hecho",
+      "duracion_s": 0.0783,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "review",
+      "nombre": "Revisión",
+      "estado": "hecho",
+      "duracion_s": 0.0445,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    },
+    {
+      "id": "export",
+      "nombre": "Exportación",
+      "estado": "hecho",
+      "duracion_s": 0.0862,
+      "llamadas": 0,
+      "coste_eur": 0.0,
+      "error": null
+    }
+  ],
+  "contador": null,
+  "llamadas": 0,
+  "coste_eur": 0.0,
+  "coste_real": false,
+  "transcurrido_s": 1.35
+}

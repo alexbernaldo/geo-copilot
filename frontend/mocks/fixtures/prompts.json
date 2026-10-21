@@ -1,0 +1,229 @@
+{
+  "prompts": [
+    {
+      "prompt_id": "OFT-DG-01",
+      "familia": "Descubrimiento genérico",
+      "intencion": "Descubrimiento",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "¿Cuáles son las mejores clínicas oftalmológicas de España para operarse la vista?"
+    },
+    {
+      "prompt_id": "OFT-DG-02",
+      "familia": "Descubrimiento genérico",
+      "intencion": "Descubrimiento",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Estoy pensando en dejar de usar gafas. ¿Qué clínicas de cirugía láser me recomendarías en España?"
+    },
+    {
+      "prompt_id": "OFT-DG-03",
+      "familia": "Descubrimiento genérico",
+      "intencion": "Descubrimiento",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "¿Qué clínicas privadas destacan ahora mismo en el tratamiento de cataratas?"
+    },
+    {
+      "prompt_id": "OFT-DP-01",
+      "familia": "Descubrimiento por perfil",
+      "intencion": "Descubrimiento",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Tengo 45 años, bastante miopía y quiero dejar de usar gafas. ¿Qué clínica me recomendarías para operarme la vista?"
+    },
+    {
+      "prompt_id": "OFT-DP-02",
+      "familia": "Descubrimiento por perfil",
+      "intencion": "Descubrimiento",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "A mi madre de 70 años le han diagnosticado cataratas. ¿En qué clínica oftalmológica la operaríais?"
+    },
+    {
+      "prompt_id": "OFT-DP-03",
+      "familia": "Descubrimiento por perfil",
+      "intencion": "Descubrimiento",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Soy piloto de aviación y necesito una cirugía refractiva compatible con mi licencia. ¿Qué centros valorarías?"
+    },
+    {
+      "prompt_id": "OFT-DP-04",
+      "familia": "Descubrimiento por perfil",
+      "intencion": "Descubrimiento",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Mi hijo de 12 años tiene miopía progresiva. ¿Qué clínicas oftalmológicas con unidad pediátrica recomendarías?"
+    },
+    {
+      "prompt_id": "OFT-CO-01",
+      "familia": "Comparación de opciones",
+      "intencion": "Comparación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Compara las principales clínicas de cirugía ocular en España: reputación, tecnología y precio."
+    },
+    {
+      "prompt_id": "OFT-CO-02",
+      "familia": "Comparación de opciones",
+      "intencion": "Comparación",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "¿Qué diferencias hay entre operarse con láser en una cadena low cost y en un hospital privado? ¿Qué centros compararías?"
+    },
+    {
+      "prompt_id": "OFT-CO-03",
+      "familia": "Comparación de opciones",
+      "intencion": "Comparación",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Quiero comparar clínicas para una operación de cataratas con lente intraocular premium. ¿Qué opciones valorarías?"
+    },
+    {
+      "prompt_id": "OFT-CM-01",
+      "familia": "Comparación de marcas",
+      "intencion": "Comparación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "par",
+      "plantilla": "Diferencias entre [MARCA_A] y [MARCA_B] a la hora de elegir dónde operarme la vista."
+    },
+    {
+      "prompt_id": "OFT-CM-02",
+      "familia": "Comparación de marcas",
+      "intencion": "Comparación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "par",
+      "plantilla": "¿[MARCA_A] o [MARCA_B]? ¿Cuál elegirías para una cirugía refractiva y por qué?"
+    },
+    {
+      "prompt_id": "OFT-CM-03",
+      "familia": "Comparación de marcas",
+      "intencion": "Comparación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "marca",
+      "plantilla": "¿Qué ventajas tiene [MARCA_A] frente a otras clínicas oftalmológicas?"
+    },
+    {
+      "prompt_id": "OFT-VR-01",
+      "familia": "Validación reputacional",
+      "intencion": "Validación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "marca",
+      "plantilla": "¿Qué percepción tienen los pacientes de [MARCA_A]?"
+    },
+    {
+      "prompt_id": "OFT-VR-02",
+      "familia": "Validación reputacional",
+      "intencion": "Validación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "marca",
+      "plantilla": "¿Qué debería revisar antes de operarme en [MARCA_A]?"
+    },
+    {
+      "prompt_id": "OFT-VR-03",
+      "familia": "Validación reputacional",
+      "intencion": "Validación",
+      "prioridad": "P2",
+      "uso": "Diagnóstico",
+      "instanciacion": "marca",
+      "plantilla": "¿Qué riesgos o inconvenientes debería considerar antes de elegir [MARCA_A]?"
+    },
+    {
+      "prompt_id": "OFT-DF-01",
+      "familia": "Decisión final",
+      "intencion": "Decisión",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Ya he comparado varias clínicas para operarme la vista y tengo que decidirme esta semana. ¿Cuál elegirías tú y por qué?"
+    },
+    {
+      "prompt_id": "OFT-DF-02",
+      "familia": "Decisión final",
+      "intencion": "Decisión",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "marca",
+      "plantilla": "Estoy a punto de pedir cita en [MARCA_A] para operarme. ¿Es una buena elección o mirarías otra opción?"
+    },
+    {
+      "prompt_id": "OFT-DF-03",
+      "familia": "Decisión final",
+      "intencion": "Decisión",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Dame tu recomendación final: ¿qué clínica elegirías para operarme de cataratas en España?"
+    },
+    {
+      "prompt_id": "OFT-PR-01",
+      "familia": "Precio y valor",
+      "intencion": "Decisión",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "¿Qué clínica ofrece la mejor relación calidad-precio para la cirugía láser ocular?"
+    },
+    {
+      "prompt_id": "OFT-PR-02",
+      "familia": "Precio y valor",
+      "intencion": "Decisión",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Tengo un presupuesto ajustado para operarme la miopía, pero no quiero renunciar a seguridad. ¿Qué me recomiendas?"
+    },
+    {
+      "prompt_id": "OFT-FU-01",
+      "familia": "Fuentes y citación",
+      "intencion": "Validación",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "generico",
+      "plantilla": "Recomiéndame 5 clínicas oftalmológicas destacadas en España y cita las fuentes en las que te basas."
+    },
+    {
+      "prompt_id": "OFT-FU-02",
+      "familia": "Fuentes y citación",
+      "intencion": "Validación",
+      "prioridad": "P2",
+      "uso": "Diagnóstico",
+      "instanciacion": "generico",
+      "plantilla": "¿En qué rankings, medios o reseñas te basas para recomendar clínicas de oftalmología?"
+    },
+    {
+      "prompt_id": "OFT-LO-01",
+      "familia": "Localización",
+      "intencion": "Descubrimiento",
+      "prioridad": "P1",
+      "uso": "Publicable",
+      "instanciacion": "ciudad",
+      "plantilla": "¿Qué clínica oftalmológica recomendada hay en [CIUDAD] para cirugía láser?"
+    },
+    {
+      "prompt_id": "OFT-LO-02",
+      "familia": "Localización",
+      "intencion": "Descubrimiento",
+      "prioridad": "P2",
+      "uso": "Publicable",
+      "instanciacion": "ciudad",
+      "plantilla": "Busco una clínica de cataratas con buena reputación en [CIUDAD]. ¿Cuál me recomiendas?"
+    }
+  ]
+}

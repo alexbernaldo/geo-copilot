@@ -1,0 +1,55 @@
+{
+  "validacion": {
+    "disponible": false,
+    "campos": [],
+    "n": 0
+  },
+  "discrepancias": [],
+  "aprobaciones": [
+    {
+      "punto_control": 0,
+      "nombre": "checkpoint_0_brief",
+      "fecha": "2026-10-21T16:31:00",
+      "nota": "Auto-approve CLI",
+      "automatica": true
+    },
+    {
+      "punto_control": 1,
+      "nombre": "checkpoint_1_competidores",
+      "fecha": "2026-10-21T16:31:02",
+      "nota": "Auto-approve CLI",
+      "automatica": true
+    },
+    {
+      "punto_control": 2,
+      "nombre": "checkpoint_2_hallazgos",
+      "fecha": "2026-10-21T16:31:02",
+      "nota": "Auto-approve CLI",
+      "automatica": true
+    },
+    {
+      "punto_control": 3,
+      "nombre": "checkpoint_3_plan",
+      "fecha": "2026-10-21T16:31:02",
+      "nota": "Auto-approve CLI",
+      "automatica": true
+    }
+  ],
+  "muestra_para_etiquetar": [
+    "EJ-0001",
+    "EJ-0002",
+    "EJ-0003",
+    "EJ-0004",
+    "EJ-0005",
+    "EJ-0006",
+    "EJ-0007",
+    "EJ-0008",
+    "EJ-0009",
+    "EJ-0010",
+    "EJ-0011",
+    "EJ-0012",
+    "EJ-0013",
+    "EJ-0014",
+    "EJ-0015"
+  ]
+}

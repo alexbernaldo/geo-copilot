@@ -1,0 +1,3500 @@
+openapi: 3.0.3
+info:
+  license:
+    name: Uso interno
+  title: GEO Copilot API
+  version: 1.0.0
+  description: Contrato de la API (fuente de verdad). Todas las rutas van bajo /api. Textos de error en español. Ninguna GET llama a OpenRouter.
+servers:
+- url: /api
+tags:
+- name: projects
+- name: inputs
+- name: study
+- name: estimates
+- name: run
+- name: ficha
+- name: market
+- name: findings
+- name: plan
+- name: checkpoints
+- name: results
+- name: exports
+- name: quality
+- name: traces
+- name: settings
+- name: meta
+security: []
+paths:
+  /projects:
+    get:
+      summary: Lista de proyectos
+      tags:
+      - projects
+      operationId: get_projects
+      parameters:
+      - name: estado
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: archivados
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+              example:
+              - id: p_20261021_153012_ab12cd
+                nombre: Academia Lingua
+                tipo: cliente
+                marca: Academia Lingua
+                sector: Educación
+                origen_datos: csv
+                revision: pausas
+                estado: esperando_revision
+                punto_control_pendiente: 1
+                checkpoints:
+                  ficha: true
+                  competencia: false
+                  hallazgos: false
+                  plan: false
+                coste_eur: 0.0
+                creado: '2026-10-21T15:30:12Z'
+                actualizado: '2026-10-21T15:42:03Z'
+                archivado: false
+    post:
+      summary: Crea un borrador
+      tags:
+      - projects
+      operationId: post_projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+            example:
+              nombre: Academia Lingua
+              tipo: cliente
+      responses:
+        '201':
+          description: Creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+              example:
+                id: p_20261021_153012_ab12cd
+                nombre: Academia Lingua
+                tipo: cliente
+                marca: Academia Lingua
+                sector: Educación
+                origen_datos: csv
+                revision: pausas
+                estado: esperando_revision
+                punto_control_pendiente: 1
+                checkpoints:
+                  ficha: true
+                  competencia: false
+                  hallazgos: false
+                  plan: false
+                coste_eur: 0.0
+                creado: '2026-10-21T15:30:12Z'
+                actualizado: '2026-10-21T15:42:03Z'
+                archivado: false
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}:
+    get:
+      summary: Detalle del proyecto
+      tags:
+      - projects
+      operationId: get_projects_id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+              example:
+                id: p_20261021_153012_ab12cd
+                nombre: Academia Lingua
+                tipo: cliente
+                marca: Academia Lingua
+                sector: Educación
+                origen_datos: csv
+                revision: pausas
+                estado: esperando_revision
+                punto_control_pendiente: 1
+                checkpoints:
+                  ficha: true
+                  competencia: false
+                  hallazgos: false
+                  plan: false
+                coste_eur: 0.0
+                creado: '2026-10-21T15:30:12Z'
+                actualizado: '2026-10-21T15:42:03Z'
+                archivado: false
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Renombrar, revisión o archivar
+      tags:
+      - projects
+      operationId: patch_projects_id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectPatch'
+            example:
+              revision: continuo
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+              example:
+                id: p_20261021_153012_ab12cd
+                nombre: Academia Lingua
+                tipo: cliente
+                marca: Academia Lingua
+                sector: Educación
+                origen_datos: csv
+                revision: pausas
+                estado: esperando_revision
+                punto_control_pendiente: 1
+                checkpoints:
+                  ficha: true
+                  competencia: false
+                  hallazgos: false
+                  plan: false
+                coste_eur: 0.0
+                creado: '2026-10-21T15:30:12Z'
+                actualizado: '2026-10-21T15:42:03Z'
+                archivado: false
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+    delete:
+      summary: Borrar (requiere ?confirm=<nombre>)
+      tags:
+      - projects
+      operationId: delete_projects_id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: confirm
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Borrado
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '423':
+          $ref: '#/components/responses/Locked'
+  /projects/{id}/duplicate:
+    post:
+      summary: Duplica entradas y configuración
+      tags:
+      - projects
+      operationId: post_projects_id_duplicate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+              example:
+                id: p_20261021_153012_ab12cd
+                nombre: Academia Lingua
+                tipo: cliente
+                marca: Academia Lingua
+                sector: Educación
+                origen_datos: csv
+                revision: pausas
+                estado: esperando_revision
+                punto_control_pendiente: 1
+                checkpoints:
+                  ficha: true
+                  competencia: false
+                  hallazgos: false
+                  plan: false
+                coste_eur: 0.0
+                creado: '2026-10-21T15:30:12Z'
+                actualizado: '2026-10-21T15:42:03Z'
+                archivado: false
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/brief:
+    post:
+      summary: Sube el brief (multipart) o pega texto; devuelve vista previa de la ficha
+      tags:
+      - inputs
+      operationId: post_projects_id_brief
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                archivo:
+                  type: string
+                  format: binary
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BriefText'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FichaPreview'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+  /projects/{id}/prospect:
+    post:
+      summary: Datos de la marca prospecto
+      tags:
+      - inputs
+      operationId: post_projects_id_prospect
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProspectData'
+            example:
+              marca: Academia Lingua
+              dominio: lingua.example
+              sector: Educación
+              ciudad: Valencia
+              competidores: []
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FichaPreview'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/study/upload:
+    post:
+      summary: Sube CSV (varios); informe de validación por archivo
+      tags:
+      - study
+      operationId: post_projects_id_study_upload
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                archivos:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResult'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+  /projects/{id}/study/summary:
+    get:
+      summary: Resumen del estudio cargado o generado
+      tags:
+      - study
+      operationId: get_projects_id_study_summary
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudySummary'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/study/brands/propose:
+    post:
+      summary: Propuesta de marcas (síncrono, timeout 90 s)
+      tags:
+      - study
+      operationId: post_projects_id_study_brands_propose
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandsPayload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/study/brands:
+    put:
+      summary: Guarda las marcas editadas
+      tags:
+      - study
+      operationId: put_projects_id_study_brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandsPayload'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandsPayload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+    get:
+      summary: Marcas del estudio
+      tags:
+      - study
+      operationId: get_projects_id_study_brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandsPayload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/study/prompts/propose:
+    post:
+      summary: Propuesta de banco de prompts
+      tags:
+      - study
+      operationId: post_projects_id_study_prompts_propose
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptsPayload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/study/prompts:
+    put:
+      summary: Guarda el banco editado
+      tags:
+      - study
+      operationId: put_projects_id_study_prompts
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptsPayload'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptsPayload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+    get:
+      summary: Banco de prompts del estudio
+      tags:
+      - study
+      operationId: get_projects_id_study_prompts
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptsPayload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/study/prompts/instances:
+    get:
+      summary: Vista previa de la instanciación
+      tags:
+      - study
+      operationId: get_projects_id_study_prompts_instances
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PromptInstance'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/study/config:
+    put:
+      summary: Tamaño, motores y repeticiones
+      tags:
+      - study
+      operationId: put_projects_id_study_config
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyConfig'
+            example:
+              tamano: rapido
+              motores:
+              - ChatGPT
+              - Gemini
+              - Perplexity
+              - Claude
+              repeticiones: 2
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyConfig'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+    get:
+      summary: Configuración del estudio
+      tags:
+      - study
+      operationId: get_projects_id_study_config
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudyConfig'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /estimates/study:
+    get:
+      summary: Estimación del estudio en vivo
+      tags:
+      - estimates
+      operationId: get_estimates_study
+      parameters:
+      - name: project_id
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+              example:
+                pasos:
+                - id: judge
+                  nombre: Juez
+                  llamadas: 624
+                  tokens_in: 900000
+                  tokens_out: 90000
+                  eur: 1.1
+                total_llamadas: 624
+                total_eur: 1.1
+                minutos: 6.5
+                supera_tope: false
+                tope_eur: 15.0
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /estimates/analysis:
+    get:
+      summary: Estimación del análisis
+      tags:
+      - estimates
+      operationId: get_estimates_analysis
+      parameters:
+      - name: project_id
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+              example:
+                pasos:
+                - id: judge
+                  nombre: Juez
+                  llamadas: 624
+                  tokens_in: 900000
+                  tokens_out: 90000
+                  eur: 1.1
+                total_llamadas: 624
+                total_eur: 1.1
+                minutos: 6.5
+                supera_tope: false
+                tope_eur: 15.0
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/run:
+    post:
+      summary: Lanza el análisis (423 si hay otro trabajo)
+      tags:
+      - run
+      operationId: post_projects_id_run
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmaCoste'
+            example:
+              confirmo_coste: true
+      responses:
+        '202':
+          description: Aceptado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/run/resume:
+    post:
+      summary: Reanuda tras interrupción o aprobación
+      tags:
+      - run
+      operationId: post_projects_id_run_resume
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmaCoste'
+      responses:
+        '202':
+          description: Aceptado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/run/retry-step:
+    post:
+      summary: Reintenta un paso degradado
+      tags:
+      - run
+      operationId: post_projects_id_run_retry_step
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                paso:
+                  type: string
+                confirmo_coste:
+                  type: boolean
+              required:
+              - paso
+      responses:
+        '202':
+          description: Aceptado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/run/cancel:
+    post:
+      summary: Cancela (termina tras la llamada en curso)
+      tags:
+      - run
+      operationId: post_projects_id_run_cancel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{id}/progress:
+    get:
+      summary: Progreso
+      tags:
+      - run
+      operationId: get_projects_id_progress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/events:
+    get:
+      summary: SSE de progreso (ver contracts/events.md)
+      tags:
+      - run
+      operationId: get_projects_id_events
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: text/event-stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/ficha:
+    get:
+      summary: Ficha de marca
+      tags:
+      - ficha
+      operationId: get_projects_id_ficha
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FichaResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    put:
+      summary: Guarda la ficha
+      tags:
+      - ficha
+      operationId: put_projects_id_ficha
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FichaMarca'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FichaResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/market:
+    get:
+      summary: Competencia (ContrasteMercado)
+      tags:
+      - market
+      operationId: get_projects_id_market
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContrasteMercado'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    put:
+      summary: Guarda la competencia
+      tags:
+      - market
+      operationId: put_projects_id_market
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContrasteMercado'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContrasteMercado'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/findings:
+    get:
+      summary: Hallazgos
+      tags:
+      - findings
+      operationId: get_projects_id_findings
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hallazgo'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{id}/findings/{hid}:
+    patch:
+      summary: Aprobar, descartar o editar título
+      tags:
+      - findings
+      operationId: patch_projects_id_findings_hid
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: hid
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingPatch'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hallazgo'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/plan:
+    get:
+      summary: Plan
+      tags:
+      - plan
+      operationId: get_projects_id_plan
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    put:
+      summary: Guarda el plan; devuelve el plan revalidado con avisos
+      tags:
+      - plan
+      operationId: put_projects_id_plan
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plan'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/plan/simulate:
+    post:
+      summary: Simulador de escenarios
+      tags:
+      - plan
+      operationId: post_projects_id_plan_simulate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulateRequest'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulateResult'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/checkpoints/{n}/approve:
+    post:
+      summary: Aprueba un punto de control
+      tags:
+      - checkpoints
+      operationId: post_projects_id_checkpoints_n_approve
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: n
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckpointApprove'
+            example:
+              nota: Revisado
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+              example:
+                id: p_20261021_153012_ab12cd
+                nombre: Academia Lingua
+                tipo: cliente
+                marca: Academia Lingua
+                sector: Educación
+                origen_datos: csv
+                revision: pausas
+                estado: esperando_revision
+                punto_control_pendiente: 1
+                checkpoints:
+                  ficha: true
+                  competencia: false
+                  hallazgos: false
+                  plan: false
+                coste_eur: 0.0
+                creado: '2026-10-21T15:30:12Z'
+                actualizado: '2026-10-21T15:42:03Z'
+                archivado: false
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/invalidation:
+    get:
+      summary: Qué se recalcula y cuánto cuesta
+      tags:
+      - checkpoints
+      operationId: get_projects_id_invalidation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: cambio
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - ficha
+          - market
+          - findings
+          - plan
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invalidation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/recompute:
+    post:
+      summary: Recalcula desde un paso
+      tags:
+      - checkpoints
+      operationId: post_projects_id_recompute
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recompute'
+      responses:
+        '202':
+          description: Aceptado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/diagnosis:
+    get:
+      summary: Indicadores y gráficos agregados
+      tags:
+      - results
+      operationId: get_projects_id_diagnosis
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: ambito
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - espontanea
+          - asistida
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Diagnosis'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/tables/{tid}:
+    get:
+      summary: Tabla T1-T12 en JSON
+      tags:
+      - results
+      operationId: get_projects_id_tables_tid
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableData'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{id}/executions:
+    get:
+      summary: Ejecuciones paginadas con filtros
+      tags:
+      - results
+      operationId: get_projects_id_executions
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: motor
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: familia
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: intencion
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ambito
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ciudad
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: ids
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: pagina
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: tamano
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionPage'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/executions/{eid}:
+    get:
+      summary: Detalle con evaluación por marca
+      tags:
+      - results
+      operationId: get_projects_id_executions_eid
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: eid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionDetail'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{id}/proposal:
+    get:
+      summary: Propuesta con etiquetas de origen
+      tags:
+      - results
+      operationId: get_projects_id_proposal
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proposal'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{id}/proposal/regenerate:
+    post:
+      summary: Rehace redacción y revisión
+      tags:
+      - results
+      operationId: post_projects_id_proposal_regenerate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmaCoste'
+      responses:
+        '202':
+          description: Aceptado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+              example:
+                estado: en_ejecucion
+                paso_actual: judge
+                pasos:
+                - id: intake
+                  nombre: Ficha
+                  estado: hecho
+                  duracion_s: 1.2
+                  llamadas: 0
+                  coste_eur: 0.0
+                  error: null
+                - id: judge
+                  nombre: Juez
+                  estado: en_curso
+                  duracion_s: null
+                  llamadas: 214
+                  coste_eur: 0.41
+                  error: null
+                contador:
+                  paso: judge
+                  hechos: 214
+                  total: 624
+                llamadas: 214
+                coste_eur: 0.41
+                coste_real: true
+                transcurrido_s: 93.4
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '423':
+          $ref: '#/components/responses/Locked'
+      x-puede-llamar-a-openrouter: true
+  /projects/{id}/exports/{fmt}:
+    get:
+      summary: Descarga docx o md
+      tags:
+      - exports
+      operationId: get_projects_id_exports_fmt
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fmt
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - docx
+          - md
+      responses:
+        '200':
+          description: Archivo
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{id}/quality:
+    get:
+      summary: Validación del juez, discrepancias y aprobaciones
+      tags:
+      - quality
+      operationId: get_projects_id_quality
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quality'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /projects/{id}/quality/labels:
+    post:
+      summary: Etiquetas humanas de la muestra
+      tags:
+      - quality
+      operationId: post_projects_id_quality_labels
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelsPayload'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quality'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/quality/discrepancies/{eid}/{marca}:
+    patch:
+      summary: Resuelve una discrepancia
+      tags:
+      - quality
+      operationId: patch_projects_id_quality_discrepancies_eid_marca
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: eid
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: marca
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscrepancyResolve'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quality'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /projects/{id}/traces:
+    get:
+      summary: trace.jsonl como lista
+      tags:
+      - traces
+      operationId: get_projects_id_traces
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TraceRow'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /settings:
+    get:
+      summary: Ajustes (la clave nunca se devuelve)
+      tags:
+      - settings
+      operationId: get_settings
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+              example:
+                clave_configurada: true
+                clave_mascara: sk-or-…a1b2
+    put:
+      summary: Guarda ajustes
+      tags:
+      - settings
+      operationId: put_settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingsUpdate'
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+  /settings/test:
+    post:
+      summary: Prueba la conexión con OpenRouter
+      tags:
+      - settings
+      operationId: post_settings_test
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsTest'
+      x-puede-llamar-a-openrouter: true
+  /settings/models:
+    get:
+      summary: Catálogo de OpenRouter (caché 1 h)
+      tags:
+      - settings
+      operationId: get_settings_models
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelPrices'
+  /health:
+    get:
+      summary: Estado del servidor
+      tags:
+      - meta
+      operationId: get_health
+      responses:
+        '200':
+          description: Correcto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                ok: true
+                version: 1.0.0
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            detail:
+              type: object
+              additionalProperties: true
+          required:
+          - code
+          - message
+      required:
+      - error
+    OriginTag:
+      type: object
+      properties:
+        origen:
+          type: string
+          enum:
+          - calculado
+          - ia
+          - automatico
+          - editado
+        modelo:
+          type: string
+          nullable: true
+      required:
+      - origen
+    Checkpoints:
+      type: object
+      properties:
+        ficha:
+          type: boolean
+        competencia:
+          type: boolean
+        hallazgos:
+          type: boolean
+        plan:
+          type: boolean
+      required:
+      - ficha
+      - competencia
+      - hallazgos
+      - plan
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        tipo:
+          type: string
+          enum:
+          - cliente
+          - prospecto
+        marca:
+          type: string
+          nullable: true
+        sector:
+          type: string
+          nullable: true
+        origen_datos:
+          type: string
+          enum:
+          - csv
+          - vivo
+          nullable: true
+        revision:
+          type: string
+          enum:
+          - pausas
+          - continuo
+        estado:
+          type: string
+          enum:
+          - borrador
+          - listo_para_lanzar
+          - en_ejecucion
+          - esperando_revision
+          - completado
+          - error
+          - interrumpido
+        punto_control_pendiente:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          nullable: true
+        checkpoints:
+          $ref: '#/components/schemas/Checkpoints'
+        coste_eur:
+          type: number
+        creado:
+          type: string
+          format: date-time
+        actualizado:
+          type: string
+          format: date-time
+        archivado:
+          type: boolean
+      required:
+      - id
+      - nombre
+      - tipo
+      - revision
+      - estado
+      - checkpoints
+      - coste_eur
+      - creado
+      - actualizado
+      - archivado
+    ProjectCreate:
+      type: object
+      properties:
+        nombre:
+          type: string
+        tipo:
+          type: string
+          enum:
+          - cliente
+          - prospecto
+      required:
+      - nombre
+      - tipo
+    ProjectPatch:
+      type: object
+      properties:
+        nombre:
+          type: string
+        revision:
+          type: string
+          enum:
+          - pausas
+          - continuo
+        archivado:
+          type: boolean
+    ProgressStep:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        estado:
+          type: string
+          enum:
+          - pendiente
+          - en_curso
+          - hecho
+          - hecho_automatico
+          - error
+          - esperando_revision
+        duracion_s:
+          type: number
+          nullable: true
+        llamadas:
+          type: integer
+        coste_eur:
+          type: number
+        error:
+          type: string
+          nullable: true
+      required:
+      - id
+      - nombre
+      - estado
+    Progress:
+      type: object
+      properties:
+        estado:
+          type: string
+          enum:
+          - en_ejecucion
+          - esperando_revision
+          - completado
+          - error
+          - interrumpido
+        paso_actual:
+          type: string
+          nullable: true
+        pasos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgressStep'
+        contador:
+          type: object
+          properties:
+            paso:
+              type: string
+            hechos:
+              type: integer
+            total:
+              type: integer
+          required:
+          - paso
+          - hechos
+          - total
+          nullable: true
+        llamadas:
+          type: integer
+        coste_eur:
+          type: number
+        coste_real:
+          type: boolean
+        transcurrido_s:
+          type: number
+      required:
+      - estado
+      - pasos
+      - llamadas
+      - coste_eur
+      - coste_real
+      - transcurrido_s
+    EstimateStep:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        llamadas:
+          type: integer
+        tokens_in:
+          type: integer
+        tokens_out:
+          type: integer
+        eur:
+          type: number
+      required:
+      - id
+      - nombre
+      - llamadas
+      - eur
+    Estimate:
+      type: object
+      properties:
+        pasos:
+          type: array
+          items:
+            $ref: '#/components/schemas/EstimateStep'
+        total_llamadas:
+          type: integer
+        total_eur:
+          type: number
+        minutos:
+          type: number
+        supera_tope:
+          type: boolean
+        tope_eur:
+          type: number
+      required:
+      - pasos
+      - total_llamadas
+      - total_eur
+      - minutos
+      - supera_tope
+      - tope_eur
+    ConfirmaCoste:
+      type: object
+      properties:
+        confirmo_coste:
+          type: boolean
+    BriefText:
+      type: object
+      properties:
+        texto:
+          type: string
+      required:
+      - texto
+    ProspectData:
+      type: object
+      properties:
+        marca:
+          type: string
+        dominio:
+          type: string
+        sector:
+          type: string
+        ciudad:
+          type: string
+        competidores:
+          type: array
+          items:
+            type: string
+      required:
+      - marca
+      - dominio
+      - sector
+      - ciudad
+    FichaMarca:
+      type: object
+      properties:
+        marca:
+          type: string
+        web:
+          type: string
+          nullable: true
+        sector:
+          type: string
+        subsector:
+          type: string
+          nullable: true
+        servicios:
+          type: array
+          items:
+            type: string
+        servicios_prioritarios:
+          type: array
+          items:
+            type: string
+        diferenciales:
+          type: array
+          items:
+            type: string
+        publicos:
+          type: array
+          items:
+            type: string
+        ciudades:
+          type: array
+          items:
+            type: string
+        ciudad_principal:
+          type: string
+          nullable: true
+        ciudad_crecimiento:
+          type: string
+          nullable: true
+        competidores_declarados:
+          type: array
+          items:
+            type: string
+        situacion_digital:
+          type: object
+          additionalProperties:
+            type: string
+        hipotesis_cliente:
+          type: array
+          items:
+            type: string
+        objetivo_principal:
+          type: string
+        kpis_negocio:
+          type: array
+          items:
+            type: string
+        horizonte_meses:
+          type: integer
+        presupuesto_min_eur:
+          type: number
+          nullable: true
+        presupuesto_max_eur:
+          type: number
+          nullable: true
+        equipo:
+          type: string
+        restricciones_normativas:
+          type: array
+          items:
+            type: string
+        tono:
+          type: string
+        audiencia:
+          type: string
+        formato:
+          type: string
+      required:
+      - marca
+      - sector
+      - objetivo_principal
+    FichaPreview:
+      type: object
+      properties:
+        ficha:
+          $ref: '#/components/schemas/FichaMarca'
+        faltantes:
+          type: array
+          items:
+            type: string
+        origen_campos:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - ficha
+      - faltantes
+    FichaResponse:
+      type: object
+      properties:
+        ficha:
+          $ref: '#/components/schemas/FichaMarca'
+        faltantes:
+          type: array
+          items:
+            type: string
+        origen_campos:
+          type: object
+          additionalProperties:
+            type: string
+        brief_texto:
+          type: string
+          nullable: true
+        aprobada:
+          type: boolean
+      required:
+      - ficha
+      - faltantes
+      - aprobada
+    ValidationFile:
+      type: object
+      properties:
+        archivo:
+          type: string
+        tipo:
+          type: string
+          enum:
+          - ejecuciones
+          - marcas
+          - banco_prompts
+          - fuentes_catalogo
+          - muestra_evaluada
+          nullable: true
+        filas:
+          type: integer
+        columnas_reconocidas:
+          type: array
+          items:
+            type: string
+        errores:
+          type: array
+          items:
+            type: string
+        avisos:
+          type: array
+          items:
+            type: string
+        filas_con_error:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+      required:
+      - archivo
+      - filas
+      - errores
+      - avisos
+    StudySummary:
+      type: object
+      properties:
+        ejecuciones:
+          type: integer
+        motores:
+          type: array
+          items:
+            type: string
+        repeticiones:
+          type: integer
+        prompts:
+          type: integer
+        marcas:
+          type: integer
+        espontaneas:
+          type: integer
+        asistidas:
+          type: integer
+        ciudades:
+          type: array
+          items:
+            type: string
+      required:
+      - ejecuciones
+      - motores
+      - repeticiones
+      - prompts
+      - marcas
+      - espontaneas
+      - asistidas
+    UploadResult:
+      type: object
+      properties:
+        informes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationFile'
+        resumen:
+          $ref: '#/components/schemas/StudySummary'
+          nullable: true
+        bloqueado:
+          type: boolean
+      required:
+      - informes
+      - bloqueado
+    MarcaEstudio:
+      type: object
+      properties:
+        nombre:
+          type: string
+        nivel:
+          type: string
+          enum:
+          - foco
+          - contexto
+        rol:
+          type: string
+        dominio:
+          type: string
+        alias:
+          type: array
+          items:
+            type: string
+        motivo:
+          type: string
+          nullable: true
+        fuente_url:
+          type: string
+          nullable: true
+      required:
+      - nombre
+      - nivel
+      - rol
+      - dominio
+      - alias
+    BrandsPayload:
+      type: object
+      properties:
+        marcas:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarcaEstudio'
+      required:
+      - marcas
+    PlantillaPrompt:
+      type: object
+      properties:
+        prompt_id:
+          type: string
+        familia:
+          type: string
+        intencion:
+          type: string
+          enum:
+          - Descubrimiento
+          - Comparación
+          - Validación
+          - Decisión
+        prioridad:
+          type: string
+          enum:
+          - P1
+          - P2
+        uso:
+          type: string
+        instanciacion:
+          type: string
+          enum:
+          - generico
+          - ciudad
+          - marca
+          - par
+        plantilla:
+          type: string
+      required:
+      - prompt_id
+      - familia
+      - intencion
+      - prioridad
+      - instanciacion
+      - plantilla
+    PromptsPayload:
+      type: object
+      properties:
+        prompts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlantillaPrompt'
+      required:
+      - prompts
+    PromptInstance:
+      type: object
+      properties:
+        prompt_id:
+          type: string
+        prompt:
+          type: string
+        instanciacion:
+          type: string
+        marcas_a_evaluar:
+          type: array
+          items:
+            type: string
+        ciudad:
+          type: string
+          nullable: true
+      required:
+      - prompt_id
+      - prompt
+    StudyConfig:
+      type: object
+      properties:
+        tamano:
+          type: string
+          enum:
+          - rapido
+          - estandar
+          - completo
+        motores:
+          type: array
+          items:
+            type: string
+            enum:
+            - ChatGPT
+            - Gemini
+            - Perplexity
+            - Claude
+        repeticiones:
+          type: integer
+      required:
+      - tamano
+      - motores
+      - repeticiones
+    CheckpointApprove:
+      type: object
+      properties:
+        nota:
+          type: string
+    RetryStep:
+      type: object
+      properties:
+        paso:
+          type: string
+      required:
+      - paso
+    Recompute:
+      type: object
+      properties:
+        desde_paso:
+          type: string
+        confirmo_coste:
+          type: boolean
+      required:
+      - desde_paso
+    Invalidation:
+      type: object
+      properties:
+        pasos:
+          type: array
+          items:
+            type: string
+        estimacion:
+          $ref: '#/components/schemas/Estimate'
+      required:
+      - pasos
+      - estimacion
+    MarcaMercado:
+      type: object
+      properties:
+        nombre:
+          type: string
+        rol:
+          type: string
+          enum:
+          - marca_brief
+          - lider
+          - competidor_directo
+          - referencia
+          - contexto
+        declarada_en_brief:
+          type: boolean
+        detectada_en_datos:
+          type: boolean
+        tasa_aparicion_espontanea:
+          type: number
+        nota:
+          type: string
+        excluida:
+          type: boolean
+      required:
+      - nombre
+      - rol
+      - declarada_en_brief
+      - detectada_en_datos
+      - tasa_aparicion_espontanea
+    ContrasteMercado:
+      type: object
+      properties:
+        marcas:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarcaMercado'
+        no_declaradas_relevantes:
+          type: array
+          items:
+            type: string
+        discrepancias_brief:
+          type: array
+          items:
+            type: string
+        candidatas_no_catalogadas:
+          type: array
+          items:
+            type: string
+        aprobado_por_humano:
+          type: boolean
+      required:
+      - marcas
+      - no_declaradas_relevantes
+      - discrepancias_brief
+      - aprobado_por_humano
+    Evidencia:
+      type: object
+      properties:
+        metrica:
+          type: string
+        valor:
+          type: number
+        n:
+          type: integer
+        tabla:
+          type: string
+        ejecucion_ids:
+          type: array
+          items:
+            type: string
+      required:
+      - metrica
+      - valor
+      - n
+      - tabla
+      - ejecucion_ids
+    Hallazgo:
+      type: object
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        descripcion:
+          type: string
+        tipo:
+          type: string
+        fase_embudo:
+          type: string
+          nullable: true
+        motores:
+          type: array
+          items:
+            type: string
+        evidencias:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidencia'
+        impacto:
+          type: string
+          enum:
+          - alto
+          - medio
+          - bajo
+        confianza:
+          type: string
+          enum:
+          - alta
+          - media
+          - baja
+        prioridad:
+          type: integer
+        aprobado:
+          type: boolean
+        descartado_motivo:
+          type: string
+          nullable: true
+        nota:
+          type: string
+          nullable: true
+        origen:
+          $ref: '#/components/schemas/OriginTag'
+      required:
+      - id
+      - titulo
+      - descripcion
+      - tipo
+      - evidencias
+      - impacto
+      - confianza
+      - prioridad
+      - aprobado
+    FindingPatch:
+      type: object
+      properties:
+        aprobado:
+          type: boolean
+        descartado_motivo:
+          type: string
+        titulo:
+          type: string
+        nota:
+          type: string
+    Objetivo:
+      type: object
+      properties:
+        kpi:
+          type: string
+        valor_actual:
+          type: number
+        valor_objetivo_min:
+          type: number
+        valor_objetivo_max:
+          type: number
+        plazo_meses:
+          type: integer
+        hallazgos:
+          type: array
+          items:
+            type: string
+      required:
+      - kpi
+      - valor_actual
+      - valor_objetivo_min
+      - valor_objetivo_max
+      - plazo_meses
+      - hallazgos
+    Accion:
+      type: object
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        descripcion:
+          type: string
+        hallazgos_relacionados:
+          type: array
+          items:
+            type: string
+        palanca:
+          type: string
+          enum:
+          - autoridad_terceros
+          - entidad_datos_estructurados
+          - contenido
+          - reputacion_resenas
+          - comunidades
+          - tecnico
+          - medicion
+        fase_embudo:
+          type: array
+          items:
+            type: string
+        motores_objetivo:
+          type: array
+          items:
+            type: string
+        ciudades:
+          type: array
+          items:
+            type: string
+        esfuerzo:
+          type: string
+          enum:
+          - S
+          - M
+          - L
+        impacto:
+          type: string
+          enum:
+          - S
+          - M
+          - L
+        responsable:
+          type: string
+          enum:
+          - cliente_marketing
+          - cliente_comunicacion
+          - cliente_medico
+          - agencia
+          - tercero
+        dependencias:
+          type: array
+          items:
+            type: string
+        entregables:
+          type: array
+          items:
+            type: string
+        semana_inicio:
+          type: integer
+        plazo_semanas:
+          type: integer
+        coste_estimado_eur:
+          type: number
+        kpi:
+          type: string
+        fase_plan:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+      required:
+      - id
+      - titulo
+      - descripcion
+      - hallazgos_relacionados
+      - palanca
+      - esfuerzo
+      - impacto
+      - responsable
+      - entregables
+      - semana_inicio
+      - plazo_semanas
+      - coste_estimado_eur
+      - kpi
+      - fase_plan
+    FasePlan:
+      type: object
+      properties:
+        numero:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+        nombre:
+          type: string
+        semanas:
+          type: array
+          items:
+            type: integer
+        objetivo:
+          type: string
+        acciones:
+          type: array
+          items:
+            type: string
+      required:
+      - numero
+      - nombre
+      - semanas
+      - objetivo
+      - acciones
+    Plan:
+      type: object
+      properties:
+        objetivos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Objetivo'
+        fases:
+          type: array
+          items:
+            $ref: '#/components/schemas/FasePlan'
+        acciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Accion'
+        coste_total_eur:
+          type: number
+        medicion:
+          type: string
+        riesgos:
+          type: array
+          items:
+            type: string
+        supuestos:
+          type: array
+          items:
+            type: string
+      required:
+      - objetivos
+      - fases
+      - acciones
+      - coste_total_eur
+    PlanAviso:
+      type: object
+      properties:
+        nivel:
+          type: string
+          enum:
+          - info
+          - aviso
+          - error
+        texto:
+          type: string
+        accion_id:
+          type: string
+          nullable: true
+      required:
+      - nivel
+      - texto
+    PlanResponse:
+      type: object
+      properties:
+        plan:
+          $ref: '#/components/schemas/Plan'
+        avisos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanAviso'
+        presupuesto_min_eur:
+          type: number
+          nullable: true
+        presupuesto_max_eur:
+          type: number
+          nullable: true
+        carga_semanal:
+          type: array
+          items:
+            type: object
+            properties:
+              semana:
+                type: integer
+              horas:
+                type: number
+              capacidad:
+                type: number
+            required:
+            - semana
+            - horas
+            - capacidad
+        aprobado:
+          type: boolean
+      required:
+      - plan
+      - avisos
+      - aprobado
+    SimulateRequest:
+      type: object
+      properties:
+        cambios:
+          type: object
+          additionalProperties: true
+      required:
+      - cambios
+    SimulateResult:
+      type: object
+      properties:
+        score_actual:
+          type: number
+        score_simulado:
+          type: number
+        puesto_actual:
+          type: integer
+        puesto_simulado:
+          type: integer
+        etiqueta:
+          type: string
+        detalle:
+          type: object
+          additionalProperties: true
+      required:
+      - score_actual
+      - score_simulado
+      - puesto_actual
+      - puesto_simulado
+      - etiqueta
+    Diagnosis:
+      type: object
+      properties:
+        ambito:
+          type: string
+          enum:
+          - espontanea
+          - asistida
+        marca_proyecto:
+          type: string
+        lider:
+          type: string
+          nullable: true
+        indicadores:
+          type: object
+          additionalProperties: true
+        graficos:
+          type: object
+          additionalProperties: true
+        no_aplica:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - ambito
+      - marca_proyecto
+      - indicadores
+      - graficos
+    TableData:
+      type: object
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        columnas:
+          type: array
+          items:
+            type: string
+        filas:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        n:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - columnas
+      - filas
+    ExecutionRow:
+      type: object
+      properties:
+        ejecucion_id:
+          type: string
+        prompt_id:
+          type: string
+        familia:
+          type: string
+        intencion:
+          type: string
+        instanciacion:
+          type: string
+        ambito:
+          type: string
+          enum:
+          - espontanea
+          - asistida
+        motor:
+          type: string
+        repeticion:
+          type: integer
+        ciudad:
+          type: string
+          nullable: true
+        prompt:
+          type: string
+        marcas_a_evaluar:
+          type: array
+          items:
+            type: string
+        fecha:
+          type: string
+      required:
+      - ejecucion_id
+      - prompt_id
+      - motor
+      - prompt
+    ExecutionPage:
+      type: object
+      properties:
+        total:
+          type: integer
+        pagina:
+          type: integer
+        tamano:
+          type: integer
+        filas:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExecutionRow'
+      required:
+      - total
+      - pagina
+      - tamano
+      - filas
+    BrandEvaluation:
+      type: object
+      properties:
+        marca:
+          type: string
+        aparece:
+          type: boolean
+        posicion:
+          type: integer
+          nullable: true
+        tipo_mencion:
+          type: string
+          nullable: true
+        fuerza:
+          type: integer
+        sentimiento:
+          type: string
+          nullable: true
+        tipo_fuente:
+          type: string
+          nullable: true
+        calidad_fuente:
+          type: number
+          nullable: true
+        juez:
+          type: string
+        confianza:
+          type: number
+        discrepancia:
+          type: boolean
+        fragmento:
+          type: string
+          nullable: true
+      required:
+      - marca
+      - aparece
+      - fuerza
+      - juez
+      - confianza
+    ExecutionDetail:
+      type: object
+      properties:
+        fila:
+          $ref: '#/components/schemas/ExecutionRow'
+        respuesta:
+          type: string
+        resaltados:
+          type: array
+          items:
+            type: object
+            properties:
+              marca:
+                type: string
+              inicio:
+                type: integer
+              fin:
+                type: integer
+            required:
+            - marca
+            - inicio
+            - fin
+        fuentes:
+          type: array
+          items:
+            type: object
+            properties:
+              dominio:
+                type: string
+              tipo:
+                type: string
+              calidad:
+                type: number
+                nullable: true
+            required:
+            - dominio
+        evaluaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrandEvaluation'
+      required:
+      - fila
+      - respuesta
+      - resaltados
+      - fuentes
+      - evaluaciones
+    ProposalSection:
+      type: object
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        markdown:
+          type: string
+        origen:
+          $ref: '#/components/schemas/OriginTag'
+      required:
+      - id
+      - titulo
+      - markdown
+      - origen
+    ReviewSeal:
+      type: object
+      properties:
+        cifras_verificadas:
+          type: integer
+        cifras_no_trazables:
+          type: integer
+        incidencias_normativas:
+          type: integer
+        entidades_fuera_catalogo:
+          type: integer
+        incidencias:
+          type: array
+          items:
+            type: object
+            properties:
+              tipo:
+                type: string
+              texto:
+                type: string
+              sugerencia:
+                type: string
+              bloqueante:
+                type: boolean
+            required:
+            - tipo
+            - texto
+            - bloqueante
+        aprobado:
+          type: boolean
+      required:
+      - cifras_verificadas
+      - cifras_no_trazables
+      - incidencias_normativas
+      - entidades_fuera_catalogo
+      - aprobado
+    Proposal:
+      type: object
+      properties:
+        modo:
+          type: string
+          enum:
+          - cliente
+          - prospecto
+        marca:
+          type: string
+        secciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProposalSection'
+        sello:
+          $ref: '#/components/schemas/ReviewSeal'
+        correo:
+          type: object
+          properties:
+            asunto:
+              type: string
+            cuerpo:
+              type: string
+          required:
+          - asunto
+          - cuerpo
+          nullable: true
+        exportaciones:
+          type: array
+          items:
+            type: string
+            enum:
+            - docx
+            - md
+      required:
+      - modo
+      - marca
+      - secciones
+      - sello
+    JudgeValidation:
+      type: object
+      properties:
+        disponible:
+          type: boolean
+        campos:
+          type: array
+          items:
+            type: object
+            properties:
+              campo:
+                type: string
+              exactitud:
+                type: number
+              kappa:
+                type: number
+              matriz:
+                type: object
+                additionalProperties: true
+            required:
+            - campo
+            - exactitud
+            - kappa
+        n:
+          type: integer
+      required:
+      - disponible
+    Discrepancy:
+      type: object
+      properties:
+        ejecucion_id:
+          type: string
+        marca:
+          type: string
+        reglas:
+          type: object
+          additionalProperties: true
+        llm:
+          type: object
+          additionalProperties: true
+        respuesta:
+          type: string
+        fragmento:
+          type: string
+          nullable: true
+      required:
+      - ejecucion_id
+      - marca
+      - reglas
+      - llm
+    ApprovalRecord:
+      type: object
+      properties:
+        punto_control:
+          type: integer
+        nombre:
+          type: string
+        fecha:
+          type: string
+        nota:
+          type: string
+          nullable: true
+        automatica:
+          type: boolean
+      required:
+      - punto_control
+      - nombre
+      - fecha
+    Quality:
+      type: object
+      properties:
+        validacion:
+          $ref: '#/components/schemas/JudgeValidation'
+        discrepancias:
+          type: array
+          items:
+            $ref: '#/components/schemas/Discrepancy'
+        aprobaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRecord'
+        muestra_para_etiquetar:
+          type: array
+          items:
+            type: string
+      required:
+      - validacion
+      - discrepancias
+      - aprobaciones
+    HumanLabel:
+      type: object
+      properties:
+        ejecucion_id:
+          type: string
+        marca:
+          type: string
+        aparece:
+          type: boolean
+        posicion:
+          type: integer
+          nullable: true
+        tipo_mencion:
+          type: string
+          nullable: true
+        fuerza:
+          type: integer
+        sentimiento:
+          type: string
+          nullable: true
+        tipo_fuente:
+          type: string
+          nullable: true
+      required:
+      - ejecucion_id
+      - marca
+      - aparece
+      - fuerza
+    LabelsPayload:
+      type: object
+      properties:
+        etiquetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/HumanLabel'
+      required:
+      - etiquetas
+    DiscrepancyResolve:
+      type: object
+      properties:
+        valor:
+          type: object
+          additionalProperties: true
+      required:
+      - valor
+    TraceRow:
+      type: object
+      additionalProperties: true
+      description: Línea de trace.jsonl tal cual (única respuesta que puede contener datos técnicos internos).
+    ModelPrices:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        precio_in_usd_m:
+          type: number
+          nullable: true
+        precio_out_usd_m:
+          type: number
+          nullable: true
+        contexto:
+          type: integer
+          nullable: true
+      required:
+      - id
+    ModelRoles:
+      type: object
+      properties:
+        juez:
+          type: string
+        redaccion:
+          type: string
+        propuesta:
+          type: string
+        chatgpt:
+          type: string
+        gemini:
+          type: string
+        claude:
+          type: string
+        perplexity:
+          type: string
+    Limits:
+      type: object
+      properties:
+        concurrencia:
+          type: integer
+        max_llamadas:
+          type: integer
+        tope_gasto_eur:
+          type: number
+        usd_eur:
+          type: number
+      required:
+      - concurrencia
+      - max_llamadas
+      - tope_gasto_eur
+      - usd_eur
+    Settings:
+      type: object
+      properties:
+        clave_configurada:
+          type: boolean
+        clave_mascara:
+          type: string
+          nullable: true
+        modelos:
+          $ref: '#/components/schemas/ModelRoles'
+        limites:
+          $ref: '#/components/schemas/Limits'
+        carpeta_datos:
+          type: string
+        modelos_inexistentes:
+          type: array
+          items:
+            type: string
+      required:
+      - clave_configurada
+      - modelos
+      - limites
+      - carpeta_datos
+    SettingsUpdate:
+      type: object
+      properties:
+        clave:
+          type: string
+        modelos:
+          $ref: '#/components/schemas/ModelRoles'
+        limites:
+          $ref: '#/components/schemas/Limits'
+    SettingsTest:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        latencia_ms:
+          type: integer
+          nullable: true
+        coste_eur:
+          type: number
+          nullable: true
+        gasto_clave_usd:
+          type: number
+          nullable: true
+        limite_clave_usd:
+          type: number
+          nullable: true
+        mensaje:
+          type: string
+      required:
+      - ok
+      - mensaje
+    Health:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        version:
+          type: string
+      required:
+      - ok
+      - version
+  responses:
+    BadRequest:
+      description: Validación (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: No existe (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflicto de estado (409)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unprocessable:
+      description: Entrada inválida (422)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Locked:
+      description: Hay un trabajo en curso (423)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

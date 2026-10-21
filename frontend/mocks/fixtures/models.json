@@ -1,0 +1,23 @@
+[
+  {
+    "id": "google/gemini-2.5-flash",
+    "nombre": "Gemini 2.5 Flash",
+    "precio_in_usd_m": 0.3,
+    "precio_out_usd_m": 2.5,
+    "contexto": 1048576
+  },
+  {
+    "id": "anthropic/claude-sonnet-4.5",
+    "nombre": "Claude Sonnet 4.5",
+    "precio_in_usd_m": 3.0,
+    "precio_out_usd_m": 15.0,
+    "contexto": 200000
+  },
+  {
+    "id": "openai/gpt-4o-mini",
+    "nombre": "GPT-4o mini",
+    "precio_in_usd_m": 0.15,
+    "precio_out_usd_m": 0.6,
+    "contexto": 128000
+  }
+]

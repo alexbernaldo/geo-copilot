@@ -1,0 +1,10 @@
+{
+  "tamano": "completo",
+  "motores": [
+    "ChatGPT",
+    "Gemini",
+    "Perplexity",
+    "Claude"
+  ],
+  "repeticiones": 3
+}

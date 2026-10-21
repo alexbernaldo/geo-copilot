@@ -1,0 +1,15 @@
+{
+  "ejecuciones": 624,
+  "motores": [
+    "ChatGPT",
+    "Claude",
+    "Gemini",
+    "Perplexity"
+  ],
+  "repeticiones": 3,
+  "prompts": 25,
+  "marcas": 10,
+  "espontaneas": 240,
+  "asistidas": 384,
+  "ciudades": []
+}

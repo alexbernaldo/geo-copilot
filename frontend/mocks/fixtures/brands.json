@@ -1,0 +1,115 @@
+{
+  "marcas": [
+    {
+      "nombre": "Instituto Oftálmico Tramuntana",
+      "nivel": "foco",
+      "rol": "Marca líder de referencia (premium)",
+      "dominio": "tramuntana-oftalmologia.example",
+      "alias": [
+        "Tramuntana"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Clínica Alborada Visión",
+      "nivel": "foco",
+      "rol": "MARCA DEL BRIEF",
+      "dominio": "alboradavision.example",
+      "alias": [
+        "Alborada Visión",
+        "Alborada"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Láser Nítida",
+      "nivel": "foco",
+      "rol": "Competidor directo (cadena low cost)",
+      "dominio": "lasernitida.example",
+      "alias": [
+        "Nítida"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Vistalia Oftalmología",
+      "nivel": "foco",
+      "rol": "Competidor directo (red regional)",
+      "dominio": "vistalia-oftalmologia.example",
+      "alias": [
+        "Vistalia"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Grupo Hospitalario Valdecruz",
+      "nivel": "contexto",
+      "rol": "Contexto — líder real del mercado",
+      "dominio": "valdecruz.example",
+      "alias": [
+        "Valdecruz"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Oftalmos Centro",
+      "nivel": "contexto",
+      "rol": "Contexto",
+      "dominio": "oftalmoscentro.example",
+      "alias": [
+        "Oftalmos"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Clínica del Ojo Cervantes",
+      "nivel": "contexto",
+      "rol": "Contexto",
+      "dominio": "clinicacervantes.example",
+      "alias": [
+        "Cervantes"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Visionar Clínicas",
+      "nivel": "contexto",
+      "rol": "Contexto",
+      "dominio": "visionar-clinicas.example",
+      "alias": [
+        "Visionar"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Instituto Ocular Santa Eulalia",
+      "nivel": "contexto",
+      "rol": "Contexto",
+      "dominio": "santaeulalia-ocular.example",
+      "alias": [
+        "Santa Eulalia"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    },
+    {
+      "nombre": "Centro Lasik Península",
+      "nivel": "contexto",
+      "rol": "Contexto",
+      "dominio": "lasikpeninsula.example",
+      "alias": [
+        "Lasik Península"
+      ],
+      "motivo": null,
+      "fuente_url": null
+    }
+  ]
+}

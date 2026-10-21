@@ -1,0 +1,21 @@
+{
+  "clave_configurada": true,
+  "clave_mascara": "sk-or-…a1b2",
+  "modelos": {
+    "juez": "google/gemini-2.5-flash",
+    "redaccion": "anthropic/claude-sonnet-4.5",
+    "propuesta": "google/gemini-2.5-flash",
+    "chatgpt": "openai/gpt-4o-mini",
+    "gemini": "google/gemini-2.5-flash",
+    "claude": "anthropic/claude-haiku-4.5",
+    "perplexity": "perplexity/sonar"
+  },
+  "limites": {
+    "concurrencia": 8,
+    "max_llamadas": 3000,
+    "tope_gasto_eur": 15.0,
+    "usd_eur": 0.92
+  },
+  "carpeta_datos": "./data/projects",
+  "modelos_inexistentes": []
+}

@@ -1,0 +1,500 @@
+{
+  "id": "T8",
+  "titulo": "T8",
+  "columnas": [
+    "par",
+    "marca_a",
+    "marca_b",
+    "motor",
+    "ambito",
+    "n",
+    "victorias_a",
+    "victorias_b",
+    "empates",
+    "ganador",
+    "evidencia_ids"
+  ],
+  "filas": [
+    {
+      "par": "Clínica Alborada Visión vs Instituto Oftálmico Tramuntana",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Instituto Oftálmico Tramuntana",
+      "motor": "ChatGPT",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 2,
+      "victorias_b": 4,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0041",
+        "EJ-0065",
+        "EJ-0249",
+        "EJ-0273",
+        "EJ-0457",
+        "EJ-0481"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Instituto Oftálmico Tramuntana",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Instituto Oftálmico Tramuntana",
+      "motor": "Gemini",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 3,
+      "victorias_b": 3,
+      "empates": 0,
+      "ganador": "Empate",
+      "evidencia_ids": [
+        "EJ-0042",
+        "EJ-0066",
+        "EJ-0250",
+        "EJ-0274",
+        "EJ-0458",
+        "EJ-0482"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Instituto Oftálmico Tramuntana",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Instituto Oftálmico Tramuntana",
+      "motor": "Perplexity",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 3,
+      "victorias_b": 3,
+      "empates": 0,
+      "ganador": "Empate",
+      "evidencia_ids": [
+        "EJ-0043",
+        "EJ-0067",
+        "EJ-0251",
+        "EJ-0275",
+        "EJ-0459",
+        "EJ-0483"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Instituto Oftálmico Tramuntana",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Instituto Oftálmico Tramuntana",
+      "motor": "Claude",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 1,
+      "victorias_b": 5,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0044",
+        "EJ-0068",
+        "EJ-0252",
+        "EJ-0276",
+        "EJ-0460",
+        "EJ-0484"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Láser Nítida",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Láser Nítida",
+      "motor": "ChatGPT",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0045",
+        "EJ-0069",
+        "EJ-0253",
+        "EJ-0277",
+        "EJ-0461",
+        "EJ-0485"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Láser Nítida",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Láser Nítida",
+      "motor": "Gemini",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 6,
+      "victorias_b": 0,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0046",
+        "EJ-0070",
+        "EJ-0254",
+        "EJ-0278",
+        "EJ-0462",
+        "EJ-0486"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Láser Nítida",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Láser Nítida",
+      "motor": "Perplexity",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0047",
+        "EJ-0071",
+        "EJ-0255",
+        "EJ-0279",
+        "EJ-0463",
+        "EJ-0487"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Láser Nítida",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Láser Nítida",
+      "motor": "Claude",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0048",
+        "EJ-0072",
+        "EJ-0256",
+        "EJ-0280",
+        "EJ-0464",
+        "EJ-0488"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Vistalia Oftalmología",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "ChatGPT",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 6,
+      "victorias_b": 0,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0049",
+        "EJ-0073",
+        "EJ-0257",
+        "EJ-0281",
+        "EJ-0465",
+        "EJ-0489"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Vistalia Oftalmología",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "Gemini",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 3,
+      "victorias_b": 3,
+      "empates": 0,
+      "ganador": "Empate",
+      "evidencia_ids": [
+        "EJ-0050",
+        "EJ-0074",
+        "EJ-0258",
+        "EJ-0282",
+        "EJ-0466",
+        "EJ-0490"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Vistalia Oftalmología",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "Perplexity",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 6,
+      "victorias_b": 0,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0051",
+        "EJ-0075",
+        "EJ-0259",
+        "EJ-0283",
+        "EJ-0467",
+        "EJ-0491"
+      ]
+    },
+    {
+      "par": "Instituto Oftálmico Tramuntana vs Vistalia Oftalmología",
+      "marca_a": "Instituto Oftálmico Tramuntana",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "Claude",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 6,
+      "victorias_b": 0,
+      "empates": 0,
+      "ganador": "Instituto Oftálmico Tramuntana",
+      "evidencia_ids": [
+        "EJ-0052",
+        "EJ-0076",
+        "EJ-0260",
+        "EJ-0284",
+        "EJ-0468",
+        "EJ-0492"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Grupo Hospitalario Valdecruz",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Grupo Hospitalario Valdecruz",
+      "motor": "ChatGPT",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 1,
+      "victorias_b": 5,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0053",
+        "EJ-0077",
+        "EJ-0261",
+        "EJ-0285",
+        "EJ-0469",
+        "EJ-0493"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Grupo Hospitalario Valdecruz",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Grupo Hospitalario Valdecruz",
+      "motor": "Gemini",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 2,
+      "victorias_b": 4,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0054",
+        "EJ-0078",
+        "EJ-0262",
+        "EJ-0286",
+        "EJ-0470",
+        "EJ-0494"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Grupo Hospitalario Valdecruz",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Grupo Hospitalario Valdecruz",
+      "motor": "Perplexity",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 0,
+      "victorias_b": 6,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0055",
+        "EJ-0079",
+        "EJ-0263",
+        "EJ-0287",
+        "EJ-0471",
+        "EJ-0495"
+      ]
+    },
+    {
+      "par": "Clínica Alborada Visión vs Grupo Hospitalario Valdecruz",
+      "marca_a": "Clínica Alborada Visión",
+      "marca_b": "Grupo Hospitalario Valdecruz",
+      "motor": "Claude",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 1,
+      "victorias_b": 5,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0056",
+        "EJ-0080",
+        "EJ-0264",
+        "EJ-0288",
+        "EJ-0472",
+        "EJ-0496"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Láser Nítida",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Láser Nítida",
+      "motor": "ChatGPT",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 4,
+      "victorias_b": 2,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0057",
+        "EJ-0081",
+        "EJ-0265",
+        "EJ-0289",
+        "EJ-0473",
+        "EJ-0497"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Láser Nítida",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Láser Nítida",
+      "motor": "Gemini",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0058",
+        "EJ-0082",
+        "EJ-0266",
+        "EJ-0290",
+        "EJ-0474",
+        "EJ-0498"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Láser Nítida",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Láser Nítida",
+      "motor": "Perplexity",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0059",
+        "EJ-0083",
+        "EJ-0267",
+        "EJ-0291",
+        "EJ-0475",
+        "EJ-0499"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Láser Nítida",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Láser Nítida",
+      "motor": "Claude",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 4,
+      "victorias_b": 2,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0060",
+        "EJ-0084",
+        "EJ-0268",
+        "EJ-0292",
+        "EJ-0476",
+        "EJ-0500"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Vistalia Oftalmología",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "ChatGPT",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0061",
+        "EJ-0085",
+        "EJ-0269",
+        "EJ-0293",
+        "EJ-0477",
+        "EJ-0501"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Vistalia Oftalmología",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "Gemini",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0062",
+        "EJ-0086",
+        "EJ-0270",
+        "EJ-0294",
+        "EJ-0478",
+        "EJ-0502"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Vistalia Oftalmología",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "Perplexity",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0063",
+        "EJ-0087",
+        "EJ-0271",
+        "EJ-0295",
+        "EJ-0479",
+        "EJ-0503"
+      ]
+    },
+    {
+      "par": "Grupo Hospitalario Valdecruz vs Vistalia Oftalmología",
+      "marca_a": "Grupo Hospitalario Valdecruz",
+      "marca_b": "Vistalia Oftalmología",
+      "motor": "Claude",
+      "ambito": "asistida",
+      "n": 6,
+      "victorias_a": 5,
+      "victorias_b": 1,
+      "empates": 0,
+      "ganador": "Grupo Hospitalario Valdecruz",
+      "evidencia_ids": [
+        "EJ-0064",
+        "EJ-0088",
+        "EJ-0272",
+        "EJ-0296",
+        "EJ-0480",
+        "EJ-0504"
+      ]
+    }
+  ],
+  "n": 144
+}

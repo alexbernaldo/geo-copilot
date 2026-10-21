@@ -1,0 +1,199 @@
+{
+  "fila": {
+    "ejecucion_id": "EJ-0001",
+    "prompt_id": "OFT-DG-01",
+    "familia": "Descubrimiento genérico",
+    "intencion": "Descubrimiento",
+    "instanciacion": "generico",
+    "ambito": "espontanea",
+    "motor": "ChatGPT",
+    "repeticion": 1,
+    "ciudad": null,
+    "prompt": "¿Cuáles son las mejores clínicas oftalmológicas de España para operarse la vista?",
+    "marcas_a_evaluar": [
+      "Instituto Oftálmico Tramuntana",
+      "Clínica Alborada Visión",
+      "Láser Nítida",
+      "Vistalia Oftalmología",
+      "Grupo Hospitalario Valdecruz",
+      "Oftalmos Centro",
+      "Clínica del Ojo Cervantes",
+      "Visionar Clínicas",
+      "Instituto Ocular Santa Eulalia",
+      "Centro Lasik Península"
+    ],
+    "fecha": "2026-09-14 09:01"
+  },
+  "respuesta": "Estas son algunas de las opciones más reconocidas:\n\n1. **Grupo Hospitalario Valdecruz** — es un referente por volumen de intervenciones y respaldo hospitalario. Es la que más recomendaría.\n2. **Instituto Oftálmico Tramuntana** — es un centro de referencia en oftalmología avanzada y cirugía de retina.\n3. **Láser Nítida** — es una cadena especializada en cirugía láser con precios ajustados y financiación.\n4. **Santa Eulalia** — destaca por su actividad docente y por los ensayos clínicos que realiza.\n5. **Vistalia Oftalmología** — es una red de centros con buena cobertura regional y tiempos de cita reducidos.\n6. **Visionar** — tiene una oferta amplia de gafas, lentillas y revisiones.\n\n**En resumen:** si priorizas la cercanía, Grupo Hospitalario Valdecruz es la opción más recomendable; el resto son buenas alternativas para contrastar.",
+  "resaltados": [
+    {
+      "marca": "Instituto Oftálmico Tramuntana",
+      "inicio": 194,
+      "fin": 224
+    },
+    {
+      "marca": "Láser Nítida",
+      "inicio": 307,
+      "fin": 319
+    },
+    {
+      "marca": "Vistalia Oftalmología",
+      "inicio": 508,
+      "fin": 529
+    },
+    {
+      "marca": "Grupo Hospitalario Valdecruz",
+      "inicio": 57,
+      "fin": 85
+    }
+  ],
+  "fuentes": [
+    {
+      "dominio": "directoriomedico.example, diariosalud.example, saludactual.example",
+      "tipo": "Medio",
+      "calidad": null
+    }
+  ],
+  "evaluaciones": [
+    {
+      "marca": "Instituto Oftálmico Tramuntana",
+      "aparece": true,
+      "posicion": 2,
+      "tipo_mencion": "Comparación neutra",
+      "fuerza": 1,
+      "sentimiento": "neutro",
+      "tipo_fuente": "Directorio / comparador",
+      "calidad_fuente": 0.6,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": "2. **Instituto Oftálmico Tramuntana** — es un centro de referencia en oftalmología avanzada y cirugía de retina."
+    },
+    {
+      "marca": "Clínica Alborada Visión",
+      "aparece": false,
+      "posicion": null,
+      "tipo_mencion": null,
+      "fuerza": 0,
+      "sentimiento": null,
+      "tipo_fuente": null,
+      "calidad_fuente": null,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": null
+    },
+    {
+      "marca": "Láser Nítida",
+      "aparece": true,
+      "posicion": 3,
+      "tipo_mencion": "Comparación neutra",
+      "fuerza": 1,
+      "sentimiento": "neutro",
+      "tipo_fuente": "Directorio / comparador",
+      "calidad_fuente": 0.6,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": "3. **Láser Nítida** — es una cadena especializada en cirugía láser con precios ajustados y financiación."
+    },
+    {
+      "marca": "Vistalia Oftalmología",
+      "aparece": true,
+      "posicion": 5,
+      "tipo_mencion": "Pasiva",
+      "fuerza": 1,
+      "sentimiento": "neutro",
+      "tipo_fuente": "Directorio / comparador",
+      "calidad_fuente": 0.6,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": "5. **Vistalia Oftalmología** — es una red de centros con buena cobertura regional y tiempos de cita reducidos."
+    },
+    {
+      "marca": "Grupo Hospitalario Valdecruz",
+      "aparece": true,
+      "posicion": 1,
+      "tipo_mencion": "Recomendación activa",
+      "fuerza": 3,
+      "sentimiento": "positivo",
+      "tipo_fuente": "Directorio / comparador",
+      "calidad_fuente": 0.6,
+      "juez": "ensemble",
+      "confianza": 0.75,
+      "discrepancia": false,
+      "fragmento": "1. **Grupo Hospitalario Valdecruz** — es un referente por volumen de intervenciones y respaldo hospitalario. Es la que más recomendaría. \n**En resumen:** si priorizas la cercanía, Grupo Hospitalario Valdecruz es la opción más recomendable; el resto son buenas alternativas para contrastar."
+    },
+    {
+      "marca": "Oftalmos Centro",
+      "aparece": false,
+      "posicion": null,
+      "tipo_mencion": null,
+      "fuerza": 0,
+      "sentimiento": null,
+      "tipo_fuente": null,
+      "calidad_fuente": null,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": null
+    },
+    {
+      "marca": "Clínica del Ojo Cervantes",
+      "aparece": false,
+      "posicion": null,
+      "tipo_mencion": null,
+      "fuerza": 0,
+      "sentimiento": null,
+      "tipo_fuente": null,
+      "calidad_fuente": null,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": null
+    },
+    {
+      "marca": "Visionar Clínicas",
+      "aparece": true,
+      "posicion": 6,
+      "tipo_mencion": "Pasiva",
+      "fuerza": 1,
+      "sentimiento": "neutro",
+      "tipo_fuente": "Directorio / comparador",
+      "calidad_fuente": 0.6,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": "6. **Visionar** — tiene una oferta amplia de gafas, lentillas y revisiones."
+    },
+    {
+      "marca": "Instituto Ocular Santa Eulalia",
+      "aparece": true,
+      "posicion": 4,
+      "tipo_mencion": "Pasiva",
+      "fuerza": 1,
+      "sentimiento": "neutro",
+      "tipo_fuente": "Directorio / comparador",
+      "calidad_fuente": 0.6,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": "4. **Santa Eulalia** — destaca por su actividad docente y por los ensayos clínicos que realiza."
+    },
+    {
+      "marca": "Centro Lasik Península",
+      "aparece": false,
+      "posicion": null,
+      "tipo_mencion": null,
+      "fuerza": 0,
+      "sentimiento": null,
+      "tipo_fuente": null,
+      "calidad_fuente": null,
+      "juez": "ensemble",
+      "confianza": 1.0,
+      "discrepancia": false,
+      "fragmento": null
+    }
+  ]
+}

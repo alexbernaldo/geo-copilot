@@ -1,0 +1,17 @@
+{
+  "pasos": [
+    {
+      "id": "queries",
+      "nombre": "Ejecutar consultas",
+      "llamadas": 416,
+      "tokens_in": 600000,
+      "tokens_out": 400000,
+      "eur": 4.2
+    }
+  ],
+  "total_llamadas": 416,
+  "total_eur": 4.2,
+  "minutos": 6.5,
+  "supera_tope": false,
+  "tope_eur": 15.0
+}
