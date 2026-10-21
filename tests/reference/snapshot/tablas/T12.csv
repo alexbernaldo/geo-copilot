@@ -1,0 +1,12 @@
+﻿motor,ambito,n,n_sin_busqueda,n_con_busqueda,%sin_busqueda,evidencia_ids
+ChatGPT,ejecuciones,156,12,144,0.07692307692307693,"['EJ-0109' 'EJ-0117' 'EJ-0169' 'EJ-0309' 'EJ-0317' 'EJ-0325' 'EJ-0365'
+ 'EJ-0509' 'EJ-0541' 'EJ-0549' 'EJ-0557' 'EJ-0577']"
+Gemini,ejecuciones,156,0,156,0.0,[]
+Perplexity,ejecuciones,156,0,156,0.0,[]
+Claude,ejecuciones,156,45,111,0.28846153846153844,"['EJ-0060' 'EJ-0088' 'EJ-0096' 'EJ-0100' 'EJ-0112' 'EJ-0116' 'EJ-0120'
+ 'EJ-0132' 'EJ-0144' 'EJ-0156' 'EJ-0212' 'EJ-0216' 'EJ-0240' 'EJ-0252'
+ 'EJ-0268' 'EJ-0304' 'EJ-0308' 'EJ-0316' 'EJ-0332' 'EJ-0340' 'EJ-0344'
+ 'EJ-0348' 'EJ-0352' 'EJ-0380' 'EJ-0384' 'EJ-0404' 'EJ-0416' 'EJ-0428'
+ 'EJ-0436' 'EJ-0440' 'EJ-0444' 'EJ-0448' 'EJ-0468' 'EJ-0488' 'EJ-0492'
+ 'EJ-0504' 'EJ-0516' 'EJ-0552' 'EJ-0556' 'EJ-0564' 'EJ-0568' 'EJ-0576'
+ 'EJ-0592' 'EJ-0596' 'EJ-0624']"

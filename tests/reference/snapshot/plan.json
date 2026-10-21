@@ -1,0 +1,670 @@
+{
+  "acciones": [
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 2000.0,
+      "dependencias": [],
+      "descripcion": "Implementar marcado JSON-LD completo en las fichas de cirugía refractiva, cataratas, miopía infantil y sedes de Madrid y Barcelona, vinculando cuadro médico y acreditaciones.",
+      "entregables": [
+        "Especificación JSON-LD por tipo de página (MedicalClinic, Physician, FAQPage)",
+        "Validación en Rich Results Test y Schema Markup Validator"
+      ],
+      "esfuerzo": "M",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Validación"
+      ],
+      "fase_plan": 0,
+      "hallazgos_relacionados": [
+        "H7",
+        "H3",
+        "H6"
+      ],
+      "id": "A1",
+      "impacto": "L",
+      "kpi": "100 % de fichas prioritarias y sedes con schema.org validado sin errores",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "entidad_datos_estructurados",
+      "plazo_semanas": 3,
+      "responsable": "agencia",
+      "semana_inicio": 1,
+      "titulo": "Datos estructurados schema.org (MedicalClinic, Physician, MedicalProcedure, FAQPage)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 750.0,
+      "dependencias": [],
+      "descripcion": "Configurar acceso explícito para GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot y Google-Extended, optimizando tiempos de respuesta y contenido sin dependencia de JS.",
+      "entregables": [
+        "Archivo robots.txt y sitemap.xml actualizados",
+        "Informe técnico de renderizado SSR/HTML limpio en las 60 URLs"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Descubrimiento"
+      ],
+      "fase_plan": 0,
+      "hallazgos_relacionados": [
+        "H3"
+      ],
+      "id": "A2",
+      "impacto": "L",
+      "kpi": "Acceso 200 OK verificado para bots de OpenAI, Anthropic, Google y Perplexity",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude"
+      ],
+      "palanca": "tecnico",
+      "plazo_semanas": 2,
+      "responsable": "agencia",
+      "semana_inicio": 1,
+      "titulo": "Auditoría técnica de rastreabilidad para bots de IA (robots.txt, sitemap, renderizado HTML)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 1150.0,
+      "dependencias": [],
+      "descripcion": "Unificar nombre oficial, sedes (Madrid y Barcelona), especialidades, cuadro médico y horarios en comparaclinicas.example y directoriomedico.example.",
+      "entregables": [
+        "Matriz maestra de atributos NAP y servicios por sede",
+        "Fichas verificadas en comparaclinicas.example y directoriomedico.example"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Comparación"
+      ],
+      "fase_plan": 0,
+      "hallazgos_relacionados": [
+        "H7",
+        "H1",
+        "H5"
+      ],
+      "id": "A3",
+      "impacto": "M",
+      "kpi": "100 % de fichas de directorios sectoriales actualizadas y coherentes en Madrid y Barcelona",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Gemini",
+        "Perplexity",
+        "Claude"
+      ],
+      "palanca": "entidad_datos_estructurados",
+      "plazo_semanas": 3,
+      "responsable": "cliente_marketing",
+      "semana_inicio": 2,
+      "titulo": "Normalización de entidad y NAP en directorios sanitarios citados (comparaclinicas.example, directoriomedico.example)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 550.0,
+      "dependencias": [
+        "A1"
+      ],
+      "descripcion": "Dar de alta y estructurar la entidad de Clínica Alborada Visión en Wikidata con datos verificables (año de fundación 2009, sedes, especialidades, identificadores y referencias de prensa).",
+      "entregables": [
+        "Ficha de entidad publicada en Wikidata",
+        "Enlace sameAs integrado en el marcado schema.org de la web"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Validación"
+      ],
+      "fase_plan": 0,
+      "hallazgos_relacionados": [
+        "H3",
+        "H7"
+      ],
+      "id": "A4",
+      "impacto": "M",
+      "kpi": "Entidad activa en Wikidata con >= 10 propiedades y referencias externas",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude"
+      ],
+      "palanca": "entidad_datos_estructurados",
+      "plazo_semanas": 2,
+      "responsable": "agencia",
+      "semana_inicio": 4,
+      "titulo": "Creación y enriquecimiento de entidad en Wikidata con referencias verificables"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 950.0,
+      "dependencias": [],
+      "descripcion": "Concentrar en una URL pública de referencia las cifras oficiales de Clínica Alborada Visión (fundada en 2009, 14 oftalmólogos, ~7.500 intervenciones/año, 4,7/5 en 1.800 reseñas) para alimentar grounding web.",
+      "entregables": [
+        "Página 'Cifras y Calidad Asistencial' con datos estructurados y fuentes descargables",
+        "Hoja de datos rápida (Fact Sheet) para periodistas y asistentes de IA"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Validación"
+      ],
+      "fase_plan": 0,
+      "hallazgos_relacionados": [
+        "H5",
+        "H3"
+      ],
+      "id": "A5",
+      "impacto": "L",
+      "kpi": "Reducción de apariciones en zona de azar y mejora de consistencia 3/3 repeticiones",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "entidad_datos_estructurados",
+      "plazo_semanas": 2,
+      "responsable": "cliente_comunicacion",
+      "semana_inicio": 2,
+      "titulo": "Página de datos institucionales verificables (Memoria de actividad y calidad asistencial)"
+    },
+    {
+      "ciudades": [
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 2750.0,
+      "dependencias": [
+        "A1"
+      ],
+      "descripcion": "Crear landing pages específicas del centro de Barcelona (abierto en 2024) con equipo médico local, tecnología diagnóstica, tiempos de cita y preguntas frecuentes locales.",
+      "entregables": [
+        "3 páginas locales de Barcelona (cirugía refractiva, control de miopía infantil, cataratas)",
+        "Ficha local de sede Barcelona con perfiles de los oftalmólogos"
+      ],
+      "esfuerzo": "M",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Decisión"
+      ],
+      "fase_plan": 1,
+      "hallazgos_relacionados": [
+        "H1"
+      ],
+      "id": "A6",
+      "impacto": "L",
+      "kpi": "Incremento de aparición espontánea en consultas de Barcelona hacia el rango 20 % - 35 %",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Gemini",
+        "Perplexity",
+        "Claude"
+      ],
+      "palanca": "contenido",
+      "plazo_semanas": 4,
+      "responsable": "agencia",
+      "semana_inicio": 5,
+      "titulo": "Páginas locales en Barcelona por tratamiento prioritario (refractiva, cataratas y miopía infantil)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 900.0,
+      "dependencias": [],
+      "descripcion": "Reforzar criterios E-E-A-T sanitarios mediante perfiles detallados de cada especialista en Madrid y Barcelona, enlazados como revisores de las guías médicas.",
+      "entregables": [
+        "14 páginas de perfil médico con número de colegiado y experiencia",
+        "Sello de revisión médica con fecha en las 60 URLs informativas"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Validación",
+        "Decisión"
+      ],
+      "fase_plan": 0,
+      "hallazgos_relacionados": [
+        "H7",
+        "H3"
+      ],
+      "id": "A7",
+      "impacto": "M",
+      "kpi": "14 perfiles médicos completos con marcado Physician y autoría clínica visible",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "entidad_datos_estructurados",
+      "plazo_semanas": 3,
+      "responsable": "cliente_marketing",
+      "semana_inicio": 3,
+      "titulo": "Fichas individuales de los 14 oftalmólogos con colegiación, publicaciones y subespecialidad"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 2000.0,
+      "dependencias": [
+        "A1"
+      ],
+      "descripcion": "Redactar bloques de respuesta directa (40-80 palabras + tabla de criterios) para las dudas recurrentes que lanzan los usuarios a ChatGPT, Claude, Gemini y Perplexity.",
+      "entregables": [
+        "25 módulos FAQ optimizados para citación generativa y validados por dirección médica",
+        "Marcado FAQPage integrado en las páginas de servicio"
+      ],
+      "esfuerzo": "M",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Comparación",
+        "Decisión"
+      ],
+      "fase_plan": 1,
+      "hallazgos_relacionados": [
+        "H6",
+        "H3"
+      ],
+      "id": "A8",
+      "impacto": "L",
+      "kpi": "Publicación de 25 bloques Q&A estructurados con datos verificables de la clínica",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "contenido",
+      "plazo_semanas": 4,
+      "responsable": "agencia",
+      "semana_inicio": 5,
+      "titulo": "Hub de FAQ citables construidas desde el banco de prompts reales (DG, DP, CO, PR)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 1000.0,
+      "dependencias": [],
+      "descripcion": "Publicar desglose claro de rangos de inversión por técnica (LASIK, PRK, lentes fáquicas, cataratas), detallando que incluye valoración de 1 visita y 12 meses de seguimiento.",
+      "entregables": [
+        "Página pública de tarifas orientativas, alcance clínico y opciones de financiación",
+        "Tabla comparativa de qué incluye el protocolo asistencial de Clínica Alborada Visión"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Comparación",
+        "Decisión"
+      ],
+      "fase_plan": 1,
+      "hallazgos_relacionados": [
+        "H6",
+        "H4"
+      ],
+      "id": "A9",
+      "impacto": "L",
+      "kpi": "Aumento de aparición espontánea en fase de Decisión desde el 25 % hacia el 38 % - 48 %",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "contenido",
+      "plazo_semanas": 3,
+      "responsable": "cliente_marketing",
+      "semana_inicio": 6,
+      "titulo": "Página transparente de precios orientativos, qué incluye el tratamiento y financiación"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 1250.0,
+      "dependencias": [],
+      "descripcion": "Explicar con rigor médico el protocolo de revisiones durante 12 meses con el mismo oftalmólogo, respondiendo a la principal inquietud del paciente sin nombrar ni comparar con terceros.",
+      "entregables": [
+        "Guía clínica del protocolo de seguimiento postoperatorio de 12 meses firmada por el equipo médico",
+        "Infografía de cronograma de revisiones (24 h, 1 semana, 1 mes, 3, 6 y 12 meses)"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Validación",
+        "Decisión"
+      ],
+      "fase_plan": 1,
+      "hallazgos_relacionados": [
+        "H2",
+        "H6"
+      ],
+      "id": "A10",
+      "impacto": "L",
+      "kpi": "Incremento de menciones de recomendación activa basadas en seguimiento postoperatorio",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "contenido",
+      "plazo_semanas": 3,
+      "responsable": "cliente_medico",
+      "semana_inicio": 7,
+      "titulo": "Contenido de puesta en valor del seguimiento postoperatorio de 12 meses (diferencial propio)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 2000.0,
+      "dependencias": [
+        "A8"
+      ],
+      "descripcion": "Crear guías clínicas dedicadas a padres de niños con miopía progresiva, acompañantes de mayores con cataratas y opositores/pilotos con requisitos visuales.",
+      "entregables": [
+        "Guía para familias sobre control de miopía infantil",
+        "Guía sobre cirugía refractiva según edad y profesión (25-50 años, pilotos)",
+        "Guía de cirugía de cataratas con lentes premium para pacientes y familiares"
+      ],
+      "esfuerzo": "M",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Comparación"
+      ],
+      "fase_plan": 2,
+      "hallazgos_relacionados": [
+        "H6"
+      ],
+      "id": "A11",
+      "impacto": "M",
+      "kpi": "Incremento de visibilidad espontánea en prompts de familia DP (Descubrimiento por perfil)",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "contenido",
+      "plazo_semanas": 5,
+      "responsable": "agencia",
+      "semana_inicio": 11,
+      "titulo": "Guías específicas por perfil de paciente (miopía infantil para padres, mayores de 60, pilotos)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 4000.0,
+      "dependencias": [
+        "A6",
+        "A10"
+      ],
+      "descripcion": "Publicar tribunas médicas y notas con datos clínicos propios (~7.500 intervenciones/año, 14 oftalmólogos y protocolo de 12 meses de seguimiento) en bienestar-hoy.example, diariosalud.example y saludactual.example.",
+      "entregables": [
+        "Informe anual de datos clínicos y tendencias en cirugía refractiva y miopía infantil",
+        "6 artículos/entrevistas con portavoces médicos publicados en bienestar-hoy.example, diariosalud.example y saludactual.example"
+      ],
+      "esfuerzo": "L",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Validación"
+      ],
+      "fase_plan": 2,
+      "hallazgos_relacionados": [
+        "H7",
+        "H4",
+        "H5",
+        "H2"
+      ],
+      "id": "A12",
+      "impacto": "L",
+      "kpi": ">= 6 apariciones editoriales en bienestar-hoy.example, diariosalud.example y saludactual.example",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "autoridad_terceros",
+      "plazo_semanas": 12,
+      "responsable": "agencia",
+      "semana_inicio": 11,
+      "titulo": "Plan de PR digital en prensa de salud citada (bienestar-hoy.example, diariosalud.example, saludactual.example)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 2000.0,
+      "dependencias": [
+        "A3"
+      ],
+      "descripcion": "Presentar memoria clínica y asistencial ante colegiooftalmologos.example, guiaoftalmologia.example y rankingclinicas.example para mejorar respaldo institucional.",
+      "entregables": [
+        "Dossier institucional de indicadores médicos, equipamiento y sedes",
+        "Solicitudes de inclusión/actualización en colegiooftalmologos.example, guiaoftalmologia.example y rankingclinicas.example"
+      ],
+      "esfuerzo": "M",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Comparación",
+        "Validación"
+      ],
+      "fase_plan": 2,
+      "hallazgos_relacionados": [
+        "H7",
+        "H4"
+      ],
+      "id": "A13",
+      "impacto": "L",
+      "kpi": "Presencia activa en >= 3 rankings/guías sectoriales de calidad 1.0",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Claude",
+        "Gemini",
+        "Perplexity"
+      ],
+      "palanca": "autoridad_terceros",
+      "plazo_semanas": 8,
+      "responsable": "cliente_comunicacion",
+      "semana_inicio": 12,
+      "titulo": "Dossier y candidatura a rankings y guías sectoriales (colegiooftalmologos.example, guiaoftalmologia.example, rankingclinicas.example)"
+    },
+    {
+      "ciudades": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "coste_estimado_eur": 3000.0,
+      "dependencias": [
+        "A1",
+        "A6"
+      ],
+      "descripcion": "Re-ejecutar el banco de 25 prompts en ChatGPT, Gemini, Perplexity y Claude cada trimestre para medir evolución del Score de Citación, con hito intermedio en el mes 6.",
+      "entregables": [
+        "4 informes trimestrales de evolución GEO para el Comité de Dirección",
+        "Revisión de mitad de horizonte (mes 6) con recalibración de acciones"
+      ],
+      "esfuerzo": "S",
+      "fase_embudo": [
+        "Descubrimiento",
+        "Comparación",
+        "Validación",
+        "Decisión"
+      ],
+      "fase_plan": 3,
+      "hallazgos_relacionados": [
+        "H1",
+        "H3",
+        "H6",
+        "H4",
+        "H7",
+        "H2",
+        "H5"
+      ],
+      "id": "A14",
+      "impacto": "L",
+      "kpi": "4 oleadas trimestrales ejecutadas (S12, S24, S36, S48) con atribución a primeras visitas",
+      "motores_objetivo": [
+        "ChatGPT",
+        "Gemini",
+        "Perplexity",
+        "Claude"
+      ],
+      "palanca": "medicion",
+      "plazo_semanas": 36,
+      "responsable": "agencia",
+      "semana_inicio": 12,
+      "titulo": "Re-medición trimestral del estudio GEO (4 oleadas: semanas 12, 24, 36 y 48) e informe a Comité"
+    }
+  ],
+  "coste_total_eur": 24300.0,
+  "fases": [
+    {
+      "acciones": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A7"
+      ],
+      "nombre": "Fase 0 · Fundamentos técnicos, entidad y datos estructurados",
+      "numero": 0,
+      "objetivo": "Asegurar que los bots de IA rastreen la web sin fricción y comprendan la entidad médica, sedes y cuadro facultativo.",
+      "semanas": [
+        1,
+        4
+      ]
+    },
+    {
+      "acciones": [
+        "A6",
+        "A8",
+        "A9",
+        "A10"
+      ],
+      "nombre": "Fase 1 · Contenidos prioritarios, páginas locales (Barcelona) y reputación",
+      "numero": 1,
+      "objetivo": "Cerrar la brecha de visibilidad en Barcelona y en la fase de Decisión con páginas locales, FAQ citables, precios transparentes y protocolo postoperatorio.",
+      "semanas": [
+        5,
+        10
+      ]
+    },
+    {
+      "acciones": [
+        "A11",
+        "A12",
+        "A13"
+      ],
+      "nombre": "Fase 2 · Autoridad en terceros, PR digital, rankings y perfiles de paciente",
+      "numero": 2,
+      "objetivo": "Construir respaldo en medios sanitarios, rankings institucionales y guías por perfil de paciente para escalar recomendaciones en ChatGPT, Claude, Gemini y Perplexity.",
+      "semanas": [
+        11,
+        36
+      ]
+    },
+    {
+      "acciones": [
+        "A14"
+      ],
+      "nombre": "Fase 3 · Medición continua y recalibración trimestral",
+      "numero": 3,
+      "objetivo": "Medir la evolución del Score de Citación en las semanas 12, 24, 36 y 48, verificando primeros resultados visibles en el mes 6.",
+      "semanas": [
+        12,
+        48
+      ]
+    }
+  ],
+  "medicion": "Re-ejecución trimestral del banco de 25 prompts (624 ejecuciones por oleada en ChatGPT, Gemini, Perplexity y Claude) en las semanas 12, 24, 36 y 48, con hito de control intermedio en el mes 6 (semana 24) para evaluar evolución del Score de Citación y primeras visitas de cirugía refractiva.",
+  "objetivos": [
+    {
+      "hallazgos": [
+        "H4",
+        "H7"
+      ],
+      "kpi": "Score de Citación espontáneo global (0-100)",
+      "plazo_meses": 12,
+      "valor_actual": 27.97,
+      "valor_objetivo_max": 48.0,
+      "valor_objetivo_min": 40.0
+    },
+    {
+      "hallazgos": [
+        "H4",
+        "H5"
+      ],
+      "kpi": "Tasa de aparición espontánea global (%)",
+      "plazo_meses": 12,
+      "valor_actual": 38.8,
+      "valor_objetivo_max": 58.8,
+      "valor_objetivo_min": 50.8
+    },
+    {
+      "hallazgos": [
+        "H1"
+      ],
+      "kpi": "Tasa de aparición espontánea en Barcelona (%)",
+      "plazo_meses": 12,
+      "valor_actual": 4.2,
+      "valor_objetivo_max": 35.0,
+      "valor_objetivo_min": 20.0
+    },
+    {
+      "hallazgos": [
+        "H3"
+      ],
+      "kpi": "Tasa de aparición espontánea en ChatGPT (%)",
+      "plazo_meses": 12,
+      "valor_actual": 18.3,
+      "valor_objetivo_max": 45.0,
+      "valor_objetivo_min": 32.0
+    },
+    {
+      "hallazgos": [
+        "H6"
+      ],
+      "kpi": "Tasa de aparición espontánea en fase de Decisión (%)",
+      "plazo_meses": 12,
+      "valor_actual": 25.0,
+      "valor_objetivo_max": 50.0,
+      "valor_objetivo_min": 38.0
+    }
+  ],
+  "riesgos": [
+    "No determinismo y actualizaciones de los modelos de IA: las respuestas varían entre ejecuciones y por cambios de pesos de cada proveedor.",
+    "Tiempos de indexación y refresco de fuentes de terceros (rankings, directorios y prensa sanitaria).",
+    "Sensibilidad regulatoria en publicidad sanitaria: toda pieza requiere validación médico-legal previa sin promesas de resultado.",
+    "Disponibilidad del equipo interno (1 responsable de marketing + 0,5 comunicación) en semanas de lanzamiento de contenidos."
+  ],
+  "supuestos": [
+    "Supuestos de tarifa orientativos definidos por el equipo para servicios de consultoría GEO, desarrollo técnico y PR digital (sujetos a tarifas oficiales de agencia).",
+    "Los objetivos de visibilidad se formulan como rangos esperados basados en las palancas GEO de la industria, nunca como resultados garantizados.",
+    "Capacidad de dedicación del equipo del cliente estimada en hasta 18 horas semanales combinadas."
+  ]
+}

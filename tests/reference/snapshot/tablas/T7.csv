@@ -1,0 +1,149 @@
+﻿marca,rol_comparado,dominio,ambito,n,n_ejecuciones_marca,tasa_citacion_en_apariciones,evidencia_ids
+Clínica Alborada Visión,marca_brief,diariosalud.example,ejecuciones,28,93,0.3010752688172043,"['EJ-0007' 'EJ-0012' 'EJ-0014' 'EJ-0023' 'EJ-0035' 'EJ-0155' 'EJ-0187'
+ 'EJ-0195' 'EJ-0203' 'EJ-0219' 'EJ-0226' 'EJ-0230' 'EJ-0239' 'EJ-0383'
+ 'EJ-0395' 'EJ-0401' 'EJ-0406' 'EJ-0411' 'EJ-0429' 'EJ-0430' 'EJ-0431'
+ 'EJ-0442' 'EJ-0446' 'EJ-0451' 'EJ-0569' 'EJ-0571' 'EJ-0591' 'EJ-0619']"
+Clínica Alborada Visión,marca_brief,directoriomedico.example,ejecuciones,25,93,0.26881720430107525,"['EJ-0011' 'EJ-0014' 'EJ-0019' 'EJ-0022' 'EJ-0026' 'EJ-0031' 'EJ-0035'
+ 'EJ-0187' 'EJ-0193' 'EJ-0203' 'EJ-0215' 'EJ-0219' 'EJ-0221' 'EJ-0231'
+ 'EJ-0236' 'EJ-0238' 'EJ-0398' 'EJ-0406' 'EJ-0419' 'EJ-0423' 'EJ-0434'
+ 'EJ-0451' 'EJ-0570' 'EJ-0599' 'EJ-0607']"
+Clínica Alborada Visión,marca_brief,saludactual.example,ejecuciones,22,93,0.23655913978494625,"['EJ-0002' 'EJ-0003' 'EJ-0031' 'EJ-0035' 'EJ-0202' 'EJ-0203' 'EJ-0204'
+ 'EJ-0210' 'EJ-0215' 'EJ-0223' 'EJ-0230' 'EJ-0231' 'EJ-0232' 'EJ-0235'
+ 'EJ-0394' 'EJ-0395' 'EJ-0429' 'EJ-0430' 'EJ-0431' 'EJ-0453' 'EJ-0607'
+ 'EJ-0611']"
+Clínica Alborada Visión,marca_brief,comparaclinicas.example,ejecuciones,20,93,0.21505376344086022,"['EJ-0006' 'EJ-0018' 'EJ-0023' 'EJ-0187' 'EJ-0195' 'EJ-0215' 'EJ-0222'
+ 'EJ-0227' 'EJ-0236' 'EJ-0238' 'EJ-0239' 'EJ-0395' 'EJ-0419' 'EJ-0420'
+ 'EJ-0423' 'EJ-0451' 'EJ-0453' 'EJ-0599' 'EJ-0611' 'EJ-0619']"
+Clínica Alborada Visión,marca_brief,google.com,ejecuciones,18,93,0.1935483870967742,"['EJ-0018' 'EJ-0026' 'EJ-0038' 'EJ-0190' 'EJ-0193' 'EJ-0223' 'EJ-0234'
+ 'EJ-0239' 'EJ-0246' 'EJ-0363' 'EJ-0382' 'EJ-0399' 'EJ-0403' 'EJ-0429'
+ 'EJ-0434' 'EJ-0446' 'EJ-0454' 'EJ-0599']"
+Clínica Alborada Visión,marca_brief,trustpilot.com,ejecuciones,17,93,0.1827956989247312,"['EJ-0003' 'EJ-0007' 'EJ-0010' 'EJ-0011' 'EJ-0015' 'EJ-0019' 'EJ-0030'
+ 'EJ-0038' 'EJ-0218' 'EJ-0222' 'EJ-0226' 'EJ-0233' 'EJ-0394' 'EJ-0434'
+ 'EJ-0447' 'EJ-0571' 'EJ-0610']"
+Clínica Alborada Visión,marca_brief,bienestar-hoy.example,ejecuciones,16,93,0.17204301075268819,"['EJ-0003' 'EJ-0006' 'EJ-0010' 'EJ-0015' 'EJ-0153' 'EJ-0190' 'EJ-0221'
+ 'EJ-0222' 'EJ-0243' 'EJ-0399' 'EJ-0403' 'EJ-0419' 'EJ-0435' 'EJ-0439'
+ 'EJ-0572' 'EJ-0604']"
+Clínica Alborada Visión,marca_brief,opinaclinicas.example,ejecuciones,16,93,0.17204301075268819,"['EJ-0006' 'EJ-0011' 'EJ-0015' 'EJ-0019' 'EJ-0025' 'EJ-0155' 'EJ-0227'
+ 'EJ-0235' 'EJ-0363' 'EJ-0382' 'EJ-0399' 'EJ-0406' 'EJ-0431' 'EJ-0435'
+ 'EJ-0591' 'EJ-0618']"
+Clínica Alborada Visión,marca_brief,colegiooftalmologos.example,ejecuciones,15,93,0.16129032258064516,"['EJ-0007' 'EJ-0015' 'EJ-0025' 'EJ-0210' 'EJ-0223' 'EJ-0238' 'EJ-0243'
+ 'EJ-0401' 'EJ-0420' 'EJ-0425' 'EJ-0435' 'EJ-0438' 'EJ-0569' 'EJ-0604'
+ 'EJ-0619']"
+Clínica Alborada Visión,marca_brief,guiaoftalmologia.example,ejecuciones,14,93,0.15053763440860216,"['EJ-0007' 'EJ-0010' 'EJ-0012' 'EJ-0204' 'EJ-0231' 'EJ-0383' 'EJ-0402'
+ 'EJ-0411' 'EJ-0422' 'EJ-0430' 'EJ-0431' 'EJ-0445' 'EJ-0446' 'EJ-0447']"
+Clínica Alborada Visión,marca_brief,reddit.com,ejecuciones,14,93,0.15053763440860216,"['EJ-0019' 'EJ-0025' 'EJ-0031' 'EJ-0155' 'EJ-0193' 'EJ-0195' 'EJ-0203'
+ 'EJ-0223' 'EJ-0399' 'EJ-0423' 'EJ-0447' 'EJ-0451' 'EJ-0453' 'EJ-0611']"
+Clínica Alborada Visión,marca_brief,rankingclinicas.example,ejecuciones,13,93,0.13978494623655913,"['EJ-0011' 'EJ-0023' 'EJ-0153' 'EJ-0219' 'EJ-0227' 'EJ-0233' 'EJ-0243'
+ 'EJ-0363' 'EJ-0395' 'EJ-0419' 'EJ-0438' 'EJ-0571' 'EJ-0610']"
+Clínica Alborada Visión,marca_brief,youtube.com,ejecuciones,12,93,0.12903225806451613,"['EJ-0031' 'EJ-0187' 'EJ-0195' 'EJ-0233' 'EJ-0235' 'EJ-0383' 'EJ-0403'
+ 'EJ-0435' 'EJ-0439' 'EJ-0445' 'EJ-0571' 'EJ-0619']"
+Clínica Alborada Visión,marca_brief,wikipedia.org,ejecuciones,11,93,0.11827956989247312,"['EJ-0022' 'EJ-0030' 'EJ-0221' 'EJ-0232' 'EJ-0235' 'EJ-0243' 'EJ-0363'
+ 'EJ-0382' 'EJ-0401' 'EJ-0411' 'EJ-0572']"
+Clínica Alborada Visión,marca_brief,alboradavision.example,ejecuciones,10,93,0.10752688172043011,"['EJ-0002' 'EJ-0038' 'EJ-0176' 'EJ-0210' 'EJ-0234' 'EJ-0402' 'EJ-0438'
+ 'EJ-0454' 'EJ-0569' 'EJ-0610']"
+Clínica Alborada Visión,marca_brief,foroscorazonsalud.example,ejecuciones,10,93,0.10752688172043011,"['EJ-0023' 'EJ-0219' 'EJ-0231' 'EJ-0411' 'EJ-0423' 'EJ-0425' 'EJ-0439'
+ 'EJ-0445' 'EJ-0607' 'EJ-0611']"
+Clínica Alborada Visión,marca_brief,valdecruz.example,ejecuciones,7,93,0.07526881720430108,['EJ-0002' 'EJ-0022' 'EJ-0153' 'EJ-0190' 'EJ-0234' 'EJ-0422' 'EJ-0442']
+Clínica Alborada Visión,marca_brief,santaeulalia-ocular.example,ejecuciones,7,93,0.07526881720430108,['EJ-0018' 'EJ-0176' 'EJ-0202' 'EJ-0226' 'EJ-0398' 'EJ-0570' 'EJ-0618']
+Clínica Alborada Visión,marca_brief,clinicacervantes.example,ejecuciones,3,93,0.03225806451612903,['EJ-0202' 'EJ-0218' 'EJ-0246']
+Clínica Alborada Visión,marca_brief,visionar-clinicas.example,ejecuciones,3,93,0.03225806451612903,['EJ-0218' 'EJ-0402' 'EJ-0422']
+Clínica Alborada Visión,marca_brief,vistalia-oftalmologia.example,ejecuciones,2,93,0.021505376344086023,['EJ-0026' 'EJ-0618']
+Clínica Alborada Visión,marca_brief,tramuntana-oftalmologia.example,ejecuciones,2,93,0.021505376344086023,['EJ-0030' 'EJ-0246']
+Clínica Alborada Visión,marca_brief,lasernitida.example,ejecuciones,2,93,0.021505376344086023,['EJ-0394' 'EJ-0442']
+Clínica Alborada Visión,marca_brief,oftalmoscentro.example,ejecuciones,2,93,0.021505376344086023,['EJ-0398' 'EJ-0425']
+Clínica Alborada Visión,marca_brief,lasikpeninsula.example,ejecuciones,1,93,0.010752688172043012,['EJ-0230']
+Grupo Hospitalario Valdecruz,lider,directoriomedico.example,ejecuciones,60,218,0.27522935779816515,"['EJ-0001' 'EJ-0008' 'EJ-0009' 'EJ-0011' 'EJ-0014' 'EJ-0019' 'EJ-0020'
+ 'EJ-0022' 'EJ-0027' 'EJ-0031' 'EJ-0034' 'EJ-0039' 'EJ-0040' 'EJ-0177'
+ 'EJ-0179' 'EJ-0180' 'EJ-0182' 'EJ-0184' 'EJ-0187' 'EJ-0193' 'EJ-0194'
+ 'EJ-0199' 'EJ-0203' 'EJ-0208' 'EJ-0215' 'EJ-0219' 'EJ-0221' 'EJ-0231'
+ 'EJ-0236' 'EJ-0237' 'EJ-0238' 'EJ-0242' 'EJ-0245' 'EJ-0388' 'EJ-0389'
+ 'EJ-0390' 'EJ-0398' 'EJ-0400' 'EJ-0406' 'EJ-0407' 'EJ-0413' 'EJ-0415'
+ 'EJ-0419' 'EJ-0423' 'EJ-0432' 'EJ-0434' 'EJ-0437' 'EJ-0441' 'EJ-0450'
+ 'EJ-0451']"
+Grupo Hospitalario Valdecruz,lider,saludactual.example,ejecuciones,50,218,0.22935779816513763,"['EJ-0001' 'EJ-0002' 'EJ-0003' 'EJ-0008' 'EJ-0009' 'EJ-0024' 'EJ-0031'
+ 'EJ-0033' 'EJ-0034' 'EJ-0037' 'EJ-0154' 'EJ-0183' 'EJ-0189' 'EJ-0192'
+ 'EJ-0203' 'EJ-0204' 'EJ-0206' 'EJ-0210' 'EJ-0213' 'EJ-0215' 'EJ-0223'
+ 'EJ-0224' 'EJ-0228' 'EJ-0230' 'EJ-0231' 'EJ-0232' 'EJ-0235' 'EJ-0241'
+ 'EJ-0244' 'EJ-0362' 'EJ-0364' 'EJ-0385' 'EJ-0388' 'EJ-0391' 'EJ-0394'
+ 'EJ-0395' 'EJ-0413' 'EJ-0415' 'EJ-0426' 'EJ-0429' 'EJ-0430' 'EJ-0431'
+ 'EJ-0453' 'EJ-0589' 'EJ-0607' 'EJ-0609' 'EJ-0611' 'EJ-0616' 'EJ-0620'
+ 'EJ-0623']"
+Grupo Hospitalario Valdecruz,lider,comparaclinicas.example,ejecuciones,46,218,0.21100917431192662,"['EJ-0006' 'EJ-0017' 'EJ-0018' 'EJ-0023' 'EJ-0028' 'EJ-0034' 'EJ-0178'
+ 'EJ-0181' 'EJ-0187' 'EJ-0191' 'EJ-0194' 'EJ-0195' 'EJ-0196' 'EJ-0197'
+ 'EJ-0200' 'EJ-0205' 'EJ-0214' 'EJ-0215' 'EJ-0220' 'EJ-0222' 'EJ-0225'
+ 'EJ-0236' 'EJ-0238' 'EJ-0239' 'EJ-0395' 'EJ-0407' 'EJ-0409' 'EJ-0414'
+ 'EJ-0415' 'EJ-0419' 'EJ-0420' 'EJ-0423' 'EJ-0437' 'EJ-0443' 'EJ-0451'
+ 'EJ-0453' 'EJ-0590' 'EJ-0594' 'EJ-0597' 'EJ-0599' 'EJ-0611' 'EJ-0619'
+ 'EJ-0620' 'EJ-0621' 'EJ-0622' 'EJ-0623']"
+Grupo Hospitalario Valdecruz,lider,diariosalud.example,ejecuciones,44,218,0.2018348623853211,"['EJ-0001' 'EJ-0004' 'EJ-0007' 'EJ-0012' 'EJ-0014' 'EJ-0016' 'EJ-0023'
+ 'EJ-0024' 'EJ-0033' 'EJ-0155' 'EJ-0173' 'EJ-0177' 'EJ-0187' 'EJ-0195'
+ 'EJ-0197' 'EJ-0199' 'EJ-0203' 'EJ-0206' 'EJ-0209' 'EJ-0219' 'EJ-0226'
+ 'EJ-0230' 'EJ-0239' 'EJ-0361' 'EJ-0383' 'EJ-0395' 'EJ-0401' 'EJ-0406'
+ 'EJ-0408' 'EJ-0411' 'EJ-0429' 'EJ-0430' 'EJ-0431' 'EJ-0433' 'EJ-0442'
+ 'EJ-0446' 'EJ-0451' 'EJ-0569' 'EJ-0571' 'EJ-0591' 'EJ-0595' 'EJ-0609'
+ 'EJ-0617' 'EJ-0619']"
+Grupo Hospitalario Valdecruz,lider,wikipedia.org,ejecuciones,39,218,0.17889908256880735,"['EJ-0017' 'EJ-0021' 'EJ-0022' 'EJ-0030' 'EJ-0033' 'EJ-0036' 'EJ-0039'
+ 'EJ-0175' 'EJ-0178' 'EJ-0182' 'EJ-0189' 'EJ-0191' 'EJ-0192' 'EJ-0205'
+ 'EJ-0217' 'EJ-0221' 'EJ-0228' 'EJ-0232' 'EJ-0235' 'EJ-0243' 'EJ-0245'
+ 'EJ-0248' 'EJ-0363' 'EJ-0382' 'EJ-0387' 'EJ-0391' 'EJ-0401' 'EJ-0408'
+ 'EJ-0411' 'EJ-0414' 'EJ-0421' 'EJ-0443' 'EJ-0449' 'EJ-0455' 'EJ-0572'
+ 'EJ-0597' 'EJ-0605' 'EJ-0608' 'EJ-0623']"
+Grupo Hospitalario Valdecruz,lider,bienestar-hoy.example,ejecuciones,36,218,0.1651376146788991,"['EJ-0003' 'EJ-0006' 'EJ-0010' 'EJ-0021' 'EJ-0153' 'EJ-0175' 'EJ-0180'
+ 'EJ-0188' 'EJ-0189' 'EJ-0190' 'EJ-0200' 'EJ-0214' 'EJ-0221' 'EJ-0222'
+ 'EJ-0241' 'EJ-0243' 'EJ-0381' 'EJ-0386' 'EJ-0392' 'EJ-0399' 'EJ-0403'
+ 'EJ-0409' 'EJ-0412' 'EJ-0414' 'EJ-0419' 'EJ-0424' 'EJ-0435' 'EJ-0439'
+ 'EJ-0449' 'EJ-0450' 'EJ-0456' 'EJ-0572' 'EJ-0594' 'EJ-0604' 'EJ-0617'
+ 'EJ-0621']"
+Grupo Hospitalario Valdecruz,lider,colegiooftalmologos.example,ejecuciones,31,218,0.14220183486238533,"['EJ-0004' 'EJ-0005' 'EJ-0007' 'EJ-0016' 'EJ-0025' 'EJ-0032' 'EJ-0183'
+ 'EJ-0185' 'EJ-0199' 'EJ-0205' 'EJ-0209' 'EJ-0210' 'EJ-0217' 'EJ-0223'
+ 'EJ-0238' 'EJ-0243' 'EJ-0401' 'EJ-0412' 'EJ-0420' 'EJ-0421' 'EJ-0425'
+ 'EJ-0427' 'EJ-0435' 'EJ-0438' 'EJ-0452' 'EJ-0455' 'EJ-0569' 'EJ-0590'
+ 'EJ-0604' 'EJ-0606' 'EJ-0619']"
+Grupo Hospitalario Valdecruz,lider,opinaclinicas.example,ejecuciones,31,218,0.14220183486238533,"['EJ-0006' 'EJ-0011' 'EJ-0017' 'EJ-0019' 'EJ-0025' 'EJ-0027' 'EJ-0029'
+ 'EJ-0039' 'EJ-0155' 'EJ-0173' 'EJ-0197' 'EJ-0206' 'EJ-0235' 'EJ-0363'
+ 'EJ-0382' 'EJ-0387' 'EJ-0390' 'EJ-0393' 'EJ-0399' 'EJ-0406' 'EJ-0418'
+ 'EJ-0421' 'EJ-0426' 'EJ-0431' 'EJ-0435' 'EJ-0589' 'EJ-0591' 'EJ-0598'
+ 'EJ-0605' 'EJ-0614' 'EJ-0618']"
+Grupo Hospitalario Valdecruz,lider,google.com,ejecuciones,31,218,0.14220183486238533,"['EJ-0013' 'EJ-0018' 'EJ-0027' 'EJ-0173' 'EJ-0174' 'EJ-0179' 'EJ-0183'
+ 'EJ-0185' 'EJ-0186' 'EJ-0190' 'EJ-0193' 'EJ-0194' 'EJ-0198' 'EJ-0223'
+ 'EJ-0234' 'EJ-0239' 'EJ-0246' 'EJ-0363' 'EJ-0382' 'EJ-0385' 'EJ-0399'
+ 'EJ-0403' 'EJ-0418' 'EJ-0426' 'EJ-0429' 'EJ-0434' 'EJ-0446' 'EJ-0454'
+ 'EJ-0590' 'EJ-0599' 'EJ-0603']"
+Grupo Hospitalario Valdecruz,lider,rankingclinicas.example,ejecuciones,30,218,0.13761467889908258,"['EJ-0009' 'EJ-0011' 'EJ-0023' 'EJ-0153' 'EJ-0185' 'EJ-0186' 'EJ-0199'
+ 'EJ-0217' 'EJ-0219' 'EJ-0233' 'EJ-0241' 'EJ-0243' 'EJ-0362' 'EJ-0363'
+ 'EJ-0364' 'EJ-0381' 'EJ-0393' 'EJ-0395' 'EJ-0396' 'EJ-0400' 'EJ-0405'
+ 'EJ-0419' 'EJ-0427' 'EJ-0437' 'EJ-0438' 'EJ-0443' 'EJ-0571' 'EJ-0600'
+ 'EJ-0612' 'EJ-0617']"
+Grupo Hospitalario Valdecruz,lider,guiaoftalmologia.example,ejecuciones,28,218,0.12844036697247707,"['EJ-0007' 'EJ-0010' 'EJ-0012' 'EJ-0029' 'EJ-0037' 'EJ-0039' 'EJ-0154'
+ 'EJ-0174' 'EJ-0184' 'EJ-0204' 'EJ-0224' 'EJ-0231' 'EJ-0242' 'EJ-0244'
+ 'EJ-0383' 'EJ-0385' 'EJ-0405' 'EJ-0407' 'EJ-0409' 'EJ-0411' 'EJ-0422'
+ 'EJ-0430' 'EJ-0431' 'EJ-0433' 'EJ-0445' 'EJ-0446' 'EJ-0447' 'EJ-0455']"
+Grupo Hospitalario Valdecruz,lider,trustpilot.com,ejecuciones,24,218,0.11009174311926606,"['EJ-0003' 'EJ-0005' 'EJ-0007' 'EJ-0010' 'EJ-0011' 'EJ-0019' 'EJ-0029'
+ 'EJ-0030' 'EJ-0175' 'EJ-0218' 'EJ-0222' 'EJ-0226' 'EJ-0233' 'EJ-0361'
+ 'EJ-0387' 'EJ-0394' 'EJ-0407' 'EJ-0415' 'EJ-0418' 'EJ-0434' 'EJ-0447'
+ 'EJ-0450' 'EJ-0571' 'EJ-0615']"
+Grupo Hospitalario Valdecruz,lider,reddit.com,ejecuciones,23,218,0.10550458715596331,"['EJ-0019' 'EJ-0025' 'EJ-0027' 'EJ-0031' 'EJ-0037' 'EJ-0155' 'EJ-0191'
+ 'EJ-0193' 'EJ-0195' 'EJ-0203' 'EJ-0223' 'EJ-0247' 'EJ-0389' 'EJ-0391'
+ 'EJ-0399' 'EJ-0423' 'EJ-0433' 'EJ-0447' 'EJ-0451' 'EJ-0453' 'EJ-0603'
+ 'EJ-0611' 'EJ-0615']"
+Grupo Hospitalario Valdecruz,lider,foroscorazonsalud.example,ejecuciones,21,218,0.0963302752293578,"['EJ-0023' 'EJ-0179' 'EJ-0219' 'EJ-0225' 'EJ-0231' 'EJ-0237' 'EJ-0247'
+ 'EJ-0391' 'EJ-0393' 'EJ-0411' 'EJ-0423' 'EJ-0425' 'EJ-0427' 'EJ-0439'
+ 'EJ-0443' 'EJ-0445' 'EJ-0455' 'EJ-0595' 'EJ-0607' 'EJ-0611' 'EJ-0623']"
+Grupo Hospitalario Valdecruz,lider,youtube.com,ejecuciones,20,218,0.09174311926605505,"['EJ-0005' 'EJ-0031' 'EJ-0187' 'EJ-0195' 'EJ-0233' 'EJ-0235' 'EJ-0237'
+ 'EJ-0247' 'EJ-0383' 'EJ-0387' 'EJ-0403' 'EJ-0405' 'EJ-0427' 'EJ-0435'
+ 'EJ-0439' 'EJ-0445' 'EJ-0571' 'EJ-0603' 'EJ-0615' 'EJ-0619']"
+Grupo Hospitalario Valdecruz,lider,valdecruz.example,ejecuciones,15,218,0.06880733944954129,"['EJ-0002' 'EJ-0022' 'EJ-0040' 'EJ-0153' 'EJ-0174' 'EJ-0178' 'EJ-0190'
+ 'EJ-0209' 'EJ-0213' 'EJ-0234' 'EJ-0242' 'EJ-0361' 'EJ-0396' 'EJ-0422'
+ 'EJ-0442']"
+Grupo Hospitalario Valdecruz,lider,santaeulalia-ocular.example,ejecuciones,9,218,0.04128440366972477,"['EJ-0018' 'EJ-0032' 'EJ-0176' 'EJ-0226' 'EJ-0248' 'EJ-0398' 'EJ-0449'
+ 'EJ-0570' 'EJ-0618']"
+Grupo Hospitalario Valdecruz,lider,tramuntana-oftalmologia.example,ejecuciones,8,218,0.03669724770642202,"['EJ-0013' 'EJ-0030' 'EJ-0154' 'EJ-0246' 'EJ-0424' 'EJ-0441' 'EJ-0608'
+ 'EJ-0614']"
+Grupo Hospitalario Valdecruz,lider,lasernitida.example,ejecuciones,8,218,0.03669724770642202,"['EJ-0036' 'EJ-0389' 'EJ-0394' 'EJ-0442' 'EJ-0594' 'EJ-0606' 'EJ-0612'
+ 'EJ-0616']"
+Grupo Hospitalario Valdecruz,lider,alboradavision.example,ejecuciones,7,218,0.03211009174311927,['EJ-0002' 'EJ-0176' 'EJ-0210' 'EJ-0234' 'EJ-0438' 'EJ-0454' 'EJ-0569']
+Grupo Hospitalario Valdecruz,lider,oftalmoscentro.example,ejecuciones,7,218,0.03211009174311927,['EJ-0181' 'EJ-0198' 'EJ-0214' 'EJ-0362' 'EJ-0398' 'EJ-0425' 'EJ-0432']
+Grupo Hospitalario Valdecruz,lider,vistalia-oftalmologia.example,ejecuciones,5,218,0.022935779816513763,['EJ-0177' 'EJ-0198' 'EJ-0386' 'EJ-0441' 'EJ-0618']
+Grupo Hospitalario Valdecruz,lider,clinicacervantes.example,ejecuciones,5,218,0.022935779816513763,['EJ-0182' 'EJ-0186' 'EJ-0218' 'EJ-0246' 'EJ-0598']
+Grupo Hospitalario Valdecruz,lider,visionar-clinicas.example,ejecuciones,5,218,0.022935779816513763,['EJ-0218' 'EJ-0390' 'EJ-0392' 'EJ-0422' 'EJ-0606']
+Grupo Hospitalario Valdecruz,lider,lasikpeninsula.example,ejecuciones,4,218,0.01834862385321101,['EJ-0020' 'EJ-0196' 'EJ-0213' 'EJ-0230']
