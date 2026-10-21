@@ -45,7 +45,7 @@ def main() -> None:
     port = _free_port(8000)
     python_bin = str(venv / "bin" / "python")
 
-    print(f"Iniciando GEO Copilot en http://localhost:{port} ...")
+    print(f"Iniciando GEO Copilot en http://localhost:{port} ...", flush=True)
     proc = subprocess.Popen(
         [
             python_bin,
@@ -81,7 +81,7 @@ def main() -> None:
         proc.terminate()
         sys.exit(1)
 
-    print(f"GEO Copilot listo en {url}")
+    print(f"GEO Copilot listo en {url}", flush=True)
 
     # Abrir navegador en modo ventana app si es posible
     opened = False
