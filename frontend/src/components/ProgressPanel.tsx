@@ -47,19 +47,38 @@ export function applyEvent(prev: Progress | undefined, name: string, d: Ev): Pro
   }
 }
 
-/** Progreso en vivo: SSE con caída a sondeo cada 2 s (contracts/events.md). */
-export function ProgressPanel({ projectId, onResume, onRetryStep }: { projectId: string; onResume?: () => void; onRetryStep?: (paso: string) => void }) {
+/** Consultas cuyo contenido depende de los pasos del análisis; se piden de nuevo cuando un paso termina. */
+const RESULT_KEYS = ['project', 'plan', 'table', 'proposal', 'quality', 'traces', 'execution'] as const
+
+/** Huella del avance: cambia cuando un paso cambia de estado o el trabajo se para, no con cada contador o coste. */
+export function progressSignature(p: Progress | undefined): string {
+  return p ? `${p.estado}|${p.pasos.map((s) => s.estado).join(',')}` : ''
+}
+
+/** Progreso en vivo del proyecto: SSE con caída a sondeo cada 2 s (contracts/events.md).
+ *  Lo monta el shell una sola vez por proyecto y, cuando cambia el estado de algún paso, pide de nuevo los resultados:
+ *  así una pantalla que se abrió antes de que su paso terminara (409) se actualiza sola. */
+export function useLiveProgress(projectId: string): void {
   const qc = useQueryClient()
-  const { data, isLoading } = useProgress(projectId)
 
   useEffect(() => {
     let poll: number | undefined
     const key = ['progress', projectId]
+    let firma = progressSignature(qc.getQueryData<Progress>(key))
+    const unsubscribe = qc.getQueryCache().subscribe((ev) => {
+      if (ev.type !== 'updated' || ev.query.queryHash !== JSON.stringify(key)) return
+      const nueva = progressSignature(ev.query.state.data as Progress | undefined)
+      if (firma && nueva && nueva !== firma) {
+        for (const k of RESULT_KEYS) void qc.invalidateQueries({ queryKey: [k, projectId] })
+      }
+      if (nueva) firma = nueva
+    })
     const startPolling = () => {
       if (poll) return
       poll = window.setInterval(() => void qc.invalidateQueries({ queryKey: key }), 2000)
     }
-    if (typeof EventSource === 'undefined') { startPolling(); return () => { if (poll) window.clearInterval(poll) } }
+    const stop = () => { unsubscribe(); if (poll) window.clearInterval(poll) }
+    if (typeof EventSource === 'undefined') { startPolling(); return stop }
     const es = new EventSource(`/api/projects/${projectId}/events`)
     for (const name of ['snapshot', 'step', 'counter', 'cost', 'checkpoint', 'done']) {
       es.addEventListener(name, (e) => {
@@ -69,8 +88,13 @@ export function ProgressPanel({ projectId, onResume, onRetryStep }: { projectId:
       })
     }
     es.onerror = () => { es.close(); startPolling() }
-    return () => { es.close(); if (poll) window.clearInterval(poll) }
+    return () => { es.close(); stop() }
   }, [projectId, qc])
+}
+
+/** Panel de progreso; los datos en vivo los mantiene `useLiveProgress` desde el shell. */
+export function ProgressPanel({ projectId, onResume, onRetryStep }: { projectId: string; onResume?: () => void; onRetryStep?: (paso: string) => void }) {
+  const { data, isLoading } = useProgress(projectId)
 
   if (isLoading) return <div className="prog" aria-busy><Skeleton height={20} width="60%" /><Skeleton height={6} /><Skeleton height={120} /></div>
   if (!data) return null

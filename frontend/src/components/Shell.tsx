@@ -5,7 +5,7 @@ import { useProgress, useProject, useSettings } from '@/api/hooks'
 import { useTheme } from '@/lib/theme'
 import { Chip, type Tone } from './display'
 import { Button, Drawer } from './primitives'
-import { ProgressPanel } from './ProgressPanel'
+import { ProgressPanel, useLiveProgress } from './ProgressPanel'
 
 const SECTIONS: { to: string; label: string; end?: boolean; checkpoint?: 'ficha' | 'competencia' | 'hallazgos' | 'plan' }[] = [
   { to: '', label: 'Resumen', end: true },
@@ -52,6 +52,7 @@ function ConnectionStatus() {
 
 function RunIndicator({ projectId }: { projectId: string }) {
   const [open, setOpen] = useState(false)
+  useLiveProgress(projectId)
   const { data } = useProgress(projectId)
   const running = data?.estado === 'en_ejecucion'
   const label = running ? `En ejecución${data?.contador ? `: ${data.contador.hechos} de ${data.contador.total}` : ''}` : data?.estado === 'esperando_revision' ? 'Esperando revisión' : 'Progreso'

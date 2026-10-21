@@ -22,6 +22,7 @@ from geo.schemas import (
     Propuesta,
 )
 from geo.strategy import build_plan
+from geo.text import formato_es
 
 
 class _ClientNarrativeLLM(BaseModel):
@@ -291,6 +292,15 @@ def _build_code_tables_client(
     }
 
 
+def plan_aggregates(plan: Plan) -> list[float]:
+    """Totales por fase y por responsable que la sección 10 muestra; el revisor los necesita para trazarlos."""
+    por_fase = [sum(a.coste_estimado_eur for a in plan.acciones if a.id in f.acciones) for f in plan.fases]
+    por_responsable = [
+        sum(a.coste_estimado_eur for a in plan.acciones if a.responsable == r) for r in {a.responsable for a in plan.acciones}
+    ]
+    return por_fase + por_responsable
+
+
 def _is_kit_brand(marca: str) -> bool:
     from geo.reference import REFERENCE_BRAND, normalize_for_fingerprint
 
@@ -556,6 +566,7 @@ def write_client(
         "hallazgos": list(hallazgos),
         "plan": plan,
         "ficha": ficha,
+        "agregados_plan": plan_aggregates(plan),
     }
 
     # Bucle de verificación y reescritura (máximo 2 reintentos si hay incidencias en el texto narrativo)
@@ -699,6 +710,8 @@ def write_client(
             f"#### Reparto por responsable\n{code_tables['responsables']}"
         ),
     }
+    # Las tablas y algunas frases salen con formato inglés (27.97, 24,300 €); el documento va en es-ES
+    secciones = {k: formato_es(v) for k, v in secciones.items()}
 
     full_doc_text = "\n\n".join(secciones.values())
     final_revision = compliance(
@@ -885,6 +898,7 @@ def write_prospect(
         "3. Qué haríamos (3 acciones de alto impacto)": prosp_out.que_hariamos,
         "4. Correo comercial": prosp_out.correo_comercial,
     }
+    secciones = {k: formato_es(v) for k, v in secciones.items()}
 
     contexto_cifras = {
         "metrics": metrics_prosp,

@@ -6,6 +6,7 @@ import docx
 from docx.shared import Pt, RGBColor
 
 from geo.schemas import Propuesta
+from geo.text import formato_es
 
 
 def _build_traceability_annex_md(propuesta: Propuesta) -> str:
@@ -22,7 +23,7 @@ def _build_traceability_annex_md(propuesta: Propuesta) -> str:
             lines.append(
                 f"| {h.id} ({h.tipo}) | `{ev.metrica}` | {ev.valor} | {ev.n} | {ev.tabla} | {eids} |"
             )
-    return "\n".join(lines)
+    return formato_es("\n".join(lines))
 
 
 def export_md(propuesta: Propuesta, path: Path | None = None) -> str:
