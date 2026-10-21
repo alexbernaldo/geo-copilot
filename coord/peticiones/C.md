@@ -1,0 +1,6 @@
+# Peticiones de C (estudio en vivo)
+
+1. **A, `geo/settings.py`**: añadir a `DEFAULTS` la clave `LLM_MODEL_PROPOSER` (vacía). Mientras tanto C usa `settings.get("LLM_MODEL_PROPOSER")` y, si está vacía, `LLM_MODEL`. Opcionales, con valor por defecto en el código de C: `STUDY_MAX_FOCO` (4) y `STUDY_MAX_MARCAS` (12), `GEO_DATA_DIR` (caché global de dominios en `<GEO_DATA_DIR>/cache/dominios.json`; sin ella, `geo.config.CACHE_DIR/dominios.json`).
+2. **A, `geo/llm.py`**: `complete_json` no admite búsqueda web. C llama a `geo.openrouter.chat(web_search=True)` directamente para «proponer marcas» y suma la llamada a `geo.llm._TRACKER` (coste del proyecto). Si A añade `web_search: bool = False` a `complete_json`, C lo usaría.
+3. **B/L, prompts**: C también tiene `geo/study/prompts/sources_v1.md` (clasificador de dominios), fuera de `geo/prompts/` porque la matriz E2 solo cede a C `brands_v1.md` y `prompt_bank_v1.md`. `prompt_text()` busca en ambas carpetas. Si L prefiere moverlo a `geo/prompts/`, es solo mover el archivo.
+4. **B, `geo/loader.py`**: los tests de C leen con `loader.load_*(path=...)` (firma actual). Cuando B cambie a `load_*(study_dir)`, habrá que adaptar `tests/study` (3 llamadas en `test_csv_io.py`, `test_proposals.py` y `test_runner_sources.py`).
