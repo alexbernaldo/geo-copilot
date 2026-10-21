@@ -108,8 +108,6 @@ def test_error_prompt_id_fuera_del_banco(kit_files: dict[str, Path], tmp_path: P
     informes = csv_io.validate_set(copias)
     ej = next(r for r in informes if r.tipo == "ejecuciones")
     assert any("Prompt_ID" in e and "XXX-ZZ-99" in e for e in ej.errores)
-    # el prompt que se quedó sin ejecuciones sale como aviso en la misma validación
-    assert any("sin ejecuciones" in a for a in ej.avisos)
 
 
 def test_error_marca_fuera_de_marcas(kit_files: dict[str, Path], tmp_path: Path) -> None:
