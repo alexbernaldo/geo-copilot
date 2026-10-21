@@ -223,7 +223,7 @@ export default function AsistentePage() {
   const costeTotal = estimacionTotal?.total_eur ?? 0
 
   return (
-    <div className="grid max-w-4xl gap-6">
+    <div className="grid max-w-4xl gap-6 mx-auto w-full">
       <PageHeader
         title="Nuevo análisis"
         description="Asistente de configuración de proyecto, datos del estudio y parámetros de ejecución."

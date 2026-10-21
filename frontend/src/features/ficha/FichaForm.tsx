@@ -18,7 +18,7 @@ function Campo({ etiqueta, ayuda, falta, error, origen, children }: CampoProps) 
   const descId = `${id}-d`
   const hay = Boolean(ayuda || error || origen)
   return (
-    <div data-falta={falta || undefined} data-invalid={error ? true : undefined}>
+    <div className="campo" data-falta={falta || undefined} data-invalid={error ? true : undefined}>
       <label htmlFor={id}>
         {etiqueta} {falta && <Chip tone="warn">Falta</Chip>}
       </label>
@@ -80,7 +80,7 @@ export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmi
   const situacion = Object.keys(valores.situacion_digital)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate aria-label="Ficha de la marca">
+    <form className="ficha-form" onSubmit={handleSubmit(onSubmit)} noValidate aria-label="Ficha de la marca">
       <fieldset>
         <legend>Identidad</legend>
         {texto('marca', 'Marca')}
@@ -105,7 +105,7 @@ export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmi
       <fieldset>
         <legend>Situación y objetivos</legend>
         {situacion.map((clave) => (
-          <Campo key={clave} etiqueta={`Situación digital · ${ETIQUETAS_SITUACION[clave] ?? clave}`} falta={false}>
+          <Campo key={clave} etiqueta={ETIQUETAS_SITUACION[clave] ?? clave} falta={false}>
             {({ id }) => <Entrada control={control} name={`situacion_digital.${clave}`} id={id} multilinea filas={3} invalido={false} />}
           </Campo>
         ))}
@@ -127,7 +127,7 @@ export function FichaForm({ valores, faltantes, origenCampos, guardando, onSubmi
         {texto('audiencia', 'Audiencia')}
         {texto('formato', 'Formato')}
       </fieldset>
-      <Button type="submit" disabled={!formState.isDirty || guardando}>{guardando ? 'Guardando…' : 'Guardar cambios'}</Button>
+      <Button type="submit" variant="primary" disabled={!formState.isDirty || guardando}>{guardando ? 'Guardando…' : 'Guardar cambios'}</Button>
     </form>
   )
 }

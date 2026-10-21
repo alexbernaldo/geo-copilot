@@ -102,10 +102,14 @@ export default function DatosdelestudioPage() {
     <>
       <PageHeader title="Datos del estudio" description="Explora cada respuesta de los asistentes, con las marcas resaltadas y la evaluación del juez." />
       {resumen.data && (
-        <p>
-          {formatNum(resumen.data.ejecuciones)} ejecuciones · {resumen.data.motores.join(', ')} · {formatNum(resumen.data.repeticiones)} repeticiones ·{' '}
-          {formatNum(resumen.data.prompts)} prompts · {formatNum(resumen.data.marcas)} marcas · {formatNum(resumen.data.espontaneas)} espontáneas y {formatNum(resumen.data.asistidas)} asistidas
-        </p>
+        <div className="meta-line" aria-label="Resumen del estudio">
+          <Chip tone="neutral">{`${formatNum(resumen.data.ejecuciones)} ejecuciones`}</Chip>
+          <Chip tone="neutral">{resumen.data.motores.join(' · ')}</Chip>
+          <Chip tone="neutral">{`${formatNum(resumen.data.repeticiones)} repeticiones`}</Chip>
+          <Chip tone="neutral">{`${formatNum(resumen.data.prompts)} prompts · ${formatNum(resumen.data.marcas)} marcas`}</Chip>
+          <Chip tone="spont" dot>{`${formatNum(resumen.data.espontaneas)} espontáneas`}</Chip>
+          <Chip tone="assist" dot>{`${formatNum(resumen.data.asistidas)} asistidas`}</Chip>
+        </div>
       )}
       {idsFiltrados.length > 0 && (
         <p role="status">
@@ -126,7 +130,7 @@ export default function DatosdelestudioPage() {
           <>
             <DataTable columns={COLUMNAS} data={lista.data.filas} filters={filtros} onRowClick={(r) => setAbierta(r.ejecucion_id)} />
             {lista.data.filas.length === 0 && <EmptyState title="Sin resultados" description="Ninguna ejecución cumple los filtros actuales." action={<Button onClick={() => { setBusqueda(''); setParams({}, { replace: true }) }}>Quitar filtros</Button>} />}
-            <nav aria-label="Paginación">
+            <nav className="pager" aria-label="Paginación">
               <Button disabled={pagina <= 1} onClick={() => setParam({ pagina: String(pagina - 1) }, false)}>Anterior</Button>
               <span role="status"> Página {formatNum(lista.data.pagina)} de {formatNum(totalPaginas)} · {formatNum(lista.data.total)} ejecuciones </span>
               <Button disabled={pagina >= totalPaginas} onClick={() => setParam({ pagina: String(pagina + 1) }, false)}>Siguiente</Button>

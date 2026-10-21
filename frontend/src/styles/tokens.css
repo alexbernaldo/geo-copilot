@@ -4,11 +4,11 @@
 
 /* Tokens de DESIGN.md. Claro por defecto; oscuro con el sistema o con data-theme="dark". */
 :root {
-  --bg: #f6f7f9;
+  --bg: #f3f5f9;
   --surface: #ffffff;
-  --surface-2: #eef0f4;
-  --border: #dfe3e9;
-  --border-strong: #c5ccd6;
+  --surface-2: #f0f2f7;
+  --border: #e2e6ee;
+  --border-strong: #c9d0db;
   --fg: #151a22;
   --fg-muted: #566070;
   --ink: #151a22;
@@ -26,6 +26,10 @@
   --overlay: rgb(21 26 34 / 0.4);
   --shadow-pop: 0 6px 24px rgb(21 26 34 / 0.12), 0 1px 3px rgb(21 26 34 / 0.08);
   --shadow-drawer: -12px 0 40px rgb(21 26 34 / 0.14);
+  --shadow-card: 0 1px 2px rgb(21 26 34 / 0.04), 0 2px 8px -2px rgb(21 26 34 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(21 26 34 / 0.05), 0 12px 28px -8px rgb(21 26 34 / 0.14);
+  --glow: radial-gradient(1100px 420px at 12% -8%, rgb(29 95 209 / 0.08), transparent 60%), radial-gradient(900px 380px at 92% -12%, rgb(15 118 110 / 0.07), transparent 60%);
+  --topbar-bg: rgb(255 255 255 / 0.78);
   color-scheme: light;
 
   --font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -47,9 +51,10 @@
   --s-6: 32px;
   --s-7: 48px;
 
-  --r-control: 6px;
-  --r-panel: 10px;
-  --r-overlay: 12px;
+  --r-control: 8px;
+  --r-panel: 14px;
+  --r-overlay: 16px;
+  --r-pill: 999px;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-move: cubic-bezier(0.77, 0, 0.175, 1);
@@ -62,10 +67,10 @@
 }
 
 :root[data-theme='dark'] {
-  --bg: #0f1217;
-  --surface: #161a21;
-  --surface-2: #1d222b;
-  --border: #2a303b;
+  --bg: #0c0f14;
+  --surface: #141820;
+  --surface-2: #1b2029;
+  --border: #262c37;
   --border-strong: #3a4250;
   --fg: #e9ecf1;
   --fg-muted: #9aa4b3;
@@ -84,15 +89,19 @@
   --overlay: rgb(0 0 0 / 0.55);
   --shadow-pop: 0 6px 24px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
   --shadow-drawer: -12px 0 40px rgb(0 0 0 / 0.55);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 2px 10px -2px rgb(0 0 0 / 0.35);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 14px 32px -8px rgb(0 0 0 / 0.6);
+  --glow: radial-gradient(1100px 420px at 12% -8%, rgb(111 160 242 / 0.10), transparent 60%), radial-gradient(900px 380px at 92% -12%, rgb(76 194 181 / 0.08), transparent 60%);
+  --topbar-bg: rgb(19 23 30 / 0.78);
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0f1217;
-    --surface: #161a21;
-    --surface-2: #1d222b;
-    --border: #2a303b;
+    --bg: #0c0f14;
+    --surface: #141820;
+    --surface-2: #1b2029;
+    --border: #262c37;
     --border-strong: #3a4250;
     --fg: #e9ecf1;
     --fg-muted: #9aa4b3;
@@ -111,6 +120,10 @@
     --overlay: rgb(0 0 0 / 0.55);
     --shadow-pop: 0 6px 24px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
     --shadow-drawer: -12px 0 40px rgb(0 0 0 / 0.55);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 2px 10px -2px rgb(0 0 0 / 0.35);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 14px 32px -8px rgb(0 0 0 / 0.6);
+    --glow: radial-gradient(1100px 420px at 12% -8%, rgb(111 160 242 / 0.10), transparent 60%), radial-gradient(900px 380px at 92% -12%, rgb(76 194 181 / 0.08), transparent 60%);
+    --topbar-bg: rgb(19 23 30 / 0.78);
     color-scheme: dark;
   }
 }
@@ -118,7 +131,8 @@
 html { font-family: var(--font-sans); font-size: 16px; }
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--glow), var(--bg);
+  background-attachment: fixed;
   color: var(--fg);
   font-size: var(--text-base);
   line-height: 1.5;

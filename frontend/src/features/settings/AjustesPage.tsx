@@ -108,7 +108,7 @@ export default function AjustesPage() {
   }
 
   return (
-    <div className="grid max-w-4xl gap-6">
+    <div className="grid max-w-4xl gap-6 mx-auto w-full">
       <PageHeader
         title="Ajustes"
         description="Configuración global de OpenRouter, modelos por función, topes de gasto y almacenamiento."

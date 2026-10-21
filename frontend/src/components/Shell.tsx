@@ -1,22 +1,35 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet, useMatch } from 'react-router-dom'
-import { Moon, Sun } from 'lucide-react'
+import { BarChart3, ClipboardList, Database, FileCheck2, Gauge, Lightbulb, ListChecks, Moon, ShieldCheck, Sun, Users } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useProgress, useProject, useSettings } from '@/api/hooks'
 import { useTheme } from '@/lib/theme'
-import { Chip, type Tone } from './display'
+import { Avatar, Chip, Logo, type Tone } from './display'
 import { Button, Drawer } from './primitives'
 import { ProgressPanel, useLiveProgress } from './ProgressPanel'
 
-const SECTIONS: { to: string; label: string; end?: boolean; checkpoint?: 'ficha' | 'competencia' | 'hallazgos' | 'plan' }[] = [
-  { to: '', label: 'Resumen', end: true },
-  { to: 'ficha', label: 'Ficha', checkpoint: 'ficha' },
-  { to: 'datos', label: 'Datos del estudio' },
-  { to: 'competencia', label: 'Competencia', checkpoint: 'competencia' },
-  { to: 'diagnostico', label: 'Diagnóstico' },
-  { to: 'hallazgos', label: 'Hallazgos', checkpoint: 'hallazgos' },
-  { to: 'plan', label: 'Plan', checkpoint: 'plan' },
-  { to: 'propuesta', label: 'Propuesta' },
-  { to: 'calidad', label: 'Calidad y trazas' },
+type Section = { to: string; label: string; icon: LucideIcon; end?: boolean; checkpoint?: 'ficha' | 'competencia' | 'hallazgos' | 'plan' }
+
+const GROUPS: { label: string; items: Section[] }[] = [
+  {
+    label: 'Revisión',
+    items: [
+      { to: '', label: 'Resumen', icon: Gauge, end: true },
+      { to: 'ficha', label: 'Ficha', icon: ClipboardList, checkpoint: 'ficha' },
+      { to: 'datos', label: 'Datos del estudio', icon: Database },
+      { to: 'competencia', label: 'Competencia', icon: Users, checkpoint: 'competencia' },
+    ],
+  },
+  {
+    label: 'Resultados',
+    items: [
+      { to: 'diagnostico', label: 'Diagnóstico', icon: BarChart3 },
+      { to: 'hallazgos', label: 'Hallazgos', icon: Lightbulb, checkpoint: 'hallazgos' },
+      { to: 'plan', label: 'Plan', icon: ListChecks, checkpoint: 'plan' },
+      { to: 'propuesta', label: 'Propuesta', icon: FileCheck2 },
+      { to: 'calidad', label: 'Calidad y trazas', icon: ShieldCheck },
+    ],
+  },
 ]
 
 const ESTADO_PROYECTO: Record<string, { tone: Tone; texto: string }> = {
@@ -29,12 +42,14 @@ const ESTADO_PROYECTO: Record<string, { tone: Tone; texto: string }> = {
   interrumpido: { tone: 'warn', texto: 'Interrumpido' },
 }
 
+const ICON = { size: 17, strokeWidth: 1.75, 'aria-hidden': true } as const
+
 function ThemeToggle() {
   const { resolved, setChoice } = useTheme()
   const next = resolved === 'dark' ? 'light' : 'dark'
   return (
     <Button variant="ghost" size="sm" aria-label={resolved === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'} onClick={() => setChoice(next)}>
-      {resolved === 'dark' ? <Sun size={16} strokeWidth={1.5} aria-hidden /> : <Moon size={16} strokeWidth={1.5} aria-hidden />}
+      {resolved === 'dark' ? <Sun size={16} strokeWidth={1.75} aria-hidden /> : <Moon size={16} strokeWidth={1.75} aria-hidden />}
     </Button>
   )
 }
@@ -72,23 +87,32 @@ function RunIndicator({ projectId }: { projectId: string }) {
 function ProjectSidebar({ id }: { id: string }) {
   const { data: project } = useProject(id)
   const estado = project ? ESTADO_PROYECTO[project.estado] : undefined
+  const nombre = project?.nombre ?? 'Proyecto'
   return (
     <nav className="sidenav" aria-label="Secciones del proyecto">
       <div className="side-project">
-        <b>{project?.nombre ?? 'Proyecto'}</b>
-        {estado && <Chip tone={estado.tone} dot>{estado.texto}</Chip>}
+        <Avatar nombre={project?.marca ?? nombre} />
+        <b>{nombre}</b>
+        {estado && <span><Chip tone={estado.tone} dot>{estado.texto}</Chip></span>}
       </div>
-      {SECTIONS.map((s) => {
-        const approved = s.checkpoint && project ? project.checkpoints[s.checkpoint] : undefined
-        return (
-          <NavLink key={s.label} to={s.to === '' ? `/proyectos/${id}` : `/proyectos/${id}/${s.to}`} end={s.end} className="navlink" title={s.label}>
-            <span className="navlabel">{s.label}</span>
-            {s.checkpoint && project && (
-              <span className="chip-dot" style={{ color: approved ? 'var(--good)' : 'var(--warn)' }} role="img" aria-label={approved ? 'Punto de control aprobado' : 'Punto de control pendiente'} />
-            )}
-          </NavLink>
-        )
-      })}
+      {GROUPS.map((g) => (
+        <div key={g.label} role="group" aria-label={g.label}>
+          <div className="side-label" aria-hidden>{g.label}</div>
+          {g.items.map((s) => {
+            const approved = s.checkpoint && project ? project.checkpoints[s.checkpoint] : undefined
+            const Icon = s.icon
+            return (
+              <NavLink key={s.label} to={s.to === '' ? `/proyectos/${id}` : `/proyectos/${id}/${s.to}`} end={s.end} className="navlink" title={s.label}>
+                <Icon {...ICON} />
+                <span className="navlabel">{s.label}</span>
+                {s.checkpoint && project && (
+                  <span className="chip-dot" style={{ color: approved ? 'var(--good)' : 'var(--warn)' }} role="img" aria-label={approved ? 'Punto de control aprobado' : 'Punto de control pendiente'} />
+                )}
+              </NavLink>
+            )
+          })}
+        </div>
+      ))}
     </nav>
   )
 }
@@ -100,7 +124,10 @@ export function Shell() {
   return (
     <div className="shell">
       <header className="topbar">
-        <Link to="/" className="brandmark">GEO Copilot</Link>
+        <Link to="/" className="brandmark" aria-label="GEO Copilot, ir a proyectos">
+          <Logo />
+          <span>GEO Copilot <small>visibilidad en IA</small></span>
+        </Link>
         <nav className="topnav" aria-label="Navegación global">
           <NavLink to="/" end className="navlink">Proyectos</NavLink>
           <NavLink to="/ajustes" className="navlink">Ajustes</NavLink>

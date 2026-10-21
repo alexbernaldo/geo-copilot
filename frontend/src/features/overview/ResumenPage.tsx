@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { ArrowRight, FileCheck2 } from 'lucide-react'
 import { useProject } from '@/api/hooks'
 import type { Project } from '@/api/types'
 import { Chip, ErrorState, KpiStrip, PageHeader, Panel, ProgressPanel, SourceNote, type KpiItem } from '@/components'
@@ -85,25 +86,30 @@ export default function ResumenPage() {
         description={[p.tipo === 'cliente' ? 'Cliente' : 'Prospecto', p.sector, p.origen_datos === 'vivo' ? 'Estudio en vivo' : p.origen_datos === 'csv' ? 'Datos subidos (CSV)' : null].filter(Boolean).join(' · ')}
         actions={<Chip tone={estado.tono} dot>{estado.texto}</Chip>}
       />
-      <p>
-        Actualizado: {formatDate(p.actualizado)} · Coste total: {formatEur(p.coste_eur, 2)}
-      </p>
+      <div className="meta-line">
+        <Chip tone="neutral">{`Actualizado: ${formatDate(p.actualizado)}`}</Chip>
+        <Chip tone="neutral">{`Coste total: ${formatEur(p.coste_eur, 2)}`}</Chip>
+      </div>
 
       {accion && (
-        <Panel title="Siguiente paso">
-          <p>{accion.ruta ? <Link to={accion.ruta}>{accion.texto}</Link> : accion.texto}</p>
-        </Panel>
+        <div className="callout" role="region" aria-label="Siguiente paso">
+          <div>
+            <div className="callout-eyebrow">Siguiente paso</div>
+            <div className="callout-text">{accion.texto}</div>
+          </div>
+          {accion.ruta && <Link className="btn" data-variant="primary" to={accion.ruta}>Ir ahora <ArrowRight size={15} strokeWidth={1.75} aria-hidden /></Link>}
+        </div>
       )}
 
       <Panel title="Puntos de control">
-        <ol aria-label="Puntos de control">
+        <ol className="cp-steps" aria-label="Puntos de control">
           {CHECKPOINTS.map((c) => {
             const aprobado = p.checkpoints[c.clave]
             const toca = p.punto_control_pendiente === c.n
             return (
-              <li key={c.n} aria-current={toca ? 'step' : undefined}>
-                <Link to={c.ruta}>{c.nombre}</Link>{' '}
-                <Chip tone={aprobado ? 'good' : toca ? 'warn' : 'neutral'}>{aprobado ? 'Aprobado' : toca ? 'Toca revisar' : 'Pendiente'}</Chip>
+              <li key={c.n} className="cp-step" data-estado={aprobado ? 'aprobado' : toca ? 'toca' : 'pendiente'} aria-current={toca ? 'step' : undefined}>
+                <Link to={c.ruta}>{c.nombre}</Link>
+                <span><Chip tone={aprobado ? 'good' : toca ? 'warn' : 'neutral'} dot>{aprobado ? 'Aprobado' : toca ? 'Toca revisar' : 'Pendiente'}</Chip></span>
               </li>
             )
           })}
@@ -127,9 +133,13 @@ export default function ResumenPage() {
       )}
 
       {p.estado === 'completado' && (
-        <Panel title="Entregable">
-          <p><Link to="propuesta">Ver la propuesta y descargarla</Link></p>
-        </Panel>
+        <div className="callout" role="region" aria-label="Entregable">
+          <div>
+            <div className="callout-eyebrow">Entregable</div>
+            <div className="callout-text">La propuesta está lista para revisar y descargar</div>
+          </div>
+          <Link className="btn" to="propuesta"><FileCheck2 size={15} strokeWidth={1.75} aria-hidden /> Ver la propuesta</Link>
+        </div>
       )}
     </>
   )

@@ -96,6 +96,18 @@ Reglas: sin `ease-in`; nada nace de `scale(0)` (se empieza en `0.96` con opacida
 
 Todos con estados por defecto, hover, foco, activo, deshabilitado, cargando, vacío y error cuando aplica. Detalle vivo en `/_kit` (solo desarrollo).
 
+## Pulido visual (v2)
+
+Se mantiene «Libro mayor» (color reservado para los datos), con más profundidad y algo de carácter:
+- **Profundidad:** paneles y tarjetas con sombra suave (`--shadow-card`, `--shadow-lift` al pasar el ratón); fondo con dos halos muy tenues de `--brand-project` y `--spont` (`--glow`); cabecera translúcida con desenfoque.
+- **Radios:** controles `8px`, paneles `14px`, capas `16px`. Los chips pasan a forma de píldora (`--r-pill`) para distinguirlos de los botones.
+- **Marca:** logotipo propio (ondas de visibilidad sobre degradado proyecto → espontánea), avatar con las iniciales de la marca en la lista y en el menú lateral, y menú lateral con iconos `lucide-react` agrupado en «Revisión» y «Resultados».
+- **Acento de interfaz:** `--brand-project` también marca la sección activa, el foco de los campos, casillas y deslizadores. El botón primario sigue en tinta, con un leve degradado.
+- **KPI:** tarjetas separadas con barra superior de ámbito; la cifra escala con el ancho de su tarjeta (`cqi`) y nunca se parte.
+- **Puntos de control:** pasos numerados en el Resumen y barra de aprobación fija al pie mientras esté pendiente.
+- **Movimiento:** entrada de página de 260 ms (opacidad y 6 px), desactivada con `prefers-reduced-motion`.
+- **Ajuste:** las tablas usan `overflow-wrap: break-word` (no `anywhere`), así los identificadores y nombres cortos no se parten; filtros en una fila; ficha a dos columnas con el brief fijo al lado.
+
 ## Decisiones discutibles (para la revisión del equipo)
 
 1. Interfaz monocroma: el botón primario es negro tinta, no azul. El azul queda para la marca del proyecto en gráficos.

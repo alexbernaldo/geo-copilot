@@ -36,31 +36,34 @@ export function ExecutionDrawer({ projectId, marcaProyecto, ejecucionId, onClose
       {q.isPending && ejecucionId && <p role="status">Cargando ejecución…</p>}
       {q.isError && <ErrorState error={q.error} onRetry={() => void q.refetch()} />}
       {q.data && (
-        <div>
-          <p>
-            <Chip tone={q.data.fila.ambito === 'asistida' ? 'assist' : 'spont'}>{q.data.fila.ambito === 'asistida' ? 'Asistida' : 'Espontánea'}</Chip>{' '}
-            {q.data.fila.motor} · repetición {q.data.fila.repeticion ?? '—'}
-            {q.data.fila.ciudad ? ` · ${q.data.fila.ciudad}` : ''}
+        <div className="exec">
+          <p className="exec-meta">
+            <Chip tone={q.data.fila.ambito === 'asistida' ? 'assist' : 'spont'} dot>{q.data.fila.ambito === 'asistida' ? 'Asistida' : 'Espontánea'}</Chip>
+            <Chip tone="neutral">{q.data.fila.motor}</Chip>
+            <Chip tone="neutral">{`Repetición ${q.data.fila.repeticion ?? '—'}`}</Chip>
+            {q.data.fila.ciudad && <Chip tone="neutral">{q.data.fila.ciudad}</Chip>}
           </p>
           <h3>Prompt</h3>
-          <p>{q.data.fila.prompt}</p>
+          <blockquote className="exec-prompt">{q.data.fila.prompt}</blockquote>
           <h3>Respuesta</h3>
-          <p style={{ whiteSpace: 'pre-wrap' }}>
-            {trocear(q.data.respuesta, q.data.resaltados).map((t, i) =>
-              t.marca ? (
-                <mark key={i} data-marca={t.marca} title={t.marca} style={{ background: 'transparent', color: 'inherit', borderBottom: `3px solid ${color(t.marca)}` }}>{t.texto}</mark>
+          <div className="exec-answer">
+            {trocear(q.data.respuesta, q.data.resaltados).map((t, i) => {
+              // Los ** de Markdown se quitan al pintar cada trozo: las posiciones del resaltado ya están calculadas
+              const texto = t.texto.replace(/\*\*/g, '')
+              return t.marca ? (
+                <mark key={i} data-marca={t.marca} title={t.marca} style={{ background: `color-mix(in srgb, ${color(t.marca)} 14%, transparent)`, color: 'inherit', borderBottom: `2px solid ${color(t.marca)}` }}>{texto}</mark>
               ) : (
-                <span key={i}>{t.texto}</span>
-              ),
-            )}
-          </p>
+                <span key={i}>{texto}</span>
+              )
+            })}
+          </div>
           <h3>Fuentes citadas</h3>
           {q.data.fuentes.length === 0 ? (
-            <p>Esta respuesta no cita fuentes.</p>
+            <p className="exec-empty">Esta respuesta no cita fuentes.</p>
           ) : (
-            <ul>
+            <ul className="exec-sources">
               {q.data.fuentes.map((f, i) => (
-                <li key={i}>{f.dominio}{f.tipo ? ` · ${f.tipo}` : ''}{f.calidad != null ? ` · calidad ${f.calidad}` : ''}</li>
+                <li key={i}><Chip tone="neutral">{`${f.dominio}${f.tipo ? ` · ${f.tipo}` : ''}${f.calidad != null ? ` · calidad ${f.calidad}` : ''}`}</Chip></li>
               ))}
             </ul>
           )}
