@@ -1,154 +1,119 @@
-# 🧭 GEO Copilot · De los datos de visibilidad en IA a la propuesta estratégica y comercial
+# 🧭 GEO Copilot · Auditoría y Estrategia de Visibilidad en Motores de IA
 
-**Reto `reload. × UFV-EPS` (Hackathon 20–22 de octubre)**
+**Reto `reload. × UFV-EPS`**
 
-> **Aviso importante:** Este proyecto opera por defecto sobre los **datos sintéticos del kit UFV-EPS × reload.** (`624` ejecuciones, `25` prompts, `10` marcas, `4` motores). Dichos datos no representan el comportamiento real en producción de ningún modelo de lenguaje ni de ninguna clínica sanitaria real.
-
----
-
-## 1. Qué hace GEO Copilot
-
-**GEO Copilot** transforma el estudio de presencia de marca en motores de respuesta conversacional (**ChatGPT, Gemini, Perplexity y Claude**) y el briefing de un cliente (o una marca en frío sin brief) en:
-
-1. **Diagnóstico riguroso y auditable (`T1`–`T12`)** con separación estricta entre **visibilidad espontánea (`n=240`)** y **visibilidad asistida (`n=384`)**, trazando cada métrica hasta los identificadores exactos de ejecución (`ejecucion_id`).
-2. **Contraste de mercado y competidores** que detecta discrepancias entre las creencias del brief y los datos reales de recomendación en IA: identifica que el líder espontáneo real es `Grupo Hospitalario Valdecruz` (`90,8 %` de aparición, `score 75,02`), que `Instituto Oftálmico Tramuntana` es 2º (`68,8 %`, `score 51,70`) y que el brief omite a `Vistalia Oftalmología` (`41,2 %` de aparición espontánea, `score 26,59`) y a otros 5 actores relevantes (`Oftalmos Centro` `60,0 %`, `Clínica del Ojo Cervantes` `44,2 %`, `Instituto Ocular Santa Eulalia` `42,5 %`, `Visionar Clínicas` `33,3 %` y `Centro Lasik Península` `31,2 %`).
-3. **Hallazgos priorizados (`H1`–`H7`)** generados por reglas deterministas (`R1`–`R10`) con cifra exacta, tamaño muestral `n`, tabla de origen y desplegable de evidencias originales.
-4. **Plan estratégico a 12 meses (`Fases 0 a 3`)** con matriz Esfuerzo vs Impacto, diagrama Gantt por semanas (`S1`–`S52`), control presupuestario automático dentro de la horquilla del brief (`24.300 €` dentro de `18.000–27.000 €`), respeto de la capacidad del equipo del cliente (`<= 8 h/semana`, 1,5 personas) y **Simulador What-If** del Score de Citación.
-5. **Propuesta ejecutiva exportable a `.docx` y `.md`** en dos modos:
-   - **Modo Cliente** (10 secciones + Anexo de trazabilidad completo para `Clínica Alborada Visión`).
-   - **Modo Prospecto** (dossier ejecutivo en frío sin brief previo + correo comercial de 120–180 palabras listo para enviar, p. ej. para `Vistalia Oftalmología` o `Láser Nítida`).
-6. **Sello del Agente Revisor**: verificación determinista de que el **100 % de las cifras del documento proceden de las tablas calculadas (`578/578` cifras trazables)** y **0 incidencias de cumplimiento normativo sanitario** (sin promesas garantizadas ni comparativas denigratorias).
+GEO Copilot es una plataforma web completa (**FastAPI + React 18 + TypeScript + Tailwind**) que transforma los datos de presencia de marcas en motores conversacionales (**ChatGPT, Gemini, Perplexity y Claude**) y el briefing de un cliente (o una marca en frío) en un diagnóstico riguroso, un plan estratégico a 12 meses y una propuesta comercial ejecutiva verificada y auditable.
 
 ---
 
-## 2. Instalación rápida
+## 1. Requisitos e Instalación
 
-Requisitos: **Python 3.11+** (probado en Python 3.11 / 3.13).
+### Requisitos previos
+- **Python 3.11+** (probado en 3.11 y 3.13)
+- **Node.js 18+** y `npm`
 
+### Instalación en un paso
 ```bash
-# 1. Crear y activar entorno virtual
+make install
+```
+Este comando crea el entorno virtual `.venv`, instala las dependencias de Python y ejecuta `npm ci` en `frontend/`.
+
+O bien manualmente:
+```bash
 python3 -m venv .venv
-source .venv/bin/activate
-
-# 2. Instalar dependencias
-pip install -r requirements.txt
-
-# 3. Configurar variables de entorno (opcional: por defecto funciona en modo mock sin claves)
-cp .env.example .env
+.venv/bin/pip install -r requirements.txt
+cd frontend && npm ci && cd ..
 ```
 
 ---
 
-## 3. Configuración (`.env`)
+## 2. Puesta en marcha
 
-El sistema funciona al **100 % sin conexión a red ni claves de API** con `LLM_PROVIDER=mock` (configuración por defecto). Si se desea conectar un proveedor LLM real para el juez ensemble, el redactor o los conectores de búsqueda web:
-
-```ini
-# Proveedor LLM: mock | anthropic | openai
-LLM_PROVIDER=mock
-LLM_MODEL=claude-haiku-4-5-20251001
-LLM_MODEL_WRITER=claude-sonnet-4-5-20250929
-
-# Claves opcionales (nunca subir al repositorio)
-ANTHROPIC_API_KEY=
-OPENAI_API_KEY=
-GEMINI_API_KEY=
-PERPLEXITY_API_KEY=
-
-# Límites de seguridad y gasto
-MAX_LLM_CALLS=1500
-MAX_BUDGET_EUR=5.0
+### Modo aplicación (Producción local lista para demo)
+```bash
+make app
 ```
+Compila el frontend (si no está ya compilado en `frontend/dist`), inicia el servidor FastAPI en el primer puerto libre (a partir del 8000), comprueba `/api/health` y abre la interfaz en el navegador en modo aplicación.
+
+### Modo desarrollo (Backend con recarga + Vite HMR)
+```bash
+make dev
+```
+- Backend FastAPI en `http://localhost:8000` (con documentación Swagger en `/api/docs`).
+- Frontend Vite con hot-reload en `http://localhost:5173` (con proxy automático hacia `/api`).
 
 ---
 
-## 4. Comandos principales
+## 3. Configuración inicial (Ajustes)
 
-### 4.1. Lanzar la interfaz interactiva Streamlit (Modo Demo incluido)
-```bash
-.venv/bin/streamlit run app/Home.py
-```
-- En la barra lateral (o en la portada), pulsa **«⚡ Cargar Modo Demo (`runs/demo/`)»** para inspeccionar instantáneamente las 7 páginas con el caso completo de **Clínica Alborada Visión** precalculado.
+Al arrancar la aplicación por primera vez, navega a la sección **Ajustes** en la barra lateral:
+1. **Clave de OpenRouter (opcional)**: Introduce tu API key `sk-or-v1-...` y pulsa **Probar conexión**. La aplicación verificará latencia, gasto acumulado y límite de saldo.
+   - *Sin clave*: El sistema opera en modo seguro con los datos precalculados del kit o datos sintéticos de referencia.
+   - *Con clave*: Permite ejecutar estudios en vivo y re-redactar propuestas con modelos reales.
+2. **Modelos por rol**: Asigna el modelo LLM para cada tarea:
+   - Juez y extracción: `google/gemini-2.5-flash`
+   - Estrategia y redacción final: `anthropic/claude-sonnet-4.5`
+   - Propuesta de marcas y banco: `google/gemini-2.5-flash`
+   - Motores para estudio en vivo: ChatGPT (`openai/gpt-4o`), Gemini, Claude y Perplexity.
+3. **Límites y control de gasto**:
+   - Tope de gasto por proyecto (por defecto 5,00 €).
+   - Llamadas máximas (1500) y concurrencia (8).
 
-### 4.2. Ejecutar la suite completa de tests (`pytest`)
+---
+
+## 4. Flujo de trabajo
+
+### Caso 1 · Proyecto con datos CSV (Kit del reto)
+1. Pulsa **«Nuevo proyecto»** en la pantalla principal.
+2. **Paso 1**: Elige tipo **Cliente (tengo su brief)** y asigna un nombre (o déjalo automático).
+3. **Paso 2**: Sube el brief en formato `.docx` o `.md` (p. ej. `Brief_de_ejemplo_Clinica_Alborada.docx`) o pega su contenido. El extractor analiza el documento y previsualiza la ficha de la marca y campos faltantes.
+4. **Paso 3**: En la pestaña **Subir datos del estudio (CSV del kit)**, sube los 5 archivos CSV del kit (`ejecuciones.csv`, `marcas.csv`, `banco_prompts.csv`, `motores.csv`, `metricas_agregadas.csv`). El validador confirma las 624 ejecuciones, 4 motores y 3 repeticiones.
+5. **Paso 4**: Elige el modo de revisión (**Parar en cada punto de control** o continuo) y pulsa **Lanzar análisis**.
+6. Durante la ejecución podrás revisar y aprobar los 4 puntos de control:
+   - **Punto 0**: Ficha técnica del cliente y restricciones presupuestarias.
+   - **Punto 1**: Contraste de competidores (detecta que el líder real en IA es Valdecruz y que el brief omitía a Vistalia).
+   - **Punto 2**: Hallazgos clave priorizados con acceso directo a evidencias textuales.
+   - **Punto 3**: Plan estratégico con matriz esfuerzo/impacto, calendario semanal, simulador What-If y propuesta exportable en `.docx`.
+
+### Caso 2 · Estudio en vivo con IA
+1. En el asistente, crea un proyecto de tipo **Prospecto** (o Cliente).
+2. En el Paso 3, selecciona la pestaña **Generar estudio en vivo con IA**.
+3. Pulsa **Proponer marcas** y **Proponer banco** para derivar automáticamente competidores y preguntas del sector.
+4. Selecciona el tamaño del estudio:
+   - **Rápido**: 1 repetición, prompts clave (~0,15 €).
+   - **Estándar**: 2 repeticiones (~0,50 €).
+   - **Completo**: 3 repeticiones y matriz completa (~1,20 €).
+5. Confirma la estimación de coste y lanza el análisis.
+
+---
+
+## 5. Costes orientativos y seguridad presupuestaria
+
+- **Ejecución con dataset del kit / referencia**: Coste de API: **0,00 €** (0 llamadas externas).
+- **Estudio en vivo «Rápido» (OpenRouter)**: Entre **0,10 € y 0,25 €** según modelos seleccionados.
+- **Auditoría completa + Redacción**: Menos de **0,40 €** por ejecución.
+- **Protección de gasto**: El backend bloquea llamadas si la estimación o el acumulado superan el tope configurado (`MAX_BUDGET_EUR = 5,00 €`) o el número máximo de llamadas (`1.500`).
+
+---
+
+## 6. Verificación y Tests
+
 ```bash
+# Suite completa: backend (pytest) + frontend (vitest + typecheck)
+make test
+
+# Solo backend
 .venv/bin/pytest -q
-```
-Ejecuta los **34 tests automatizados** que verifican carga de datos, detección 100 % exacta frente a `muestra_evaluada.csv`, juez por reglas (`kappa = 1.000` en mención, fuerza y sentimiento), cálculo del Score y tablas `T1`–`T12`, hallazgos `H1`–`H7`, ajuste presupuestario y de capacidad semanal, revisor de cifras y normativa, pipeline completo de extremo a extremo, simulador what-if y conectores de motores.
 
-### 4.3. Ejecutar el pipeline por línea de comandos (`run_pipeline.py`)
-```bash
-# Modo Cliente (con el brief de Clínica Alborada Visión)
-.venv/bin/python scripts/run_pipeline.py \
-  --brief "kit/Kit Participantes Hackaton/01_Briefings/Brief_de_ejemplo_Clinica_Alborada.md" \
-  --modo cliente \
-  --run-id demo \
-  --provider mock \
-  --auto-approve
-
-# Modo Prospecto (captación en frío sin brief para Vistalia Oftalmología)
-.venv/bin/python scripts/run_pipeline.py \
-  --modo prospecto \
-  --marca "Vistalia Oftalmología" \
-  --run-id demo_prospecto \
-  --provider mock \
-  --auto-approve
-```
-
-### 4.4. Scripts de auditoría numérica y validación del juez
-```bash
-# Resumen de métricas clave del dataset y tablas T1-T12
-.venv/bin/python scripts/smoke_numbers.py
-
-# Comparativa Reglas vs LLM vs Ensemble frente a muestra_evaluada.csv (accuracy y kappa)
-.venv/bin/python scripts/validate_judge.py
+# Solo frontend
+cd frontend && npm run typecheck && npm test
 ```
 
 ---
 
-## 5. Estructura del repositorio
+## 7. Solución de problemas comunes
 
-```text
-├── CLAUDE.md                     # Reglas de ingeniería y contratos del proyecto
-├── PLAN.md                       # Plan maestro por fases (F0-F16)
-├── ARQUITECTURA.md               # Documento técnico de arquitectura y decisiones
-├── README.md                     # Guía de instalación, uso y reproducción de la demo
-├── requirements.txt              # Dependencias fijadas
-├── .env.example                  # Plantilla de variables de entorno
-├── docs/
-│   └── demo_guion.md             # Guion cronometrado de 5 minutos para la defensa
-├── geo/
-│   ├── schemas.py                # Contratos Pydantic v2 inmutables
-│   ├── config.py                 # Constantes metodológicas, léxicos y ACTION_LIBRARY (22 plantillas)
-│   ├── loader.py                 # Lectura y validación de los 5 CSV del kit
-│   ├── text.py                   # Normalización, ventana de texto y detección por límites de palabra
-│   ├── detection.py              # Detección determinista de apariciones, posición y peso
-│   ├── judge_rules.py            # Juez determinista por patrones y catálogo de fuentes
-│   ├── judge_llm.py              # Juez LLM estructurado con acotación por código
-│   ├── judge.py                  # Ensemble Reglas + LLM con marcado de discrepancias
-│   ├── validation.py             # Cálculo de accuracy, kappa de Cohen y matrices de confusión
-│   ├── metrics.py                # Fórmula oficial del Score (30/20/30/20) y tablas T1-T12
-│   ├── findings.py               # Reglas R1-R10 generadoras de hallazgos trazables H1-H7
-│   ├── intake.py                 # Extracción estructurada del brief (.md, .docx, .txt)
-│   ├── market.py                 # Contraste de competidores declarados vs detectados y marcas fuera de catálogo
-│   ├── budget.py                 # Validación presupuestaria, DAG de dependencias y capacidad semanal
-│   ├── strategy.py               # Generación del Plan a 12 meses (Fases 0-3)
-│   ├── reviewer.py               # Verificador de cifras (verify_numbers) y cumplimiento normativo (compliance)
-│   ├── writer.py                 # Redactor en Modo Cliente (10 secciones) y Modo Prospecto (dossier + email)
-│   ├── export.py                 # Exportación a Markdown (.md) y Word (.docx) con Anexo de trazabilidad
-│   ├── orchestrator.py           # Orquestador con estado persistente, trazas JSONL y 4 checkpoints humanos
-│   ├── simulate.py               # Simulador what-if del Score de Citación (F14)
-│   ├── engines/                  # Conectores reales con búsqueda web (OpenAI, Gemini, Claude, Perplexity) (F15)
-│   └── prompts/                  # Prompts versionados (*_v1.md) con aislamiento <datos>...</datos>
-├── app/
-│   ├── Home.py                   # Portada Streamlit y activación en 1 clic del Modo Demo
-│   ├── ui_shared.py              # Banner sintético, paleta de marca y visor reutilizable de evidencias
-│   └── pages/                    # 7 páginas del flujo (1_Brief a 7_Calidad_y_trazas)
-├── scripts/
-│   ├── smoke_numbers.py          # Verificación rápida del dataset y tablas T1-T12
-│   ├── validate_judge.py         # Informe de exactitud y kappa frente a muestra_evaluada.csv
-│   └── run_pipeline.py           # CLI del pipeline completo
-├── runs/
-│   └── demo/                     # Ejecución precalculada completa lista para demostración offline
-└── tests/                        # 34 tests unitarios y de integración con pytest
-```
+- **Puerto en uso**: `make app` detecta automáticamente puertos ocupados y se vincula al siguiente disponible (8000, 8001...).
+- **El frontend no carga o muestra página en blanco**: Ejecuta `make build` para regenerar la compilación estática en `frontend/dist`.
+- **Falta la clave de OpenRouter**: La plataforma puede utilizarse íntegramente con los archivos del kit del reto sin ninguna clave configurada. Para análisis en vivo, añade tu clave en la pantalla de Ajustes.
+- **Error en subida de CSV**: Comprueba que los archivos CSV tengan codificación UTF-8 y contengan las columnas mínimas especificadas en `contracts/openapi.yaml`.

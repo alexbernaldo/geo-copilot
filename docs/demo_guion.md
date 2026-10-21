@@ -1,91 +1,83 @@
 # 🎙️ Guion de Demostración en Vivo (5 minutos) · GEO Copilot
 
 **Reto `reload. × UFV-EPS`** · Duración total: **5:00 min**
+**Plataforma:** Aplicación Web React + FastAPI (`make app`)
 
 ---
 
-## Preparación previa (2 minutos antes de entrar)
+## Preparación previa (la noche anterior y antes de entrar)
 
-1. Arrancar la aplicación Streamlit:
+1. Arrancar la aplicación con el comando único de producción:
    ```bash
-   .venv/bin/streamlit run app/Home.py
+   make app
    ```
-2. Pulsar **«⚡ Cargar Modo Demo (`runs/demo/`)»** en la barra lateral para asegurar que `runs/demo/` está cargado en memoria (`0` latencia de red).
-3. Tener abierto en una segunda ventana el documento exportado `runs/demo/propuesta_cliente.docx` por si el jurado pide ver el entregable Word nativo.
+   La aplicación arranca en `http://localhost:8000` (o el primer puerto libre) y abre la ventana en modo aplicación.
+2. En **Ajustes**: clave de OpenRouter configurada y probada (para demostrar conectividad real con modelos LLM) y roles de modelos asignados.
+3. Tener en el escritorio o en carpeta accesible:
+   - `Brief_de_ejemplo_Clinica_Alborada.docx` (o formato markdown)
+   - Carpeta del kit `caso_oftalmologia` con los 5 archivos CSV (`ejecuciones.csv`, `marcas.csv`, `banco_prompts.csv`, `motores.csv`, `metricas_agregadas.csv`).
+4. Ensayar el recorrido completo y borrar o archivar proyectos de ensayo para comenzar la demo con la lista limpia o con un proyecto previo de otro sector.
+5. (Opcional) Tener ya ejecutado un proyecto de otro sector con estudio en vivo en modo «Rápido» para enseñar el funcionamiento y coste real.
 
 ---
 
 ## Cronograma minuto a minuto
 
-### 1. El Gancho (0:00 – 0:30 · 30 s) · *Pantalla: `Home`*
+### 1. El Gancho y Creación del Proyecto (0:00 – 0:45 · 45 s) · *Pantalla: `Proyectos` y `Nuevo proyecto (Asistente)`*
 - **Qué decir:**
-  > «Clínica Alborada Visión tiene 4,7 estrellas, más de 1.800 reseñas de pacientes y es líder percibida en Madrid. Su Comité de Dirección cree que con esa reputación los asistentes de IA ya la recomiendan. Pero cuando un paciente pregunta a ChatGPT o Claude sin mencionar ninguna marca, **Alborada cae al puesto 7 de 10 con un Score de Citación de solo 27,97 sobre 100**. Hoy os presentamos **GEO Copilot**: el sistema que convierte datos crudos de visibilidad conversacional en una propuesta estratégica verificada, trazable hasta cada respuesta original y lista para enviar al cliente.»
+  > «Clínica Alborada Visión tiene 4,7 estrellas, más de 1.800 reseñas de pacientes y es líder percibida en Madrid. Su Comité de Dirección cree que con esa reputación los asistentes de IA ya la recomiendan. Pero cuando un paciente pregunta a ChatGPT o Claude sin mencionar ninguna marca, **Alborada cae al puesto 7 de 10 con un Score de Citación de solo 27,97 sobre 100**. Hoy os presentamos **GEO Copilot**: la plataforma web que convierte datos crudos de visibilidad conversacional en una propuesta estratégica verificada, trazable hasta cada respuesta original y lista para el cliente.»
 - **Qué mostrar:**
-  - Tarjetas superiores de la portada (`Score espontáneo: 27,97/100 · Puesto 7/10`, `Aparición espontánea: 38,8 % (n=240)`, `Presupuesto Plan: 24.300 €`, `Verificador: 578/578 cifras trazables`).
+  - Pulsar **«Nuevo proyecto»**. Seleccionar **Cliente (tengo su brief)** y asignar nombre.
+  - En Paso 2, subir `Brief_de_ejemplo_Clinica_Alborada.docx`. Señalar la vista previa inmediata de la ficha (marca, sector, ciudades, presupuesto y campos faltantes).
+  - En Paso 3, subir los CSV del estudio en la pestaña de datos. La plataforma valida en milisegundos las 624 ejecuciones, 4 motores y 3 repeticiones.
+  - En Paso 4, seleccionar modo **«Parar en cada punto de control»** y pulsar **«Lanzar análisis»**.
 
 ---
 
-### 2. Brief, Faltantes y Mapa Competitivo Real (0:30 – 1:15 · 45 s) · *Pantallas: `1 Brief` y `2 Competidores`*
+### 2. Checkpoints 0 y 1: Ficha y Contraste de Mercado (0:45 – 1:30 · 45 s) · *Pantallas: `Ficha` y `Competencia`*
 - **Qué decir:**
-  > «En la página 1 cargamos el briefing del cliente. El código —nunca el LLM— calcula la horquilla presupuestaria anual (`18.000 a 27.000 €`) y detecta qué información falta antes de presupuestar (URL exacta, desglose de tráfico web o acceso al CMS), generando las preguntas para el cliente en el **Checkpoint 0**.»
-  > «Al pasar a la página 2 (**Checkpoint 1**), el sistema contrasta lo que el cliente cree contra las 240 ejecuciones espontáneas reales: descubre que el verdadero líder en IA es **Grupo Hospitalario Valdecruz** (`Score 75,02`, `90,8 %` de aparición) por delante de **Instituto Oftálmico Tramuntana** (`Score 51,70`, `68,8 %`), alerta de que **Vistalia Oftalmología** (`Score 26,59`, `41,2 %` de aparición espontánea) no estaba declarada en su brief pese a superarla en tasa de aparición (`41,2 %` vs `38,8 %`), e identifica otros 5 actores relevantes del catálogo con presencia espontánea $\ge 30\%$ (`Oftalmos Centro` `60,0 %`, `Clínica del Ojo Cervantes` `44,2 %`, `Instituto Ocular Santa Eulalia` `42,5 %`, `Visionar Clínicas` `33,3 %` y `Centro Lasik Península` `31,2 %`).»
+  > «El pipeline comienza y se detiene en el **Punto de Control 0**: revisamos y aprobamos la ficha técnica del cliente con sus objetivos y restricciones presupuestarias (`18.000 a 27.000 €`).»
+  > «Al reanudar, el sistema ejecuta el contraste de mercado y se detiene en el **Punto de Control 1**: detecta automáticamente que el brief omitía a **Vistalia Oftalmología** (`41,2 %` de aparición espontánea, superando a Alborada) y que el verdadero líder en IA es **Grupo Hospitalario Valdecruz** (`90,8 %` de aparición y score `75,02`). Aprobamos el mapa competitivo validado.»
 - **Qué mostrar:**
-  - En `2_Competidores`, señalar la tabla de contraste y las discrepancias detectadas entre el brief y `T1_espontanea`.
+  - Barra superior de Checkpoint con confirmación interactiva.
+  - En `Competencia`, mostrar el contraste entre marcas declaradas y detectadas.
 
 ---
 
-### 3. Diagnóstico Espontáneo vs. Asistido y Trazabilidad a la Evidencia (1:15 – 2:45 · 90 s) · *Pantallas: `3 Diagnóstico` y `4 Hallazgos`*
+### 3. Diagnóstico Espontáneo vs. Asistido y Trazabilidad a Evidencias (1:30 – 2:45 · 75 s) · *Pantallas: `Diagnóstico` y `Hallazgos`*
 - **Qué decir:**
-  > «Aquí es donde la mayoría de herramientas engañaría al cliente: si mezcláramos consultas con marca y sin marca, inflaríamos artificialmente su visibilidad. En `3_Diagnóstico` separamos estrictamente **Espontáneo (`n=240`)** de **Asistido (`n=384`)**.»
-  > «Mirad los tres cuellos de botella de Alborada:
-  > 1. **Brecha geográfica (`T4`)**: en Madrid aparecen en el **54,2 %** de las consultas (`n=24`, `Score 42,17`), pero en **Barcelona caen al 4,2 % (`1 de 24`, `Score 3,39`)**, justo donde quieren crecer un 25 %.
-  > 2. **Asimetría por motor (`T2`)**: funcionan bien en Perplexity (**65,0 %**, `Score 49,08`) y Gemini (**56,7 %**, `Score 41,38`), pero se desploman en **Claude (15,0 %, `Score 9,73`)** y **ChatGPT (18,3 %, `Score 11,70`)**.
-  > 3. **Caída en el embudo (`T3`) y contraste asistido (`T9`)**: pasan del **44,7 %** en Descubrimiento (`n=132`) al **25,0 %** en la fase crítica de **Decisión** (`n=48`, `Score 16,32`). En cambio, en consultas asistidas sobre la marca (`n=108`), aparecen en el **100,0 %** (`Score 73,97`) con solo un **9,3 %** de menciones negativas, mientras que su competidor low-cost **Láser Nítida** sufre un **34,3 %** de menciones negativas por seguimiento postoperatorio (`n=108`).»
-  > «Y ninguna cifra es una caja negra: si hacemos clic en **Ver evidencia**, leemos la respuesta exacta del motor con la marca resaltada y los dominios citados.»
+  > «En Diagnóstico demostramos por qué no se pueden mezclar consultas: separamos con un conmutador **Espontánea (`n=240`)** de **Asistida (`n=384`)**.»
+  > «Observad los tres cuellos de botella reales de Alborada:
+  > 1. **Brecha geográfica**: en Madrid aparecen en el **54,2 %** (`Score 42,17`), pero en **Barcelona caen al 4,2 %** (solo 1 de 24 consultas), justo donde buscan crecer un 25 %.
+  > 2. **Asimetría de motores**: fuerte presencia en Perplexity (**65,0 %**) y Gemini (**56,7 %**), pero invisibles en **Claude (15,0 %)** y **ChatGPT (18,3 %)**.
+  > 3. **Embudo de decisión**: caen del 44,7 % en Descubrimiento al 25,0 % en Decisión final. En cambio, en consultas asistidas sobre la marca tienen el 100 % con solo un 9,3 % negativo, frente al 34,3 % de críticas postoperatorias de su competidor low-cost Láser Nítida.»
+  > «Y nada es una caja negra: hacemos clic en **Ver evidencia** y abrimos la respuesta textual original del motor con marcas resaltadas.»
 - **Qué mostrar:**
-  - Alternar pestaña **Espontáneo (`n=240`)** y **Asistido (`n=384`)**.
-  - Abrir el desplegable `🔎 Ver evidencia` en `3_Diagnóstico` o en la tarjeta `H1`/`H2` de `4_Hallazgos`.
+  - Conmutador Espontánea / Asistida.
+  - Gráficos por motor, ciudad y embudo.
+  - Abrir el cajón de evidencia desde una métrica de la tabla o tarjeta de Hallazgos.
+  - Aprobar el **Punto de Control 2** en Hallazgos.
 
 ---
 
-### 4. Plan Estratégico, Restricciones y Simulador What-If (2:45 – 3:45 · 60 s) · *Pantalla: `5 Plan`*
+### 4. Plan Estratégico, Simulador y Checkpoint 3 (2:45 – 3:45 · 60 s) · *Pantalla: `Plan`*
 - **Qué decir:**
-  > «Cada hallazgo aprobado en el **Checkpoint 2** activa acciones concretas en `5_Plan`. No son recomendaciones genéricas: son 14 acciones en 4 fases a 12 meses con entregable, responsable, KPI y grafo de dependencias sin ciclos. Además, como la reputación asistida de Alborada es una **fortaleza** (`9,3 %` negativo frente a `25,9 %` de Vistalia y `34,3 %` de Láser Nítida), el sistema no gasta presupuesto en gestión de crisis reputacional, sino que la utiliza como argumento central en contenidos y PR digital.»
-  > «El módulo `budget.py` garantiza dos restricciones duras del brief: el coste total queda en **24.300 €** (dentro de `18.000–27.000 €`) y la carga del equipo interno de 1,5 personas **nunca supera las 8 horas semanales** (máximo `6,5 h/semana`).»
-  > «Abajo, el **Simulador What-If** (claramente etiquetado como *escenario hipotético, no una predicción*) nos permite mover el slider de Barcelona y de ChatGPT/Claude, ver en vivo cómo el Score sube de `27,97` y volcarlo con un clic a los objetivos del plan.»
+  > «En el Plan Estratégico, las acciones responden a los hallazgos con matriz Esfuerzo vs. Impacto, cronograma por semanas y estricto control de restricciones: coste total en **24.300 €** (dentro del rango del brief) y carga de trabajo para el equipo del cliente siempre por debajo de 8 horas semanales.»
+  > «Abajo disponemos del **Simulador What-If** (*escenario hipotético, no una predicción*), que recalcula el impacto en el Score global al mejorar el rendimiento en Barcelona y ChatGPT. Aprobamos el **Punto de Control 3**.»
 - **Qué mostrar:**
-  - Matriz Esfuerzo vs Impacto, Gantt por semanas, curva de horas semanales bajo la línea roja de `8 h/sem` y mover un slider del simulador.
+  - Matriz 2x2 interactiva, cronograma Gantt y barra de presupuesto y horas.
+  - Mover un control del simulador y observar la actualización visual.
+  - Aprobar el Punto de Control 3.
 
 ---
 
-### 5. Confianza: Sello del Revisor y Validación del Juez (3:45 – 4:15 · 30 s) · *Pantallas: `6 Propuesta` y `7 Calidad y trazas`*
+### 5. Propuesta Ejecutiva y Cierre (3:45 – 5:00 · 75 s) · *Pantalla: `Propuesta`*
 - **Qué decir:**
-  > «¿Cómo garantizamos al Comité de Dirección que el LLM no ha inventado ni un solo dato? En `6_Propuesta`, el Agente Revisor audita el documento completo: **578 de 578 cifras verificadas contra las tablas deterministas** y **0 incidencias normativas sanitarias** (cero promesas garantizadas, cero comparativas denigratorias).»
-  > «Además, en `7_Calidad_y_trazas` auditamos nuestro propio juez contra `muestra_evaluada.csv`: **100 % de exactitud y $\kappa = 1{,}000$ en detección, tipo de mención, fuerza y sentimiento**, documentando con total transparencia el 56,7 % en `tipo_fuente` porque el dataset informa las fuentes a nivel de respuesta y no por marca.»
+  > «Llegamos a la Propuesta Ejecutiva. Cada sección incluye su etiqueta de origen (`Calculado`, `Generado automáticamente`, `Revisado`).»
+  > «El **Sello del Revisor** certifica de forma automática que el **100 % de las cifras proceden de las tablas calculadas** y que existen **0 incidencias deontológicas o normativas** en materia sanitaria.»
+  > «Descargamos el informe en `.docx` con formato corporativo impecable listo para entregar al cliente. Y si se tratara de una prospección comercial en frío, disponemos del modo Prospecto con un correo de 150 palabras listo para enviar.»
 - **Qué mostrar:**
-  - Sello verde en `6_Propuesta` + botón de descarga `.docx`, y tabla de $\kappa$ de Cohen en `7_Calidad_y_trazas`.
-
----
-
-### 6. Giro Comercial: Modo Prospecto en Frío (4:15 – 4:45 · 30 s) · *Pantalla: `6 Propuesta` → Pestaña `Modo Prospecto`*
-- **Qué decir:**
-  > «Por último, convertimos el estudio sectorial en una máquina de desarrollo de negocio para la agencia. En la pestaña **Modo Prospecto**, seleccionamos a cualquier competidor sin brief —por ejemplo, **Vistalia Oftalmología** o **Láser Nítida**— y el sistema genera al instante una auditoría ejecutiva de captación con sus 3 brechas reales, 3 intervenciones y un correo comercial de 120 a 180 palabras listo para enviar.»
-- **Qué mostrar:**
-  - Cambiar el selector a `Vistalia Oftalmología` y mostrar el correo comercial listo para copiar y el botón de descarga `.docx`.
-
----
-
-### 7. Cierre: Impacto en Negocio y Honestidad Metodológica (4:45 – 5:00 · 15 s)
-- **Qué decir:**
-  > «En resumen: pasamos de días de cruce manual de hojas de cálculo a una propuesta consultiva auditable en menos de un minuto y por menos de 4 céntimos de coste LLM, declarando siempre nuestras limitaciones muestrales ($n=24$ por ciudad y datos sintéticos). Muchas gracias.»
-
----
-
-## Respuestas rápidas a posibles preguntas del jurado
-
-1. **«¿Cómo evitáis que el falso positivo del adjetivo "nítida" infle a la marca Láser Nítida?»**
-   - En `geo/text.py` y `geo/detection.py`, el término corto `"nítida"` solo se acepta cuando va precedido de `"láser"` o `"clínica"`. Así evitamos falsos positivos en frases como *«visión más nítida»* y clavamos **133/133 (100 %)** en `muestra_evaluada.csv`.
-2. **«¿Por qué `tipo_fuente` tiene un 56,7 % en apariciones mientras los demás campos tienen un 100 %?»**
-   - Porque en `ejecuciones.csv` la columna `Fuentes citadas` contiene los dominios de toda la respuesta (separados por `;`), sin indicar qué dominio respalda a qué marca cuando aparecen 3 o 4 clínicas en el mismo texto. Cuando aparece el dominio propio de la clínica (`alboradavision.example`), se asigna `Web propia` con 100 % de certeza; en el resto, existe ambigüedad intrínseca al dato de entrada.
-3. **«¿Qué ocurre si se cae la API de Anthropic u OpenAI a mitad de la demo?»**
-   - El orquestador (`geo/orchestrator.py`) captura cualquier excepción o falta de clave, activa la degradación elegante (`degradado=True` en `trace.jsonl`) hacia el motor determinista/mock, y además contamos con caché SHA-256 en disco y el directorio `runs/demo/` precalculado.
+  - Vista previa de la propuesta y etiquetas `OriginTag`.
+  - Sello verde del Agente Revisor con 0 incidencias.
+  - Botón de descarga de propuesta `.docx`.
+  - (Si sobra tiempo) Mostrar la pestaña de prospecto o las trazas técnicas de ejecución.
