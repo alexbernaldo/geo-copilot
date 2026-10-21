@@ -59,7 +59,9 @@ def _split_domains(val: object) -> list[str]:
 
 def load_marcas(study_dir: Path) -> list[Marca]:
     """Carga las marcas del estudio desde marcas.csv."""
-    df = pd.read_csv(Path(study_dir) / MARCAS_FILE, encoding="utf-8-sig")
+    p = Path(study_dir)
+    file_path = p if p.suffix.lower() == ".csv" else p / MARCAS_FILE
+    df = pd.read_csv(file_path, encoding="utf-8-sig")
     marcas: list[Marca] = []
     for _, row in df.iterrows():
         rol = str(row["Rol"]).strip()
@@ -78,7 +80,9 @@ def load_marcas(study_dir: Path) -> list[Marca]:
 
 def load_prompts(study_dir: Path) -> list[Prompt]:
     """Carga el banco de prompts desde banco_prompts.csv."""
-    df = pd.read_csv(Path(study_dir) / BANCO_PROMPTS_FILE, encoding="utf-8-sig")
+    p = Path(study_dir)
+    file_path = p if p.suffix.lower() == ".csv" else p / BANCO_PROMPTS_FILE
+    df = pd.read_csv(file_path, encoding="utf-8-sig")
     prompts: list[Prompt] = []
     for _, row in df.iterrows():
         prompts.append(
@@ -97,7 +101,9 @@ def load_prompts(study_dir: Path) -> list[Prompt]:
 
 def load_fuentes(study_dir: Path) -> dict[str, tuple[TipoFuente, float]]:
     """Carga el catálogo de fuentes: dominio -> (TipoFuente, calidad)."""
-    df = pd.read_csv(Path(study_dir) / FUENTES_CATALOGO_FILE, encoding="utf-8-sig")
+    p = Path(study_dir)
+    file_path = p if p.suffix.lower() == ".csv" else p / FUENTES_CATALOGO_FILE
+    df = pd.read_csv(file_path, encoding="utf-8-sig")
     catalogo: dict[str, tuple[TipoFuente, float]] = {}
     for _, row in df.iterrows():
         dominio = str(row["Dominio"]).strip().lower()
@@ -107,15 +113,28 @@ def load_fuentes(study_dir: Path) -> dict[str, tuple[TipoFuente, float]]:
     return catalogo
 
 
-def load_ejecuciones(study_dir: Path, ciudades: list[str] | None = None) -> pd.DataFrame:
+def load_ejecuciones(
+    study_dir: Path | None = None,
+    ciudades: list[str] | None = None,
+    *,
+    path: Path | None = None,
+    prompts_path: Path | None = None,
+) -> pd.DataFrame:
     """Carga ejecuciones.csv, lo une con banco_prompts y normaliza campos.
 
     La ciudad de los prompts `ciudad` sale de `ciudades` (p. ej. las de la ficha) si se pasa;
     si no, de comparar el prompt ejecutado con la plantilla del banco.
     """
+    if study_dir is None:
+        if path is not None:
+            study_dir = Path(path).parent
+        else:
+            raise ValueError("Se debe proporcionar study_dir o path.")
     study_dir = Path(study_dir)
-    df_ej = pd.read_csv(study_dir / EJECUCIONES_FILE, encoding="utf-8-sig")
-    df_pr_full = pd.read_csv(study_dir / BANCO_PROMPTS_FILE, encoding="utf-8-sig")
+    ej_file = Path(path) if path is not None else study_dir / EJECUCIONES_FILE
+    pr_file = Path(prompts_path) if prompts_path is not None else study_dir / BANCO_PROMPTS_FILE
+    df_ej = pd.read_csv(ej_file, encoding="utf-8-sig")
+    df_pr_full = pd.read_csv(pr_file, encoding="utf-8-sig")
     df_pr = df_pr_full[["Prompt_ID", "Instanciación"]]
     plantillas = dict(zip(df_pr_full["Prompt_ID"], df_pr_full["Prompt (plantilla)"]))
 
@@ -189,7 +208,9 @@ def as_ejecuciones(study_dir: Path, ciudades: list[str] | None = None) -> list[E
 
 def load_muestra(study_dir: Path) -> pd.DataFrame:
     """Carga muestra_evaluada.csv renombrando sus columnas a los campos de Evaluacion."""
-    df = pd.read_csv(Path(study_dir) / MUESTRA_EVALUADA_FILE, encoding="utf-8-sig")
+    p = Path(study_dir)
+    file_path = p if p.suffix.lower() == ".csv" else p / MUESTRA_EVALUADA_FILE
+    df = pd.read_csv(file_path, encoding="utf-8-sig")
     df = df.rename(
         columns={
             "Ejecucion_ID": "ejecucion_id",
