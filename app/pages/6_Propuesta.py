@@ -1,4 +1,4 @@
-"""Página 6 · Propuesta final en Modo Cliente y Modo Prospecto, sello del revisor y exportación .docx/.md (F13)."""
+"""Página 6: propuesta final en modo cliente y modo prospecto, sello del revisor y exportación .docx/.md."""
 
 from pathlib import Path
 import sys
@@ -9,13 +9,10 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from app.ui_shared import get_active_run, render_header_banner
+from app.ui_shared import get_active_run, kpi_strip, page_header, panel, render_seal, section
 from geo.export import export_docx, export_md
 from geo.loader import load_marcas
 from geo.writer import write_prospect
-
-st.set_page_config(page_title="6 · Propuesta | GEO Copilot", page_icon="📄", layout="wide")
-render_header_banner()
 
 run = get_active_run()
 if not (run.run_dir / "propuesta.json").exists():
@@ -25,39 +22,30 @@ propuesta_cliente = run.load_propuesta()
 tablas = run.load_tablas()
 marcas_catalogo = load_marcas()
 
-st.title("6 · Propuesta Estratégica y Comercial")
-st.caption(
-    "Previsualización íntegra de la propuesta ejecutiva con sello del agente revisor (verificación determinista de cifras y cumplimiento normativo sanitario) y descarga en `.docx` y `.md`."
+page_header(
+    "Propuesta",
+    "Vista previa íntegra de la propuesta ejecutiva, con el sello del agente revisor y descarga en .docx y .md.",
+    step=6,
 )
 
 tab_cliente, tab_prospecto = st.tabs(
-    [
-        f"🏥 Modo Cliente ({propuesta_cliente.marca} · 10 secciones)",
-        "🎯 Modo Prospecto (Captación en frío sin brief previo)",
-    ]
+    [f"Modo cliente · {propuesta_cliente.marca}", "Modo prospecto · captación en frío"]
 )
 
 with tab_cliente:
     rev = propuesta_cliente.revision
     total_cifras = rev.cifras_verificadas + rev.cifras_no_trazables
+    limpio = rev.aprobado and rev.cifras_no_trazables == 0 and len(rev.incidencias) == 0
 
-    # Sello del revisor
-    st.subheader("🛡️ Sello del Agente Revisor (F10)")
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Estado de revisión", "APROBADO ✅" if rev.aprobado else "REVISIÓN ⚠️")
-    c2.metric("Cifras trazables verificadas", f"{rev.cifras_verificadas}/{total_cifras}")
-    c3.metric("Cifras no trazables", str(rev.cifras_no_trazables))
-    c4.metric("Incidencias normativas", str(len(rev.incidencias)))
-
-    if rev.aprobado and rev.cifras_no_trazables == 0 and len(rev.incidencias) == 0:
-        st.success(
-            f"**Sello Verificador GEO:** `{rev.cifras_verificadas}/{total_cifras}` cifras trazables verificadas contra las tablas deterministas y `0` incidencias normativas sanitarias."
-        )
-    else:
+    render_seal(
+        f"{rev.cifras_verificadas}/{total_cifras} cifras trazables · {len(rev.incidencias)} incidencias normativas",
+        "Lista para enviar" if rev.aprobado else "Requiere revisión",
+        ok=rev.aprobado,
+    )
+    if not limpio:
         for inc in rev.incidencias:
-            st.warning(f"**[{inc.severidad.upper()} · {inc.tipo}]** {inc.detalle} (`{inc.ubicacion}`)")
+            st.warning(f"**{inc.severidad.upper()} · {inc.tipo}.** {inc.detalle} (`{inc.ubicacion}`)", icon=":material/warning:")
 
-    # Botones de descarga .docx y .md
     md_path = run.run_dir / f"propuesta_{propuesta_cliente.modo}.md"
     docx_path = run.run_dir / f"propuesta_{propuesta_cliente.modo}.docx"
     if not md_path.exists():
@@ -65,66 +53,61 @@ with tab_cliente:
     if not docx_path.exists():
         export_docx(propuesta_cliente, docx_path)
 
-    col_dl1, col_dl2, col_regen = st.columns([1, 1, 1])
+    nombre_archivo = propuesta_cliente.marca.replace(" ", "_")
+    col_dl1, col_dl2, col_regen = st.columns(3)
     with col_dl1:
         st.download_button(
-            "📥 Descargar Propuesta Cliente (.docx)",
+            "Descargar .docx",
             data=docx_path.read_bytes(),
-            file_name=f"Propuesta_GEO_{propuesta_cliente.marca.replace(' ', '_')}.docx",
+            file_name=f"Propuesta_GEO_{nombre_archivo}.docx",
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             type="primary",
+            icon=":material/download:",
             use_container_width=True,
         )
     with col_dl2:
         st.download_button(
-            "📥 Descargar Propuesta Cliente (.md)",
+            "Descargar .md",
             data=md_path.read_text(encoding="utf-8"),
-            file_name=f"Propuesta_GEO_{propuesta_cliente.marca.replace(' ', '_')}.md",
+            file_name=f"Propuesta_GEO_{nombre_archivo}.md",
             mime="text/markdown",
+            icon=":material/download:",
             use_container_width=True,
         )
     with col_regen:
-        if st.button("🔄 Regenerar propuesta desde Plan actual", use_container_width=True):
+        if st.button("Regenerar desde el plan actual", icon=":material/refresh:", use_container_width=True):
             run.run_all(auto_approve=True, force=True)
             st.rerun()
 
-    st.divider()
-    st.subheader("📖 Vista previa de las 10 secciones")
-    sec_names = list(propuesta_cliente.secciones.keys())
-    vista_modo = st.radio(
-        "Modo de lectura:",
-        options=["Sección por sección (desplegables)", "Documento completo continuo"],
-        horizontal=True,
+    section("Lectura de la propuesta", f"{len(propuesta_cliente.secciones)} secciones")
+    vista_modo = st.segmented_control(
+        "Modo de lectura",
+        options=["Por secciones", "Documento continuo"],
+        default="Por secciones",
+        selection_mode="single",
+        key="vista_propuesta",
     )
 
-    if vista_modo == "Sección por sección (desplegables)":
+    if vista_modo != "Documento continuo":
         for idx, (sec_title, sec_body) in enumerate(propuesta_cliente.secciones.items()):
-            with st.expander(f"**{sec_title}**", expanded=(idx < 2)):
+            with st.expander(sec_title, expanded=(idx < 2)):
                 st.markdown(sec_body)
     else:
-        full_md = export_md(propuesta_cliente)
-        st.markdown(full_md)
+        with panel():
+            st.markdown(export_md(propuesta_cliente))
 
 with tab_prospecto:
-    st.subheader("🎯 Generador de Propuesta en Modo Prospecto (sin brief previo)")
-    st.caption(
-        "Construye al instante una auditoría ejecutiva de captación para cualquier clínica competidora del catálogo a partir de las 624 ejecuciones del estudio sintético."
+    section(
+        "Propuesta para un prospecto",
+        "Sin brief previo",
+        "Auditoría ejecutiva de captación para cualquier clínica del catálogo, construida con las 624 ejecuciones del estudio sintético.",
     )
 
-    prospect_candidates = [
-        m.nombre for m in marcas_catalogo if m.nombre != propuesta_cliente.marca
-    ]
+    prospect_candidates = [m.nombre for m in marcas_catalogo if m.nombre != propuesta_cliente.marca]
     default_idx = (
-        prospect_candidates.index("Vistalia Oftalmología")
-        if "Vistalia Oftalmología" in prospect_candidates
-        else 0
+        prospect_candidates.index("Vistalia Oftalmología") if "Vistalia Oftalmología" in prospect_candidates else 0
     )
-
-    marca_prosp = st.selectbox(
-        "Selecciona la clínica prospecto objetivo:",
-        options=prospect_candidates,
-        index=default_idx,
-    )
+    marca_prosp = st.selectbox("Clínica prospecto", options=prospect_candidates, index=default_idx)
 
     propuesta_prosp = write_prospect(
         marca=marca_prosp,
@@ -136,11 +119,13 @@ with tab_prospecto:
 
     rev_p = propuesta_prosp.revision
     tot_p = rev_p.cifras_verificadas + rev_p.cifras_no_trazables
-    st.info(
-        f"🛡️ **Sello Revisor (Prospecto {marca_prosp}):** `{rev_p.cifras_verificadas}/{tot_p}` cifras trazables · `{len(rev_p.incidencias)}` incidencias normativas · Ficha generada desde `marcas.csv` (sin brief interno)."
+    render_seal(
+        f"{rev_p.cifras_verificadas}/{tot_p} cifras trazables · {len(rev_p.incidencias)} incidencias normativas",
+        "Ficha generada desde marcas.csv",
+        ok=rev_p.aprobado,
     )
 
-    col_p1, col_p2 = st.columns([1.3, 1.0])
+    col_p1, col_p2 = st.columns([1.3, 1.0], gap="large")
     with col_p1:
         for sec_t, sec_b in propuesta_prosp.secciones.items():
             if "Correo comercial" in sec_t:
@@ -149,29 +134,32 @@ with tab_prospecto:
             st.markdown(sec_b)
 
     with col_p2:
-        st.markdown("### ✉️ Correo comercial listo para enviar (120–180 palabras)")
-        correo_txt = propuesta_prosp.secciones.get("4. Correo comercial", "")
-        n_words = len(correo_txt.split())
-        st.caption(f"Longitud verificada: **{n_words} palabras** (rango objetivo: 120–180 palabras).")
-        st.code(correo_txt, language="markdown")
+        with panel("Correo comercial", "120 a 180 palabras"):
+            correo_txt = propuesta_prosp.secciones.get("4. Correo comercial", "")
+            n_words = len(correo_txt.split())
+            st.caption(f"Longitud verificada: {n_words} palabras.")
+            st.code(correo_txt, language="markdown", wrap_lines=True)
 
-        md_prosp_str = export_md(propuesta_prosp)
-        with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as tmp_docx:
-            export_docx(propuesta_prosp, Path(tmp_docx.name))
-            docx_prosp_bytes = Path(tmp_docx.name).read_bytes()
+            md_prosp_str = export_md(propuesta_prosp)
+            with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as tmp_docx:
+                export_docx(propuesta_prosp, Path(tmp_docx.name))
+                docx_prosp_bytes = Path(tmp_docx.name).read_bytes()
 
-        st.download_button(
-            f"📥 Descargar Dossier Prospecto — {marca_prosp} (.docx)",
-            data=docx_prosp_bytes,
-            file_name=f"Propuesta_Prospecto_{marca_prosp.replace(' ', '_')}.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            type="primary",
-            use_container_width=True,
-        )
-        st.download_button(
-            f"📥 Descargar Dossier Prospecto — {marca_prosp} (.md)",
-            data=md_prosp_str,
-            file_name=f"Propuesta_Prospecto_{marca_prosp.replace(' ', '_')}.md",
-            mime="text/markdown",
-            use_container_width=True,
-        )
+            nombre_prosp = marca_prosp.replace(" ", "_")
+            st.download_button(
+                "Descargar dossier .docx",
+                data=docx_prosp_bytes,
+                file_name=f"Propuesta_Prospecto_{nombre_prosp}.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                type="primary",
+                icon=":material/download:",
+                use_container_width=True,
+            )
+            st.download_button(
+                "Descargar dossier .md",
+                data=md_prosp_str,
+                file_name=f"Propuesta_Prospecto_{nombre_prosp}.md",
+                mime="text/markdown",
+                icon=":material/download:",
+                use_container_width=True,
+            )
