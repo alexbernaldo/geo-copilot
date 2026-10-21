@@ -7,7 +7,7 @@ import { FASES, PALANCA, parseList, RESPONSABLE, TALLA, TALLAS } from './labels'
 
 type Patch = Partial<PlanAccion>
 
-const cell = 'w-full min-w-0 rounded border border-[var(--brand-neutral)]/40 bg-transparent px-1.5 py-1 text-sm'
+const cell = 'w-full min-w-24 rounded border border-[var(--brand-neutral)]/40 bg-transparent px-1.5 py-1 text-sm'
 
 function NumberCell({ value, label, onChange, min = 0 }: { value: number; label: string; onChange: (v: number) => void; min?: number }) {
   return <input className={`${cell} w-20 tabular-nums`} type="number" min={min} value={value} aria-label={label} onChange={(e) => onChange(Number(e.target.value))} />

@@ -26,7 +26,7 @@ function Document({ proposal }: { proposal: Proposal }) {
               <h2 className="text-lg font-semibold">{s.titulo}</h2>
               <OriginTag origen={s.origen.origen} modelo={s.origen.modelo} />
             </header>
-            <div className="max-w-[72ch] [&_p]:my-2 [&_table]:my-3 [&_table]:w-full [&_table]:text-sm [&_td]:border [&_td]:border-[var(--brand-neutral)]/30 [&_td]:p-1.5 [&_th]:border [&_th]:border-[var(--brand-neutral)]/30 [&_th]:p-1.5 [&_th]:text-left [&_ul]:list-disc [&_ul]:pl-5">
+            <div className="min-w-0 max-w-full overflow-x-auto [&_p]:my-2 [&_p]:max-w-[72ch] [&_table]:my-3 [&_table]:text-sm [&_td]:border [&_td]:border-[var(--brand-neutral)]/30 [&_td]:p-1.5 [&_th]:border [&_th]:border-[var(--brand-neutral)]/30 [&_th]:p-1.5 [&_th]:text-left [&_ul]:list-disc [&_ul]:pl-5">
               <Markdown source={s.markdown} />
             </div>
           </article>

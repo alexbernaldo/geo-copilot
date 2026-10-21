@@ -1,0 +1,164 @@
+[
+ {
+  "name": "plan",
+  "scheme": "light",
+  "width": 1024,
+  "errors": [],
+  "writesOnLoad": [
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate"
+  ],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "plan",
+  "scheme": "light",
+  "width": 1280,
+  "errors": [],
+  "writesOnLoad": [
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate",
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate"
+  ],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "plan",
+  "scheme": "light",
+  "width": 1440,
+  "errors": [],
+  "writesOnLoad": [
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate",
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate",
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate"
+  ],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "propuesta",
+  "scheme": "light",
+  "width": 1024,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": true
+ },
+ {
+  "name": "propuesta",
+  "scheme": "light",
+  "width": 1280,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": true
+ },
+ {
+  "name": "propuesta",
+  "scheme": "light",
+  "width": 1440,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "calidad",
+  "scheme": "light",
+  "width": 1024,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "calidad",
+  "scheme": "light",
+  "width": 1280,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "calidad",
+  "scheme": "light",
+  "width": 1440,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "plan",
+  "scheme": "dark",
+  "width": 1024,
+  "errors": [],
+  "writesOnLoad": [
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate"
+  ],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "plan",
+  "scheme": "dark",
+  "width": 1280,
+  "errors": [],
+  "writesOnLoad": [
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate",
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate"
+  ],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "plan",
+  "scheme": "dark",
+  "width": 1440,
+  "errors": [],
+  "writesOnLoad": [
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate",
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate",
+   "POST http://localhost:5176/api/projects/p_demo/plan/simulate"
+  ],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "propuesta",
+  "scheme": "dark",
+  "width": 1024,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": true
+ },
+ {
+  "name": "propuesta",
+  "scheme": "dark",
+  "width": 1280,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": true
+ },
+ {
+  "name": "propuesta",
+  "scheme": "dark",
+  "width": 1440,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "calidad",
+  "scheme": "dark",
+  "width": 1024,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "calidad",
+  "scheme": "dark",
+  "width": 1280,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ },
+ {
+  "name": "calidad",
+  "scheme": "dark",
+  "width": 1440,
+  "errors": [],
+  "writesOnLoad": [],
+  "horizontalOverflow": false
+ }
+]

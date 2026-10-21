@@ -72,7 +72,7 @@ export default function PlanPage() {
   const presupuesto = server.presupuesto_max_eur ?? null
 
   return (
-    <div className="grid gap-6">
+    <div className="grid min-w-0 gap-6 [&>*]:min-w-0">
       <PageHeader
         title="Plan"
         description="Objetivos, acciones y cronograma. Al guardar, el backend revalida presupuesto, capacidad y dependencias."
@@ -105,7 +105,7 @@ export default function PlanPage() {
       <Panel title="Objetivos" source={<span className="text-xs text-[var(--brand-neutral)]">Valores calculados por el backend</span>}>
         {draft.objetivos.length === 0 ? <EmptyState title="Sin objetivos" description="El plan no tiene objetivos definidos." /> : (
           <table className="w-full text-sm">
-            <thead><tr className="text-left"><th scope="col">KPI</th><th scope="col" className="text-right">Actual</th><th scope="col" className="text-right">Objetivo</th><th scope="col" className="text-right">Plazo</th><th scope="col">Hallazgos</th></tr></thead>
+            <thead><tr className="text-left"><th scope="col">KPI</th><th scope="col" className="text-right">Actual</th><th scope="col" className="text-right">Objetivo</th><th scope="col" className="text-right">Plazo</th><th scope="col" className="pl-3">Hallazgos</th></tr></thead>
             <tbody>
               {draft.objetivos.map((o) => (
                 <tr key={o.kpi} className="border-t border-[var(--brand-neutral)]/30 align-top">
