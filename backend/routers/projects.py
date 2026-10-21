@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Query, Response, status
 
 from backend.api_models import FichaResponse, Project, ProjectCreate, ProjectPatch
 from backend.deps import get_store
-from backend.errors import unprocessable
+from backend.errors import api_error, unprocessable
 from backend.services import results
 from backend.services.store import ProjectStore
 from geo.schemas import FichaMarca
@@ -63,7 +63,8 @@ def delete_projects_id(
 ) -> Response:
     p = store.require(id)
     if confirm != p.get("nombre"):
-        raise unprocessable(
+        raise api_error(
+            400,
             "confirmacion_incorrecta",
             f"El parámetro confirm debe coincidir exactamente con el nombre del proyecto ('{p.get('nombre')}').",
         )
