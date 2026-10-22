@@ -80,9 +80,12 @@ export function Panel({ title, source, actions, children }: { title?: string; so
 
 export interface KpiItem { label: string; value: string | number; unit?: string; note?: string; source?: ReactNode; highlight?: boolean }
 
+/** Columnas que reparten n tarjetas sin dejar huérfanas: 6 → 3+3, 7 u 8 → 4 por fila. */
+const kpiColumns = (n: number): number => (n <= 5 ? Math.max(n, 1) : n % 3 === 0 ? 3 : 4)
+
 export function KpiStrip({ items, scope }: { items: KpiItem[]; scope?: Scope }) {
   return (
-    <dl className="kpis" data-scope={scope}>
+    <dl className="kpis" data-scope={scope} style={{ '--cols': kpiColumns(items.length) } as React.CSSProperties}>
       {items.map((i) => (
         <div className="kpi" key={i.label} data-highlight={i.highlight || undefined}>
           <dt>{i.label}</dt>

@@ -54,9 +54,9 @@ const base = (p: Paleta): Pick<EChartsOption, 'textStyle' | 'animation'> => ({
 export function rankingOption(filas: FilaT1[], p: Paleta): EChartsOption {
   return {
     ...base(p),
-    grid: { left: 8, right: 24, top: 8, bottom: 8, containLabel: true },
+    grid: { left: 8, right: 24, top: 8, bottom: 24, containLabel: true },
     tooltip: tooltipItem(fmtPuntos),
-    xAxis: { type: 'value', name: 'Score' },
+    xAxis: { type: 'value', name: 'Score', nameLocation: 'middle', nameGap: 30 },
     yAxis: { type: 'category', inverse: true, data: filas.map((f) => f.marca) },
     series: [
       {
@@ -90,7 +90,7 @@ export function mapaCalorOption<T>(e: MapaCalorEntrada<T>, p: Paleta): EChartsOp
       const v = (pt.value as unknown[]) ?? []
       return `${ys[v[1] as number] ?? ''} · ${xs[v[0] as number] ?? ''}`
     }),
-    xAxis: { type: 'category', data: xs, splitArea: { show: true }, axisLabel: { interval: 0 } },
+    xAxis: { type: 'category', data: xs, splitArea: { show: true }, axisLabel: { interval: 0, width: 104, overflow: 'break', lineHeight: 14 } },
     yAxis: { type: 'category', inverse: true, data: ys, splitArea: { show: true } },
     visualMap: {
       min: 0,
