@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, model_validator
 
 
 class Error(BaseModel):
@@ -353,7 +353,16 @@ class PlanResponse(BaseModel):
 
 
 class SimulateRequest(BaseModel):
-    cambios: dict[str, Any]
+    cambios: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="before")
+    @classmethod
+    def wrap_cambios(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "cambios" in data and isinstance(data["cambios"], dict):
+                return data
+            return {"cambios": data}
+        return data
 
 
 class SimulateResult(BaseModel):

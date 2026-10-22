@@ -378,8 +378,9 @@ def _exec_row(r: pd.Series) -> dict[str, Any]:
             "marcas_a_evaluar": [m.strip() for m in r["Marcas a evaluar"].split("|") if m.strip()], "fecha": r.get("Fecha/hora", "")}
 
 
-def list_executions(store: ProjectStore, pid: str, *, motor: str | None, familia: str | None, intencion: str | None, ambito: str | None,
-                    ciudad: str | None, ids: str | None, q: str | None, pagina: int, tamano: int) -> dict[str, Any]:
+def list_executions(store: ProjectStore, pid: str, *, motor: str | None = None, familia: str | None = None, intencion: str | None = None, ambito: str | None = None,
+                    ciudad: str | None = None, ids: str | None = None, q: str | None = None, pagina: int = 1, tamano: int = 50,
+                    marca: str | None = None, **kwargs: Any) -> dict[str, Any]:
     store.require(pid)
     pagina, tamano = max(1, pagina), min(max(1, tamano), 200)
     df = _executions_df(store, pid)
@@ -395,6 +396,8 @@ def list_executions(store: ProjectStore, pid: str, *, motor: str | None, familia
         df = df[df["ambito"] == ambito]
     if ciudad:
         df = df[df["ciudad"] == ciudad]
+    if marca:
+        df = df[df["Marcas a evaluar"].str.contains(marca, case=False, na=False)]
     if ids:
         wanted = {i.strip() for i in ids.split(",") if i.strip()}
         df = df[df["Ejecucion_ID"].isin(wanted)]
